@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using KFA.MyBlogWPF.ViewModels;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,9 +17,11 @@ namespace KFA.MyBlogWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(TagViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
+            //var t = new TagViewModel();
         }
     }
 }
