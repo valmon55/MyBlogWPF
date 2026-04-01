@@ -9,12 +9,13 @@ using System.Text.Json;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace KFA.MyBlogWPF.ViewModels
 {
     public class TagViewModel : INotifyPropertyChanged
     {
-        private readonly HttpClient _myBlog = new HttpClient();
+        private readonly HttpClient _myBlog;
         private ObservableCollection<Tag> tags;
         public ObservableCollection<Tag> Tags
         {
@@ -28,34 +29,47 @@ namespace KFA.MyBlogWPF.ViewModels
         public TagViewModel(HttpClient myBlog)
         {
             _myBlog = myBlog;
+            Tags = new ObservableCollection<Tag>();
+            LoadTagsAsync();
         }
-
-        public TagViewModel()
+        public async void LoadTagsAsync()
         {
-            var tagList = GetTags().Result;
-            foreach(var tag in tagList)
+            if (_myBlog is null)
+                return;
+            try
             {
-                tags.Add(tag);
+                var resp = await _myBlog.GetAsync("https://localhost:7007/Tag/AllTags");
+                if (resp.IsSuccessStatusCode)
+                {
+                    var body = await _myBlog.GetStringAsync("https://localhost:7007/Tag/AllTags");
+                    var tags = JsonSerializer.Deserialize<List<Tag>>(body);
+
+                    Tags.Clear();
+                    foreach (var tag in tags)
+                    {
+                        Tags.Add(tag);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
             }
         }
+        //public async Task<List<Tag>> GetTags()
+        //{
+        //    var tags = new List<Tag>();
 
-        public async Task<List<Tag>> GetTags()
-        {
-            var tags = new List<Tag>();
+        //    string body;
+        //    var resp = await _myBlog.GetAsync("https://localhost:7007/Tag/AllTags");
+        //    if( resp.IsSuccessStatusCode)
+        //    {
+        //        body = await _myBlog.GetStringAsync("https://localhost:7007/Tag/AllTags");
+        //        tags = JsonSerializer.Deserialize<List<Tag>>(body);
+        //    }
 
-            string body;
-            var resp = await _myBlog.GetAsync("https://localhost:7007/Tag/AllTags");
-            if( resp.IsSuccessStatusCode)
-            {
-                body = await _myBlog.GetStringAsync("https://localhost:7007/Tag/AllTags");
-                tags = JsonSerializer.Deserialize<List<Tag>>(body);
-            }
-            else
-            {
-                
-            }
-            return tags;
-        }
+        //    return tags;
+        //}
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
