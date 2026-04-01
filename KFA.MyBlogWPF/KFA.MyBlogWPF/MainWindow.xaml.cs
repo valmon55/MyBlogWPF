@@ -21,7 +21,6 @@ namespace KFA.MyBlogWPF
         {
             InitializeComponent();
             DataContext = viewModel;
-            //var t = new TagViewModel();
         }
     }
 }

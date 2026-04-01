@@ -56,20 +56,6 @@ namespace KFA.MyBlogWPF.ViewModels
                 MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
             }
         }
-        //public async Task<List<Tag>> GetTags()
-        //{
-        //    var tags = new List<Tag>();
-
-        //    string body;
-        //    var resp = await _myBlog.GetAsync("https://localhost:7007/Tag/AllTags");
-        //    if( resp.IsSuccessStatusCode)
-        //    {
-        //        body = await _myBlog.GetStringAsync("https://localhost:7007/Tag/AllTags");
-        //        tags = JsonSerializer.Deserialize<List<Tag>>(body);
-        //    }
-
-        //    return tags;
-        //}
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

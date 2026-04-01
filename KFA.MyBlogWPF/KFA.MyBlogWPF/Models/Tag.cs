@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace KFA.MyBlogWPF.Models
 {
     public class Tag
     {
-        public int id { get; set; }
-        public string tag_Name { get; set; }
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+        [JsonPropertyName("tag_Name")]
+        public string Name { get; set; }
     }
 }
