@@ -55,7 +55,7 @@ namespace KFA.MyBlogWPF.ViewModels
             {
                 MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
             }
-        }
+        } 
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
