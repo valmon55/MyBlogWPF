@@ -3,31 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:KFA.MyBlogWPF"
+        xmlns:local="clr-namespace:KFA.MyBlogWPF" xmlns:views="clr-namespace:KFA.MyBlogWPF.Views"
         mc:Ignorable="d"
         Title="MyBlog" Height="450" Width="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <Label>Теги</Label>
-        </StackPanel>
-        <ListView Grid.Row="1" Name="TagList" ItemsSource="{Binding Tags}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Id}" Width="Auto">
-                        <GridViewColumnHeader Content="Id" />
-                    </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding Name}" Width="Auto">
-                        <GridViewColumnHeader Content="Tag Name"></GridViewColumnHeader>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
+    <Grid Margin="20">
+        <views:TagsView />
     </Grid>
 </Window>

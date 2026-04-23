@@ -1,5 +1,8 @@
-﻿using KFA.MyBlogWPF.ViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -10,19 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace KFA.MyBlogWPF
+namespace KFA.MyBlogWPF.Components
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика взаимодействия для TagsListing.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class TagsListing : UserControl
     {
-        private readonly TagsViewModel _viewModel;
-        public MainWindow(TagsViewModel viewModel)
+        public TagsListing()
         {
             InitializeComponent();
-            _viewModel = viewModel;
-            DataContext = _viewModel;
         }
     }
 }

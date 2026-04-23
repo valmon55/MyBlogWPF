@@ -27,7 +27,8 @@ namespace KFA.MyBlogWPF
                 })
                 .ConfigureServices(services =>
                 {
-                    services.AddTransient<TagViewModel>();
+                    //services.AddTransient<TagViewModel>();
+                    services.AddSingleton<TagsViewModel>();
                     services.AddSingleton<HttpClient>();
                     services.AddSingleton<MainWindow>();
                 })
@@ -39,6 +40,7 @@ namespace KFA.MyBlogWPF
             {
                 await AppHost.StartAsync();
                 var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
+                //mainWindow.DataContext = new TagsViewModel();
                 mainWindow.Show();
             }
             catch(Exception ex)
