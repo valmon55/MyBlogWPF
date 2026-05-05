@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KFA.MyBlogWPF.Commands;
+using KFA.MyBlogWPF.Stores;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -16,11 +18,13 @@ namespace KFA.MyBlogWPF.ViewModels
     {
         private readonly HttpClient _myBlog;
         public TagsListingViewModel TagsListingViewModel { get; }
-        public ICommand AddTagCommand { get; }
-        public TagsViewModel(HttpClient myBlog)
+        public ICommand AddTagsCommand { get; }
+        public TagsViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore)
         {
             _myBlog = myBlog;
             TagsListingViewModel = new TagsListingViewModel(_myBlog);
+
+            AddTagsCommand = new OpenAddTagCommand(modalNavigationStore);
         }
     }
 }

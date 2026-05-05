@@ -27,7 +27,7 @@
                 Grid.Column="1" 
                 Content="Add"
                 FontSize="16" 
-                Command="{Binding AddTagCommand}"/>
+                Command="{Binding AddTagsCommand}"/>
         </Grid>
         <Grid Grid.Row="1">
             <components:TagsListing Grid.Column="0" DataContext="{Binding TagsListingViewModel}" />

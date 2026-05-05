@@ -18,11 +18,15 @@ namespace KFA.MyBlogWPF.ViewModels
                 tagName = value; 
                 OnPropertyChanged(nameof(TagName));
                 OnPropertyChanged(nameof(CanSubmit));
-            }
-        
+            }       
         }
         public bool CanSubmit => !string.IsNullOrEmpty(TagName);
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
+        public TagDetailsFormViewModel(ICommand submitCommand, ICommand cancelCommand)
+        {
+            SubmitCommand = submitCommand;
+            CancelCommand = cancelCommand;
+        }
     }
 }
