@@ -88,8 +88,8 @@
                                                     </Style>
                                                 </StackPanel.Resources>
                                                 
-                                                <Button Content="Edit" Command="{Binding EditTag}"/>
-                                                <Button Content="Delete" Command="{Binding DeleteTag}" />
+                                                <Button Content="Edit" Command="{Binding EditTagCommand}"/>
+                                                <Button Content="Delete" Command="{Binding DeleteTagCommand}" />
                                             </StackPanel>
                                         </Border>
                                     </custom:DropdownMenu>

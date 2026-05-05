@@ -1,4 +1,5 @@
-﻿using KFA.MyBlogWPF.ViewModels;
+﻿using KFA.MyBlogWPF.Stores;
+using KFA.MyBlogWPF.ViewModels;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,8 +29,15 @@ namespace KFA.MyBlogWPF
                 .ConfigureServices(services =>
                 {
                     //services.AddTransient<TagViewModel>();
-                    services.AddSingleton<TagsViewModel>();
                     services.AddSingleton<HttpClient>();
+                    services.AddSingleton<ModalNavigationStore>();
+                    
+                    services.AddTransient<AddTagViewModel>();
+                    services.AddTransient<EditTagViewModel>();
+                    services.AddTransient<TagsListingViewModel>();
+                    services.AddTransient<TagsViewModel>();
+
+                    services.AddSingleton<MainViewModel>();
                     services.AddSingleton<MainWindow>();
                 })
                 .Build();

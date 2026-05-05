@@ -11,6 +11,16 @@ namespace KFA.MyBlogWPF.ViewModels
     public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
+        
+        /// <summary>
+        /// Заглушка
+        /// TODO: подумать как сделать
+        /// </summary>
+        protected virtual void Dispose() 
+        {
+            //~ViewModelBase();
+        }
+
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? name = null)
         {

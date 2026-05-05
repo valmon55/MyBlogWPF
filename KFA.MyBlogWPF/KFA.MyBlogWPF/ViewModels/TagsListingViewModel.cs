@@ -31,12 +31,12 @@ namespace KFA.MyBlogWPF.ViewModels
             _myBlog = myBlog;
             _tagsListingItemViewModels = new ObservableCollection<TagsListingItemViewModel>();
             Tags = new ObservableCollection<Tag>();
-            LoadTagsAsync();
+            //LoadTagsAsync();
 
-            //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("C#"));
-            //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("JavaScript"));
-            //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("WPF"));
-            //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("ASP.Net"));
+            _tagsListingItemViewModels.Add(new TagsListingItemViewModel("C#"));
+            _tagsListingItemViewModels.Add(new TagsListingItemViewModel("JavaScript"));
+            _tagsListingItemViewModels.Add(new TagsListingItemViewModel("WPF"));
+            _tagsListingItemViewModels.Add(new TagsListingItemViewModel("ASP.Net"));
         }
         public async void LoadTagsAsync()
         {

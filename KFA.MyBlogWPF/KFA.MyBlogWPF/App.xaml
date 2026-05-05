@@ -6,6 +6,9 @@
         <ResourceDictionary>
             <SolidColorBrush x:Key="BorderPrimary" Color="Gray" />
 
+            <Style x:Key="PageHeader" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="32" />
+            </Style>
             <Style TargetType="Button">
                 <Setter Property="Foreground" Value="White" />
                 <Setter Property="Background" Value="Blue" />
@@ -48,8 +51,43 @@
                             </BeginStoryboard>
                         </Trigger.ExitActions>
                     </Trigger>
+                    
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.3" />
+                    </Trigger>
                 </Style.Triggers>
             </Style>
+
+            <Style x:Key="ButtonSecondary" 
+                   BasedOn="{StaticResource {x:Type Button}}"
+                   TargetType="Button">
+                <Setter Property="Foreground" Value="Black" />
+                <Setter Property="Background" Value="#f1f1f1" />
+
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                                    To="Gray"
+                                                    Duration="0:0:0.5" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                                    To="#e1e1e1"
+                                                    Duration="0:0:0.5" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

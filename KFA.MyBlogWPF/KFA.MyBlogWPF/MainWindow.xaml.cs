@@ -1,4 +1,5 @@
-﻿using KFA.MyBlogWPF.ViewModels;
+﻿using KFA.MyBlogWPF.Stores;
+using KFA.MyBlogWPF.ViewModels;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,8 +18,9 @@ namespace KFA.MyBlogWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly TagsViewModel _viewModel;
-        public MainWindow(TagsViewModel viewModel)
+        //private readonly TagsViewModel _viewModel;
+        private readonly MainViewModel _viewModel;
+        public MainWindow(ModalNavigationStore _modalNavigationStore, MainViewModel viewModel)
         {
             InitializeComponent();
             _viewModel = viewModel;

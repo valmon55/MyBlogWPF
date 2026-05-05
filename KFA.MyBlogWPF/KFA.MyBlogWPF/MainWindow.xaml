@@ -1,12 +1,29 @@
 ﻿<Window x:Class="KFA.MyBlogWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:KFA.MyBlogWPF" xmlns:views="clr-namespace:KFA.MyBlogWPF.Views"
+        xmlns:local="clr-namespace:KFA.MyBlogWPF" 
+        xmlns:views="clr-namespace:KFA.MyBlogWPF.Views"
+        xmlns:vms="clr-namespace:KFA.MyBlogWPF.ViewModels"
         mc:Ignorable="d"
         Title="MyBlog" Height="450" Width="800">
-    <Grid Margin="20">
-        <views:TagsView />
-    </Grid>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type vms:AddTagViewModel}">
+            <views:AddTagView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vms:EditTagViewModel}">
+            <views:EditTagView />
+        </DataTemplate>
+    </Window.Resources>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Auto">
+        <Grid>
+            <custom:Modal Panel.ZIndex="1" IsOpen="{Binding IsModalOpen}">
+                <ContentControl Margin="50 25" Content="{Binding CurrentModalViewModal}" />
+            </custom:Modal>
+            <views:TagsView DataContext="{Binding TagsViewModel}"/>
+        </Grid>
+    </ScrollViewer>
 </Window>
