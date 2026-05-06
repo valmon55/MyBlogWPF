@@ -1,4 +1,5 @@
 ﻿using KFA.MyBlogWPF.Commands;
+using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,14 @@ namespace KFA.MyBlogWPF.ViewModels
 {
     public class EditTagViewModel : ViewModelBase
     {
-        public TagDetailsFormViewModel TagsDetailFormViewModel { get; }
-        public EditTagViewModel(ModalNavigationStore modalNavigationStore)
+        public TagDetailsFormViewModel TagDetailsFormViewModel { get; }
+        public EditTagViewModel(Tag tag, ModalNavigationStore modalNavigationStore)
         {
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
-            TagsDetailFormViewModel = new TagDetailsFormViewModel(null, cancelCommand);
+            TagDetailsFormViewModel = new TagDetailsFormViewModel(null, cancelCommand)
+            {
+                TagName = tag.Name
+            };
         }
     }
 }

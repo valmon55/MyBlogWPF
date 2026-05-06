@@ -23,7 +23,7 @@
                        Text="Tag name" />
             <TextBox Grid.Column="1"
                        Margin="20 0 0 0"
-                       Text="{Binding TagName}" />
+                       Text="{Binding TagName, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <WrapPanel Grid.Row="1" Margin="0 30 0 0">
             <Button Content="Submit" 

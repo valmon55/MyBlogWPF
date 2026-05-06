@@ -18,7 +18,9 @@
                    Padding="10 0 0 0" 
                    Style="{StaticResource PageHeader}" />
 
-        <components:TagDetailForm Grid.Row="1" 
-                                  Margin="0 30 0 0" />
+        <components:TagDetailForm 
+            Grid.Row="1"
+            Margin="0 30 0 0"
+            DataContext="{Binding TagDetailsFormViewModel}"/>
     </Grid>
 </UserControl>

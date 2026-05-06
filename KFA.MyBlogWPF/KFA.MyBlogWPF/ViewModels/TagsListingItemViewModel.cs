@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KFA.MyBlogWPF.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,13 @@ namespace KFA.MyBlogWPF.ViewModels
 {
     public class TagsListingItemViewModel : ViewModelBase
     {
-        public string TagName { get; }
-        public ICommand EditTagCommand { get; }
-        public ICommand DeleteTagCommand { get; }
-        public TagsListingItemViewModel(string tagName)
+        public Tag Tag { get; }
+        public ICommand EditCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public TagsListingItemViewModel(Tag tag, ICommand editCommand)
         {
-            TagName = tagName;
+            Tag = tag;
+            EditCommand = editCommand;
         }
     }
 }

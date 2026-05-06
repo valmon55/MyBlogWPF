@@ -22,7 +22,7 @@ namespace KFA.MyBlogWPF.ViewModels
         public TagsViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore)
         {
             _myBlog = myBlog;
-            TagsListingViewModel = new TagsListingViewModel(_myBlog);
+            TagsListingViewModel = new TagsListingViewModel(_myBlog, modalNavigationStore);
 
             AddTagsCommand = new OpenAddTagCommand(modalNavigationStore);
         }
