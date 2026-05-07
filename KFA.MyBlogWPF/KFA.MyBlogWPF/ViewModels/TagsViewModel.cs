@@ -19,12 +19,14 @@ namespace KFA.MyBlogWPF.ViewModels
         private readonly HttpClient _myBlog;
         public TagsListingViewModel TagsListingViewModel { get; }
         public ICommand AddTagsCommand { get; }
-        public TagsViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore)
+        public TagsViewModel(HttpClient myBlog, 
+                            ModalNavigationStore modalNavigationStore,
+                            TagsStore tagsStore)
         {
             _myBlog = myBlog;
-            TagsListingViewModel = new TagsListingViewModel(_myBlog, modalNavigationStore);
+            TagsListingViewModel = new TagsListingViewModel(_myBlog, modalNavigationStore, tagsStore);
 
-            AddTagsCommand = new OpenAddTagCommand(modalNavigationStore);
+            AddTagsCommand = new OpenAddTagCommand(modalNavigationStore, tagsStore);
         }
     }
 }

@@ -18,6 +18,8 @@ namespace KFA.MyBlogWPF.ViewModels
     public class TagsListingViewModel : ViewModelBase
     {
         private readonly HttpClient _myBlog;
+        private readonly ModalNavigationStore _modalNavigationStore;
+        private readonly TagsStore _tagsStore;
         private ObservableCollection<Tag> tags;
         public ObservableCollection<Tag> Tags
         {
@@ -30,26 +32,54 @@ namespace KFA.MyBlogWPF.ViewModels
         }
         private readonly ObservableCollection<TagsListingItemViewModel> _tagsListingItemViewModels;
         public IEnumerable<TagsListingItemViewModel> TagsListingItemViewModels => _tagsListingItemViewModels;
-        public TagsListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore)
+        public TagsListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore, TagsStore tagsStore)
         {
             _myBlog = myBlog;
+            _modalNavigationStore = modalNavigationStore;
+            _tagsStore = tagsStore;
             _tagsListingItemViewModels = new ObservableCollection<TagsListingItemViewModel>();
             Tags = new ObservableCollection<Tag>();
+
+            _tagsStore.TagAdded += TagsStore_TagAdded;
+            _tagsStore.TagUpdated += TagsStore_TagUpdated;
+
             //LoadTagsAsync();
 
-            AddTag(new Tag() { Name = "C#" }, modalNavigationStore);
-            AddTag(new Tag() { Name = "JavaScript" }, modalNavigationStore);
-            AddTag(new Tag() { Name = "WPF" }, modalNavigationStore);
-            AddTag(new Tag() { Name = "ASP.Net" }, modalNavigationStore);
-            AddTag(new Tag() { Name = "Xamarin" }, modalNavigationStore);
+            //AddTag(new Tag() { Name = "C#" }, modalNavigationStore);
+            //AddTag(new Tag() { Name = "JavaScript" }, modalNavigationStore);
+            //AddTag(new Tag() { Name = "WPF" }, modalNavigationStore);
+            //AddTag(new Tag() { Name = "ASP.Net" }, modalNavigationStore);
+            //AddTag(new Tag() { Name = "Xamarin" }, modalNavigationStore);
             //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("C#"));
             //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("JavaScript"));
             //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("WPF"));
             //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("ASP.Net"));
         }
-        private void AddTag(Tag tag, ModalNavigationStore modalNavigationStore)
+
+        protected override void Dispose()
         {
-            ICommand editCommand = new OpenEditTagCommand(tag, modalNavigationStore);
+            _tagsStore.TagAdded -= TagsStore_TagAdded;
+            _tagsStore.TagUpdated -= TagsStore_TagUpdated;
+            base.Dispose();
+        }
+        private void TagsStore_TagUpdated(Tag tag)
+        {
+            TagsListingItemViewModel? tagViewModel = 
+                _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == tag.Id);
+            
+            if(tagViewModel != null)
+            {
+                tagViewModel.Update(tag);
+            }
+        }
+        private void TagsStore_TagAdded(Tag tag)
+        {
+            AddTag(tag);
+        }
+
+        private void AddTag(Tag tag)
+        {
+            ICommand editCommand = new OpenEditTagCommand(tag, _modalNavigationStore);
             _tagsListingItemViewModels.Add(new TagsListingItemViewModel(tag, editCommand));
         }
         public async void LoadTagsAsync()

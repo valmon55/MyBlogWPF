@@ -31,6 +31,7 @@ namespace KFA.MyBlogWPF
                     //services.AddTransient<TagViewModel>();
                     services.AddSingleton<HttpClient>();
                     services.AddSingleton<ModalNavigationStore>();
+                    services.AddSingleton<TagsStore>();
                     
                     services.AddTransient<AddTagViewModel>();
                     services.AddTransient<EditTagViewModel>();

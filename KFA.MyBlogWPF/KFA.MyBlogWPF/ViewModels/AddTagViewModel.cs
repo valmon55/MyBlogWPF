@@ -11,13 +11,12 @@ namespace KFA.MyBlogWPF.ViewModels
 {
     public class AddTagViewModel : ViewModelBase
     {
-        private readonly ModalNavigationStore _modalNavigationStore;
         public TagDetailsFormViewModel TagDetailsFormViewModel { get; }
-        public AddTagViewModel(ModalNavigationStore modalNavigationStore) 
+        public AddTagViewModel(ModalNavigationStore modalNavigationStore, TagsStore tagsStore) 
         {
-            _modalNavigationStore = modalNavigationStore;
-            ICommand cancelCommand = new CloseModalCommand(_modalNavigationStore);
-            TagDetailsFormViewModel = new TagDetailsFormViewModel(null, cancelCommand);
+            ICommand submitCommand = new AddTagCommand(this, modalNavigationStore, tagsStore);
+            ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
+            TagDetailsFormViewModel = new TagDetailsFormViewModel(submitCommand, cancelCommand);
         }
     }
 }

@@ -12,15 +12,17 @@ namespace KFA.MyBlogWPF.Commands
     public class OpenAddTagCommand : CommandBase
     {
         private readonly ModalNavigationStore _modalNavigationStore;
+        private readonly TagsStore _tagsStore;
 
-        public OpenAddTagCommand(ModalNavigationStore modalNavigationStore)
+        public OpenAddTagCommand(ModalNavigationStore modalNavigationStore, TagsStore tagsStore)
         {
             _modalNavigationStore = modalNavigationStore;
+            _tagsStore = tagsStore;
         }
 
         public override void Execute(object? parameter)
         {
-            AddTagViewModel addTagViewModel = new AddTagViewModel(_modalNavigationStore);
+            AddTagViewModel addTagViewModel = new AddTagViewModel(_modalNavigationStore, _tagsStore);
             _modalNavigationStore.CurrentViewModel = addTagViewModel;
         }
     }

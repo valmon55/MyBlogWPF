@@ -15,8 +15,9 @@ namespace KFA.MyBlogWPF.ViewModels
         public TagDetailsFormViewModel TagDetailsFormViewModel { get; }
         public EditTagViewModel(Tag tag, ModalNavigationStore modalNavigationStore)
         {
+            ICommand submitCommand = new EditTagCommand(modalNavigationStore);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
-            TagDetailsFormViewModel = new TagDetailsFormViewModel(null, cancelCommand)
+            TagDetailsFormViewModel = new TagDetailsFormViewModel(submitCommand, cancelCommand)
             {
                 TagName = tag.Name
             };

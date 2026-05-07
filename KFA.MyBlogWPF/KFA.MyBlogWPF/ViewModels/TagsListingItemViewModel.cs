@@ -10,13 +10,21 @@ namespace KFA.MyBlogWPF.ViewModels
 {
     public class TagsListingItemViewModel : ViewModelBase
     {
-        public Tag Tag { get; }
+        public Tag Tag { get; private set; }
+        public string TagName => Tag.Name;
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public TagsListingItemViewModel(Tag tag, ICommand editCommand)
         {
             Tag = tag;
             EditCommand = editCommand;
+        }
+
+        public void Update(Tag tag)
+        {
+            Tag = tag;
+
+            OnPropertyChanged(nameof(TagName));
         }
     }
 }
