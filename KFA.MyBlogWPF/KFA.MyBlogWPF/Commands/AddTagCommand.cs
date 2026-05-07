@@ -22,8 +22,15 @@ namespace KFA.MyBlogWPF.Commands
         }
         public override async Task ExecuteAsync(object parameter)
         {
+            Random random = new Random();
+            int n = random.Next(1,100);
+
             TagDetailsFormViewModel formViewModel = _addTagViewModel.TagDetailsFormViewModel;
-            Models.Tag tag = new Models.Tag() { Name = formViewModel.TagName };
+            Models.Tag tag = new Models.Tag()
+            {
+                Id = n,
+                Name = formViewModel.TagName
+            };
             // Send API request to Edit Tag
 
             try

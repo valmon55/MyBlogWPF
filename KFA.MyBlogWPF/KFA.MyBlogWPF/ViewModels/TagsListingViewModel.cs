@@ -79,34 +79,34 @@ namespace KFA.MyBlogWPF.ViewModels
 
         private void AddTag(Tag tag)
         {
-            ICommand editCommand = new OpenEditTagCommand(tag, _modalNavigationStore);
-            _tagsListingItemViewModels.Add(new TagsListingItemViewModel(tag, editCommand));
+            TagsListingItemViewModel itemViewModel = new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore);
+            _tagsListingItemViewModels.Add(itemViewModel);
         }
-        public async void LoadTagsAsync()
-        {
-            if (_myBlog is null)
-                return;
-            try
-            {
-                var resp = await _myBlog.GetAsync("https://localhost:7007/Tag/AllTags");
-                if (resp.IsSuccessStatusCode)
-                {
-                    var body = await _myBlog.GetStringAsync("https://localhost:7007/Tag/AllTags");
-                    var tags = JsonSerializer.Deserialize<List<Tag>>(body);
+        //public async void LoadTagsAsync()
+        //{
+        //    if (_myBlog is null)
+        //        return;
+        //    try
+        //    {
+        //        var resp = await _myBlog.GetAsync("https://localhost:7007/Tag/AllTags");
+        //        if (resp.IsSuccessStatusCode)
+        //        {
+        //            var body = await _myBlog.GetStringAsync("https://localhost:7007/Tag/AllTags");
+        //            var tags = JsonSerializer.Deserialize<List<Tag>>(body);
 
-                    Tags.Clear();
-                    foreach (var tag in tags)
-                    {
-                        Tags.Add(tag);
-                        _tagsListingItemViewModels.Add(new TagsListingItemViewModel(tag, null));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
-            }
-        }
+        //            Tags.Clear();
+        //            foreach (var tag in tags)
+        //            {
+        //                Tags.Add(tag);
+        //                _tagsListingItemViewModels.Add(new TagsListingItemViewModel(tag, null));
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+        //    }
+        //}
 
     }
 }

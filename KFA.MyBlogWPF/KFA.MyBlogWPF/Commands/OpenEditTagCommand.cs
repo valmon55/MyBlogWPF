@@ -11,17 +11,22 @@ namespace KFA.MyBlogWPF.Commands
 {
     public class OpenEditTagCommand : CommandBase
     {
-        private readonly Tag _tag;
+        private readonly TagsListingItemViewModel _tagsListingItemViewModel;
         private readonly ModalNavigationStore _modalNavigationStore;
-        public OpenEditTagCommand(Tag tag, ModalNavigationStore modalNavigationStore)
+        private readonly TagsStore _tagsStore;
+
+        public OpenEditTagCommand(TagsListingItemViewModel tagsListingItemViewModel, ModalNavigationStore modalNavigationStore, TagsStore tagsStore)
         {
-            _tag = tag;
+            _tagsListingItemViewModel = tagsListingItemViewModel;
             _modalNavigationStore = modalNavigationStore;
+            _tagsStore = tagsStore;
         }
 
         public override void Execute(object? parameter)
         {
-            EditTagViewModel editTagViewModel = new EditTagViewModel(_tag, _modalNavigationStore);
+            Tag tag = _tagsListingItemViewModel.Tag;
+
+            EditTagViewModel editTagViewModel = new EditTagViewModel(tag, _tagsStore, _modalNavigationStore);
             _modalNavigationStore.CurrentViewModel = editTagViewModel;
         }
 
