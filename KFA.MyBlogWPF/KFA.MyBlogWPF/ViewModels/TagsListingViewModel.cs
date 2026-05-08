@@ -42,6 +42,7 @@ namespace KFA.MyBlogWPF.ViewModels
 
             _tagsStore.TagAdded += TagsStore_TagAdded;
             _tagsStore.TagUpdated += TagsStore_TagUpdated;
+            _tagsStore.TagDeleted += TagsStore_TagDeleted; 
 
             //LoadTagsAsync();
 
@@ -60,6 +61,8 @@ namespace KFA.MyBlogWPF.ViewModels
         {
             _tagsStore.TagAdded -= TagsStore_TagAdded;
             _tagsStore.TagUpdated -= TagsStore_TagUpdated;
+            _tagsStore.TagDeleted -= TagsStore_TagDeleted;
+
             base.Dispose();
         }
         private void TagsStore_TagUpdated(Tag tag)
@@ -82,6 +85,17 @@ namespace KFA.MyBlogWPF.ViewModels
             TagsListingItemViewModel itemViewModel = new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore);
             _tagsListingItemViewModels.Add(itemViewModel);
         }
+
+        private void TagsStore_TagDeleted(int id)
+        {
+            TagsListingItemViewModel? tagViewModel = 
+                _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == id);
+            if (tagViewModel != null)
+            {
+                _tagsListingItemViewModels.Remove(tagViewModel);
+            }
+        }
+
         //public async void LoadTagsAsync()
         //{
         //    if (_myBlog is null)
@@ -107,6 +121,5 @@ namespace KFA.MyBlogWPF.ViewModels
         //        MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
         //    }
         //}
-
     }
 }

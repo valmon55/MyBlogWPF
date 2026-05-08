@@ -11,6 +11,7 @@ namespace KFA.MyBlogWPF.Stores
     {
         public event Action<Tag> TagAdded;
         public event Action<Tag> TagUpdated;
+        public event Action<int> TagDeleted;
         public async Task Add(Tag tag)
         {
             TagAdded?.Invoke(tag);
@@ -18,6 +19,11 @@ namespace KFA.MyBlogWPF.Stores
         public async Task Update(Tag tag)
         {
             TagUpdated?.Invoke(tag);
+        }
+
+        public async Task Delete(int id)
+        {
+            TagDeleted?.Invoke(id);
         }
     }
 }
