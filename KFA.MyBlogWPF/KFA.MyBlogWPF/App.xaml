@@ -6,6 +6,9 @@
         <ResourceDictionary>
             <SolidColorBrush x:Key="BorderPrimary" Color="Gray" />
 
+            <Style x:Key="TabHeader" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="24" />
+            </Style>
             <Style x:Key="PageHeader" TargetType="TextBlock">
                 <Setter Property="FontSize" Value="32" />
             </Style>

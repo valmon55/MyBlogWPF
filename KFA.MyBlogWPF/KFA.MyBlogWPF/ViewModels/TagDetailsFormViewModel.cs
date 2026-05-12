@@ -11,14 +11,14 @@ namespace KFA.MyBlogWPF.ViewModels
     {
         private string tagName;
         public string TagName
-        { 
-            get { return tagName; } 
-            set 
-            { 
-                tagName = value; 
+        {
+            get { return tagName; }
+            set
+            {
+                tagName = value;
                 OnPropertyChanged(nameof(TagName));
                 OnPropertyChanged(nameof(CanSubmit));
-            }       
+            }
         }
         public bool CanSubmit => !string.IsNullOrEmpty(TagName);
         public ICommand SubmitCommand { get; }

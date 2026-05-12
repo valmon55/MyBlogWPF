@@ -8,12 +8,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KFA.MyBlogWPF.ViewModels
+namespace KFA.MyBlogWPF.ViewModels.Roles
 {
-    public class TagsListingItemViewModel : ViewModelBase
+    public class RolesListingItemViewModel :ViewModelBase
     {
-        public Tag Tag { get; private set; }
-        public string TagName => Tag.Name;
+        public Role Role { get; private set; }
+        public string RoleName => Role.Name;
         private bool isDeleting;
         public bool IsDeleting
         {
@@ -42,19 +42,20 @@ namespace KFA.MyBlogWPF.ViewModels
         }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
-        public TagsListingItemViewModel(Tag tag, ModalNavigationStore modalNavigationStore, TagsStore tagsStore)
+        public RolesListingItemViewModel(Role role, ModalNavigationStore modalNavigationStore, RolesStore tagsStore)
         {
-            Tag = tag;
+            Role = role;
 
-            EditCommand = new OpenEditTagCommand(this, modalNavigationStore, tagsStore);
-            DeleteCommand = new DeleteTagCommand(this, tagsStore);
+            //EditCommand = new OpenEditRoleCommand(this, modalNavigationStore, rolesStore);
+            //DeleteCommand = new DeleteRoleCommand(this, rolesStore);
         }
 
-        public void Update(Tag tag)
+        public void Update(Role role)
         {
-            Tag = tag;
+            Role = role;
 
-            OnPropertyChanged(nameof(TagName));
+            OnPropertyChanged(nameof(RoleName));
         }
+
     }
 }

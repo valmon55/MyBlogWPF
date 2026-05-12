@@ -1,6 +1,8 @@
-﻿using KFA.MyBlogWPF.Stores;
-using KFA.MyBlogWPF.ViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,17 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace KFA.MyBlogWPF
+namespace KFA.MyBlogWPF.Components
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Логика взаимодействия для TagDetailForm.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class LoginDetailForm : UserControl
     {
-        public MainWindow(MainViewModel viewModel)
+        public LoginDetailForm()
         {
             InitializeComponent();
-            DataContext = viewModel;
         }
     }
 }

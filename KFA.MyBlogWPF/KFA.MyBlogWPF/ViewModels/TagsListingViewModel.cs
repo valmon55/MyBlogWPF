@@ -42,7 +42,7 @@ namespace KFA.MyBlogWPF.ViewModels
 
             _tagsStore.TagAdded += TagsStore_TagAdded;
             _tagsStore.TagUpdated += TagsStore_TagUpdated;
-            _tagsStore.TagDeleted += TagsStore_TagDeleted; 
+            _tagsStore.TagDeleted += TagsStore_TagDeleted;
 
             //LoadTagsAsync();
 
@@ -67,10 +67,10 @@ namespace KFA.MyBlogWPF.ViewModels
         }
         private void TagsStore_TagUpdated(Tag tag)
         {
-            TagsListingItemViewModel? tagViewModel = 
+            TagsListingItemViewModel? tagViewModel =
                 _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == tag.Id);
-            
-            if(tagViewModel != null)
+
+            if (tagViewModel != null)
             {
                 tagViewModel.Update(tag);
             }
@@ -88,7 +88,7 @@ namespace KFA.MyBlogWPF.ViewModels
 
         private void TagsStore_TagDeleted(int id)
         {
-            TagsListingItemViewModel? tagViewModel = 
+            TagsListingItemViewModel? tagViewModel =
                 _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == id);
             if (tagViewModel != null)
             {

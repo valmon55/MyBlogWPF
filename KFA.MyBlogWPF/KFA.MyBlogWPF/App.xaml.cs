@@ -1,5 +1,6 @@
 ﻿using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
+using KFA.MyBlogWPF.ViewModels.Roles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,11 +33,14 @@ namespace KFA.MyBlogWPF
                     services.AddSingleton<HttpClient>();
                     services.AddSingleton<ModalNavigationStore>();
                     services.AddSingleton<TagsStore>();
-                    
+                    services.AddSingleton<RolesStore>();
+
                     services.AddTransient<AddTagViewModel>();
                     services.AddTransient<EditTagViewModel>();
                     services.AddTransient<TagsListingViewModel>();
                     services.AddTransient<TagsViewModel>();
+                    services.AddTransient<RolesViewModel>();
+                    services.AddTransient<LoginViewModel>();
 
                     services.AddSingleton<MainViewModel>();
                     services.AddSingleton<MainWindow>();
@@ -49,7 +53,7 @@ namespace KFA.MyBlogWPF
             {
                 await AppHost.StartAsync();
                 var mainWindow = AppHost.Services.GetRequiredService<MainWindow>();
-                //mainWindow.DataContext = new TagsViewModel();
+
                 mainWindow.Show();
             }
             catch(Exception ex)
@@ -70,5 +74,4 @@ namespace KFA.MyBlogWPF
             base.OnExit(e);
         }
     }
-
 }

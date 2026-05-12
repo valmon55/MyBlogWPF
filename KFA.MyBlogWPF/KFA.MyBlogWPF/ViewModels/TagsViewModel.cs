@@ -19,7 +19,7 @@ namespace KFA.MyBlogWPF.ViewModels
         private readonly HttpClient _myBlog;
         public TagsListingViewModel TagsListingViewModel { get; }
         public ICommand AddTagsCommand { get; }
-        public TagsViewModel(HttpClient myBlog, 
+        public TagsViewModel(HttpClient myBlog,
                             ModalNavigationStore modalNavigationStore,
                             TagsStore tagsStore)
         {

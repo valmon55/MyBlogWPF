@@ -18,12 +18,60 @@
         </DataTemplate>
     </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  HorizontalScrollBarVisibility="Auto">
+                              HorizontalScrollBarVisibility="Auto">
         <Grid>
             <custom:Modal Panel.ZIndex="1" IsOpen="{Binding IsModalOpen}">
                 <ContentControl Margin="50 25" Content="{Binding CurrentModalViewModal}" />
             </custom:Modal>
-            <views:TagsView DataContext="{Binding TagsViewModel}"/>
+            <TabControl x:Name="Menu">
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="Main" />
+                    </TabItem.Header>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="Article" />
+                    </TabItem.Header>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="Tags" />
+                        </StackPanel>
+                    </TabItem.Header>
+                    <TabItem.Content>
+                            <Grid>
+                                <views:TagsView DataContext="{Binding TagsViewModel}"/>
+                            </Grid>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="User" />
+                    </TabItem.Header>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="Role" />
+                    </TabItem.Header>
+                    <TabItem.Content>
+                        <Grid>
+                            <views:RolesView DataContext="{Binding RolesViewModel}"/>
+                        </Grid>
+                    </TabItem.Content>
+                </TabItem>
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="Login" />
+                    </TabItem.Header>
+                    <TabItem.Content>
+                        <Grid>
+                            <views:LoginView DataContext="{Binding LoginViewModel}"/>
+                        </Grid>
+                    </TabItem.Content>
+                </TabItem>
+            </TabControl>
         </Grid>
     </ScrollViewer>
 </Window>
