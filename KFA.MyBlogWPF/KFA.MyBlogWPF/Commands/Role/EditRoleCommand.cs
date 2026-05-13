@@ -7,37 +7,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KFA.MyBlogWPF.Commands.Role
+namespace KFA.MyBlogWPF.Commands
 {
-    public class AddRoleCommand : AsyncCommandBase
+    public class EditRoleCommand : AsyncCommandBase
     {
-        private readonly AddRoleViewModel _addRoleViewModel;
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly RolesStore _rolesStore;
+        private readonly EditRoleViewModel _editRoleViewModel;
 
-        public AddRoleCommand(AddRoleViewModel addRoleViewModel, ModalNavigationStore modalNavigationStore, RolesStore rolesStore)
+        public EditRoleCommand(EditRoleViewModel editRoleViewModel, ModalNavigationStore modalNavigationStore, RolesStore rolesStore)
         {
-            _addRoleViewModel = addRoleViewModel;
+            _editRoleViewModel = editRoleViewModel;
             _modalNavigationStore = modalNavigationStore;
             _rolesStore = rolesStore;
         }
         public override async Task ExecuteAsync(object parameter)
         {
-            Random random = new Random();
-            int n = random.Next(1, 100);
+            // Send API request to Add Role
 
-            RoleDetailsFormViewModel formViewModel = _addRoleViewModel.RoleDetailsFormViewModel;
-            Models.Role role = new Models.Role()
+            RoleDetailsFormViewModel formViewModel = _editRoleViewModel.RoleDetailsFormViewModel;
+            Models.Role role = new Models.Role() 
             {
-                Id = n,
+                Id = _editRoleViewModel.RoleId, 
                 Name = formViewModel.RoleName,
                 Description = formViewModel.Description,
             };
-            // Send API request to Add Role
+            // Send API request to Edit Role
 
             try
             {
-                await _rolesStore.Add(role);
+                await _rolesStore.Update(role);
 
                 _modalNavigationStore.Close();
             }
@@ -46,5 +45,6 @@ namespace KFA.MyBlogWPF.Commands.Role
                 throw;
             }
         }
+
     }
 }

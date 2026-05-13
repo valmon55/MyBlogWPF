@@ -1,4 +1,5 @@
 ﻿using KFA.MyBlogWPF.Commands;
+using KFA.MyBlogWPF.Commands.Role;
 using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
 using System;
@@ -14,6 +15,8 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
     {
         public Role Role { get; private set; }
         public string RoleName => Role.Name;
+        public string Description => Role.Description;
+
         private bool isDeleting;
         public bool IsDeleting
         {
@@ -42,12 +45,12 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
         }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
-        public RolesListingItemViewModel(Role role, ModalNavigationStore modalNavigationStore, RolesStore tagsStore)
+        public RolesListingItemViewModel(Role role, ModalNavigationStore modalNavigationStore, RolesStore rolesStore)
         {
             Role = role;
 
-            //EditCommand = new OpenEditRoleCommand(this, modalNavigationStore, rolesStore);
-            //DeleteCommand = new DeleteRoleCommand(this, rolesStore);
+            EditCommand = new OpenEditRoleCommand(this, modalNavigationStore, rolesStore);
+            DeleteCommand = new DeleteRoleCommand(this, rolesStore);
         }
 
         public void Update(Role role)
@@ -55,7 +58,7 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             Role = role;
 
             OnPropertyChanged(nameof(RoleName));
+            OnPropertyChanged(nameof(Description));
         }
-
     }
 }

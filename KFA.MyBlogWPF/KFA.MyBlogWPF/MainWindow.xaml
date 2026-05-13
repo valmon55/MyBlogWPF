@@ -7,6 +7,8 @@
         xmlns:local="clr-namespace:KFA.MyBlogWPF" 
         xmlns:views="clr-namespace:KFA.MyBlogWPF.Views"
         xmlns:vms="clr-namespace:KFA.MyBlogWPF.ViewModels"
+        xmlns:role_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Roles"
+        xmlns:role_views="clr-namespace:KFA.MyBlogWPF.Views.Roles"
         mc:Ignorable="d"
         Title="MyBlog" Height="450" Width="800">
     <Window.Resources>
@@ -15,6 +17,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vms:EditTagViewModel}">
             <views:EditTagView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type role_vms:AddRoleViewModel}">
+            <role_views:AddRoleView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type role_vms:EditRoleViewModel}">
+            <role_views:EditRoleView />
         </DataTemplate>
     </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto"

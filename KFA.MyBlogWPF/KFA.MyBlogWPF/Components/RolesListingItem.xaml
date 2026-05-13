@@ -11,11 +11,11 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Name}" />
+            <TextBlock Grid.Column="0" Text="{Binding RoleName}" />
             <TextBlock Grid.Column="1" Text="{Binding Description}" />
             
             <custom:DropdownMenu 
