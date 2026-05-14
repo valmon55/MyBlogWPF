@@ -6,10 +6,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KFA.MyBlogWPF" 
         xmlns:views="clr-namespace:KFA.MyBlogWPF.Views"
+        xmlns:user_views="clr-namespace:KFA.MyBlogWPF.Views.Users"
         xmlns:vms="clr-namespace:KFA.MyBlogWPF.ViewModels"
         xmlns:role_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Roles"
         xmlns:role_views="clr-namespace:KFA.MyBlogWPF.Views.Roles"
         mc:Ignorable="d"
+        FontSize="14"
         Title="MyBlog" Height="450" Width="800">
     <Window.Resources>
         <DataTemplate DataType="{x:Type vms:AddTagViewModel}">
@@ -58,6 +60,11 @@
                     <TabItem.Header>
                         <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="User" />
                     </TabItem.Header>
+                    <TabItem.Content>
+                        <Grid>
+                            <user_views:UsersView DataContext="{Binding UsersViewModel}"/>
+                        </Grid>
+                    </TabItem.Content>
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>

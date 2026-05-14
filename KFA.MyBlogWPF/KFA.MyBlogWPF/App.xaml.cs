@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
 using KFA.MyBlogWPF.ViewModels.Roles;
+using KFA.MyBlogWPF.ViewModels.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,12 +35,14 @@ namespace KFA.MyBlogWPF
                     services.AddSingleton<ModalNavigationStore>();
                     services.AddSingleton<TagsStore>();
                     services.AddSingleton<RolesStore>();
+                    services.AddSingleton<UsersStore>();
 
                     services.AddTransient<AddTagViewModel>();
                     services.AddTransient<EditTagViewModel>();
                     services.AddTransient<TagsListingViewModel>();
                     services.AddTransient<TagsViewModel>();
                     services.AddTransient<RolesViewModel>();
+                    services.AddTransient<UsersViewModel>();
                     services.AddTransient<LoginViewModel>();
 
                     services.AddSingleton<MainViewModel>();
