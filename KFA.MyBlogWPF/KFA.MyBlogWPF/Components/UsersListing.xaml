@@ -18,7 +18,7 @@
                         Background="White"
                         CornerRadius="5"/>
 
-                <ListView BorderThickness="0" ItemsSource="{Binding RolesListingItemViewModels}">
+                <ListView BorderThickness="0" ItemsSource="{Binding UsersListingItemViewModels}">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
