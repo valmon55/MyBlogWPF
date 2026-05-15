@@ -20,6 +20,9 @@
     <Compile Update="Components\LoginDetailForm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Components\UserDetailForm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

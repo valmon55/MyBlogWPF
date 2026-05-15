@@ -1,4 +1,5 @@
-﻿using KFA.MyBlogWPF.Commands.Role;
+﻿using KFA.MyBlogWPF.Commands;
+using KFA.MyBlogWPF.Commands.Role;
 using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
 using System;
@@ -57,8 +58,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
         {
             User = user;
 
-            //EditCommand = new OpenEditRoleCommand(this, modalNavigationStore, rolesStore);
-            //DeleteCommand = new DeleteRoleCommand(this, rolesStore);
+            EditCommand = new OpenEditUserCommand(this, modalNavigationStore, usersStore);
+            //DeleteCommand = new DeleteRoleCommand(this, usersStore);
         }
         public void Update(User user)
         {

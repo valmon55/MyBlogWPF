@@ -2,6 +2,7 @@
 using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
 using KFA.MyBlogWPF.ViewModels.Roles;
+using KFA.MyBlogWPF.ViewModels.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;

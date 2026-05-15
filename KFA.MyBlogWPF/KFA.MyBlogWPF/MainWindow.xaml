@@ -21,6 +21,9 @@
         <DataTemplate DataType="{x:Type vms:EditTagViewModel}">
             <views:EditTagView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type user_vms:EditUserViewModel}">
+            <user_views:EditUserView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type role_vms:AddRoleViewModel}">
             <role_views:AddRoleView />
         </DataTemplate>
