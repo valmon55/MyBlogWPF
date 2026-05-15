@@ -6,18 +6,37 @@ using System.Net.Http;
 
 namespace KFA.MyBlogWPF.ViewModels.Users
 {
-    public class UsersListingViewModel
+    public class UsersListingViewModel : ViewModelBase
     {
         private readonly HttpClient _myBlog;
         private readonly ModalNavigationStore _modalNavigationStore;
+        private readonly SelectedUserStore _selectedUserStore;
         private readonly UsersStore _usersStore;
 
         private ObservableCollection<UsersListingItemViewModel> _usersListingItemViewModels;
         public IEnumerable<UsersListingItemViewModel> UsersListingItemViewModels => _usersListingItemViewModels;
-        public UsersListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore, UsersStore usersStore)
+        
+        private UsersListingItemViewModel _selectedUserListingItemViewModel;
+        public UsersListingItemViewModel SelectedUserListingItemViewModel
+        {
+            get 
+            { 
+                return _selectedUserListingItemViewModel; 
+            }
+            set 
+            { 
+                _selectedUserListingItemViewModel = value;
+                OnPropertyChanged(nameof(SelectedUserListingItemViewModel));
+
+                _selectedUserStore.SelectedUser = _selectedUserListingItemViewModel?.User;
+            }
+        }
+
+        public UsersListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore, SelectedUserStore selectedUserStore, UsersStore usersStore)
         {
             _myBlog = myBlog;
             _modalNavigationStore = modalNavigationStore;
+            _selectedUserStore = selectedUserStore;
             _usersStore = usersStore;
 
             _usersListingItemViewModels = new ObservableCollection<UsersListingItemViewModel>();

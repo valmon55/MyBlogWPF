@@ -36,6 +36,7 @@ namespace KFA.MyBlogWPF
                     services.AddSingleton<TagsStore>();
                     services.AddSingleton<RolesStore>();
                     services.AddSingleton<UsersStore>();
+                    services.AddSingleton<SelectedUserStore>();
 
                     services.AddTransient<AddTagViewModel>();
                     services.AddTransient<EditTagViewModel>();

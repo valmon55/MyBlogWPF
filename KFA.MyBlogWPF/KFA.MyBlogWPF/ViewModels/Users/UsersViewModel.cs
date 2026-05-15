@@ -17,11 +17,12 @@ namespace KFA.MyBlogWPF.ViewModels.Users
         public UsersDetailsViewModel UsersDetailsViewModel { get; }
         public UsersViewModel(HttpClient myBlog,
                             ModalNavigationStore modalNavigationStore,
+                            SelectedUserStore selectedUserStore,
                             UsersStore usersStore)
         {
             _myBlog = myBlog;
-            UsersListingViewModel = new UsersListingViewModel(_myBlog, modalNavigationStore, usersStore);
-            UsersDetailsViewModel = new UsersDetailsViewModel();
+            UsersListingViewModel = new UsersListingViewModel(_myBlog, modalNavigationStore, selectedUserStore, usersStore);
+            UsersDetailsViewModel = new UsersDetailsViewModel(selectedUserStore);
         }
 
     }
