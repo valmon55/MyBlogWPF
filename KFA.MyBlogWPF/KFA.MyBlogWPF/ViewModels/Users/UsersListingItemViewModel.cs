@@ -14,10 +14,6 @@ namespace KFA.MyBlogWPF.ViewModels.Users
     public class UsersListingItemViewModel : ViewModelBase
     {
         public User User { get; }
-        public UsersListingItemViewModel(User user)
-        {
-            User = user;
-        }
         public string Last_Name => User.Last_Name;
         public string First_Name => User.First_Name;
         public string Middle_Name => User.Middle_Name;

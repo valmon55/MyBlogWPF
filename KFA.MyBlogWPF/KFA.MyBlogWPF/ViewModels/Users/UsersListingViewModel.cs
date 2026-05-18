@@ -47,7 +47,10 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         First_Name = "Admin",
                         Last_Name = "a",
                         Middle_Name = "a"
-                    })
+                    },
+                    modalNavigationStore,
+                    usersStore
+                    )
                 );
             _usersListingItemViewModels.Add(
                 new UsersListingItemViewModel(
@@ -56,7 +59,9 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         First_Name = "Fedor",
                         Last_Name = "k",
                         Middle_Name = "a"
-                    })
+                    },
+                    modalNavigationStore,
+                    usersStore)
                 );
             _usersListingItemViewModels.Add(
                 new UsersListingItemViewModel(
@@ -65,7 +70,9 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         First_Name = "user",
                         Last_Name = "u",
                         Middle_Name = "u"
-                    })
+                    },
+                    modalNavigationStore,
+                    usersStore)
                 );
         }
 
