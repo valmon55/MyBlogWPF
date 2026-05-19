@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Tags\**" />
+    <EmbeddedResource Remove="Views\Tags\**" />
+    <None Remove="Views\Tags\**" />
+    <Page Remove="Views\Tags\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DropdownMenu.WPF" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
@@ -34,7 +41,6 @@
   <ItemGroup>
     <Folder Include="Commands\Login\" />
     <Folder Include="Commands\Article\" />
-    <Folder Include="Views\Tags\" />
   </ItemGroup>
 
 </Project>

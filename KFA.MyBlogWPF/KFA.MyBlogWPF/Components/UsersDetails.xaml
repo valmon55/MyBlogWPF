@@ -84,7 +84,26 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Grid.Column="0" FontWeight="Bold" Text="Roles" />
-                        <ListBox Grid.Column="1" Margin="20 0 0 0" />
+                        <ListView Grid.Column="1" Margin="20 0 0 0" ItemsSource="{Binding Roles}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Name" Width="auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="5 0" Text="{Binding Name}"/>    
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Description" Width="auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="5 0" Text="{Binding Description}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
                     </Grid>
                 </Grid>
             </Grid>

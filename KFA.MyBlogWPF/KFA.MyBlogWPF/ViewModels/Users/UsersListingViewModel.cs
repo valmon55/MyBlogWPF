@@ -56,8 +56,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         Login = "Admin",
                         Roles = new List<Role>()
                         {
-                            new Role() { Name = "Admin" },
-                            new Role() { Name = "User" },
+                            new Role() { Name = "Admin", Description = "Administrator" },
+                            new Role() { Name = "User", Description = "Ordinal User" },
                         }
                     },
                     modalNavigationStore,
@@ -77,8 +77,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         Login = "fedor",
                         Roles = new List<Role>()
                         {
-                            new Role() { Name = "Moderator" },
-                            new Role() { Name = "User" },
+                            new Role() { Name = "Moderator", Description = "Moderator" },
+                            new Role() { Name = "User", Description = "Ordinal User" },
                         }
                     },
                     modalNavigationStore,
@@ -97,7 +97,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         Login = "usr",
                         Roles = new List<Role>()
                         {
-                            new Role() { Name = "User" },
+                            new Role() { Name = "User", Description = "Ordinal User" },
                         }
                     },
                     modalNavigationStore,
