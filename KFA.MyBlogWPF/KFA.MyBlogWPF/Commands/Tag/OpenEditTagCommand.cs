@@ -1,4 +1,4 @@
-﻿using KFA.MyBlogWPF.Models;
+﻿using Model = KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
 using System;
@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KFA.MyBlogWPF.ViewModels.Tags;
 
-namespace KFA.MyBlogWPF.Commands
+namespace KFA.MyBlogWPF.Commands.Tag
 {
     public class OpenEditTagCommand : CommandBase
     {
@@ -24,7 +25,7 @@ namespace KFA.MyBlogWPF.Commands
 
         public override void Execute(object? parameter)
         {
-            Tag tag = _tagsListingItemViewModel.Tag;
+            Model.Tag tag = _tagsListingItemViewModel.Tag;
 
             EditTagViewModel editTagViewModel = new EditTagViewModel(tag, _tagsStore, _modalNavigationStore);
             _modalNavigationStore.CurrentViewModel = editTagViewModel;

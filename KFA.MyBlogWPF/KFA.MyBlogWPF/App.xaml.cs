@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
 using KFA.MyBlogWPF.ViewModels.Roles;
+using KFA.MyBlogWPF.ViewModels.Tags;
 using KFA.MyBlogWPF.ViewModels.Users;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,4 +1,5 @@
 ﻿using KFA.MyBlogWPF.Commands;
+using KFA.MyBlogWPF.Commands.User;
 using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
 using System;

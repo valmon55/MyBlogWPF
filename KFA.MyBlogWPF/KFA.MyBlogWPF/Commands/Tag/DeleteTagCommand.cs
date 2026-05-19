@@ -1,13 +1,13 @@
-﻿using KFA.MyBlogWPF.Models;
+﻿using Model = KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
-using KFA.MyBlogWPF.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KFA.MyBlogWPF.ViewModels.Tags;
 
-namespace KFA.MyBlogWPF.Commands
+namespace KFA.MyBlogWPF.Commands.Tag
 {
     public class DeleteTagCommand : AsyncCommandBase
     {
@@ -25,12 +25,12 @@ namespace KFA.MyBlogWPF.Commands
             _tagsListingItemViewModel.ErrorMessage = null;
             _tagsListingItemViewModel.IsDeleting = true;
 
-            Tag tag = _tagsListingItemViewModel.Tag;
+            Model.Tag tag = _tagsListingItemViewModel.Tag;
             try
             {
                 await _tagsStore.Delete(tag.Id);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 _tagsListingItemViewModel.ErrorMessage = $"Failed to delete Tag {tag.Name}";
             }

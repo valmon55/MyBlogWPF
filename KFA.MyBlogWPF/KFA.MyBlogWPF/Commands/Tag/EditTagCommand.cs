@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KFA.MyBlogWPF.Commands
+namespace KFA.MyBlogWPF.Commands.Tag
 {
     public class EditTagCommand : AsyncCommandBase
     {
@@ -25,10 +25,10 @@ namespace KFA.MyBlogWPF.Commands
             // Send API request to Add Tag
 
             TagDetailsFormViewModel formViewModel = _editTagViewModel.TagDetailsFormViewModel;
-            Models.Tag tag = new Models.Tag() 
+            Models.Tag tag = new Models.Tag()
             {
-                Id = _editTagViewModel.TagId, 
-                Name = formViewModel.TagName 
+                Id = _editTagViewModel.TagId,
+                Name = formViewModel.TagName
             };
             // Send API request to Edit Tag
 

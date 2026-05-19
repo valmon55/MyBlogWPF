@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KFA.MyBlogWPF.Commands
+namespace KFA.MyBlogWPF.Commands.Tag
 {
     public class AddTagCommand : AsyncCommandBase
     {
@@ -23,7 +23,7 @@ namespace KFA.MyBlogWPF.Commands
         public override async Task ExecuteAsync(object parameter)
         {
             Random random = new Random();
-            int n = random.Next(1,100);
+            int n = random.Next(1, 100);
 
             TagDetailsFormViewModel formViewModel = _addTagViewModel.TagDetailsFormViewModel;
             Models.Tag tag = new Models.Tag()

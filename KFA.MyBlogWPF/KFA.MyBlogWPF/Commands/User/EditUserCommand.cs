@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KFA.MyBlogWPF.Commands
+namespace KFA.MyBlogWPF.Commands.User
 {
     public class EditUserCommand : AsyncCommandBase
     {
@@ -26,9 +26,9 @@ namespace KFA.MyBlogWPF.Commands
             // Send API request to Add User
 
             UserDetailsFormViewModel formViewModel = _editUserViewModel.UserDetailsFormViewModel;
-            Models.User user = new Models.User() 
+            Models.User user = new Models.User()
             {
-                Id = _editUserViewModel.UserId, 
+                Id = _editUserViewModel.UserId,
                 First_Name = formViewModel.FirstName,
                 Last_Name = formViewModel.LastName,
                 Middle_Name = formViewModel.MiddleName,

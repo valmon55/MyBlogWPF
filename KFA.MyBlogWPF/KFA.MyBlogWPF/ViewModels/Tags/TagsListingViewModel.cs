@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace KFA.MyBlogWPF.ViewModels
+namespace KFA.MyBlogWPF.ViewModels.Tags
 {
     public class TagsListingViewModel : ViewModelBase
     {

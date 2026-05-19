@@ -1,4 +1,4 @@
-﻿using KFA.MyBlogWPF.Commands;
+﻿using KFA.MyBlogWPF.Commands.Tag;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace KFA.MyBlogWPF.ViewModels
+namespace KFA.MyBlogWPF.ViewModels.Tags
 {
     /// <summary>
     /// Для представления TagsView

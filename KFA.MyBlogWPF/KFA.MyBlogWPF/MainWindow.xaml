@@ -6,6 +6,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:KFA.MyBlogWPF" 
         xmlns:views="clr-namespace:KFA.MyBlogWPF.Views"
+        xmlns:tag_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Tags"
+        xmlns:tag_views="clr-namespace:KFA.MyBlogWPF.Views"
         xmlns:user_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Users"
         xmlns:user_views="clr-namespace:KFA.MyBlogWPF.Views.Users"
         xmlns:vms="clr-namespace:KFA.MyBlogWPF.ViewModels"
