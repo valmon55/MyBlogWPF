@@ -1,7 +1,8 @@
-﻿using KFA.MyBlogWPF.Models;
+﻿using Model = KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
 using KFA.MyBlogWPF.ViewModels.Users;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,7 @@ namespace KFA.MyBlogWPF.Commands
 
         public override void Execute(object? parameter)
         {
-            User user = _usersListingItemViewModel.User;
+            Model.User user = _usersListingItemViewModel.User;
 
             EditUserViewModel editUserViewModel = new EditUserViewModel(user, _usersStore, _modalNavigationStore);
             _modalNavigationStore.CurrentViewModel = editUserViewModel;

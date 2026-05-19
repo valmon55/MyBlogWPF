@@ -1,5 +1,6 @@
 ﻿using KFA.MyBlogWPF.Commands;
 using KFA.MyBlogWPF.Commands.Role;
+using KFA.MyBlogWPF.Commands.User;
 using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
 using System;
@@ -13,7 +14,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
 {
     public class UsersListingItemViewModel : ViewModelBase
     {
-        public User User { get; }
+        public User User { get; private set; }
         public string Last_Name => User.Last_Name;
         public string First_Name => User.First_Name;
         public string Middle_Name => User.Middle_Name;
@@ -55,10 +56,12 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             User = user;
 
             EditCommand = new OpenEditUserCommand(this, modalNavigationStore, usersStore);
-            //DeleteCommand = new DeleteRoleCommand(this, usersStore);
+            DeleteCommand = new DeleteUserCommand(this, usersStore);
         }
         public void Update(User user)
         {
+            User = user;
+
             OnPropertyChanged(nameof(Last_Name));
             OnPropertyChanged(nameof(First_Name));
             OnPropertyChanged(nameof(Middle_Name));
