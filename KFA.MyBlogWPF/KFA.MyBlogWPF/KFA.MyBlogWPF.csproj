@@ -34,8 +34,6 @@
   <ItemGroup>
     <Folder Include="Commands\Login\" />
     <Folder Include="Commands\Article\" />
-    <Folder Include="Views\Login\" />
-    <Folder Include="Views\Tags\" />
   </ItemGroup>
 
 </Project>
