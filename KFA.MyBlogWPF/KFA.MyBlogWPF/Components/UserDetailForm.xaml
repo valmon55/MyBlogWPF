@@ -105,9 +105,22 @@
             <TextBlock Grid.Column="0"
                        FontWeight="Bold"
                        Text="Roles" />
-            <TextBox Grid.Column="1"
-                       Margin="20 0 0 0"
-                       Text="{Binding Roles, UpdateSourceTrigger=PropertyChanged}" />
+
+            <ListBox Grid.Column="1"
+                     Margin="20 0 0 0"
+                     ItemsSource="{Binding RoleAssignments}"
+                     SelectionMode="Extended">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox IsChecked="{Binding IsAssignment, Mode=TwoWay}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Description}" />
+                            </StackPanel>
+                        </CheckBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>                
+            </ListBox>
         </Grid>
 
         <WrapPanel Grid.Row="7" Margin="0 30 0 0">

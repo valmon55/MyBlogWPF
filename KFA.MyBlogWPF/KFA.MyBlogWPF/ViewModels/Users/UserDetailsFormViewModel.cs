@@ -82,6 +82,17 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                 OnPropertyChanged(nameof(Roles));
             }
         }
+        private IEnumerable<RoleAssignment> roleAssignments;
+        public IEnumerable<RoleAssignment> RoleAssignments
+        {
+            get { return roleAssignments; }
+            set
+            {
+                roleAssignments = value;
+                OnPropertyChanged(nameof(RoleAssignments));
+            }
+        }
+        private IEnumerable<Role> allRoles;
         public bool CanSubmit => !string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName);
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
@@ -90,5 +101,26 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             SubmitCommand = submitCommand;
             CancelCommand = cancelCommand;
         }    
+
+        public void InitRoles(List<Role> allRoles, List<Role> userRoles)
+        {
+            if(allRoles == null || !allRoles.Any())
+            {
+                RoleAssignments = new List<RoleAssignment>();
+                return;
+            }
+            this.allRoles = allRoles;
+
+            RoleAssignments = allRoles.Select(role => new RoleAssignment()
+            {
+                Role = role,
+                IsAssignment = userRoles?.Any(ur => ur.Id == role.Id) ?? false
+            }).ToList();
+        }
+        public List<Role> GetSelectedRoles()
+        {
+            return RoleAssignments?.Where(ra => ra.IsAssignment)
+                        .Select(ra => ra.Role).ToList() ?? new List<Role>();
+        }
     }
 }

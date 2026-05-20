@@ -16,19 +16,26 @@ namespace KFA.MyBlogWPF.Commands.User
         private readonly UsersListingItemViewModel _usersListingItemViewModel;
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly UsersStore _usersStore;
+        private readonly List<Model.Role> _allRoles;
 
-        public OpenEditUserCommand(UsersListingItemViewModel usersListingItemViewModel, ModalNavigationStore modalNavigationStore, UsersStore usersStore)
+        public OpenEditUserCommand(UsersListingItemViewModel usersListingItemViewModel, 
+                                ModalNavigationStore modalNavigationStore, 
+                                UsersStore usersStore,
+                                List<Model.Role> allRoles)
         {
             _usersListingItemViewModel = usersListingItemViewModel;
             _modalNavigationStore = modalNavigationStore;
             _usersStore = usersStore;
+            _allRoles = allRoles;
         }
-
+        public event EventHandler CanExecuteChanged;
+        public bool CanExecute(object parameter) => true;
         public override void Execute(object? parameter)
         {
             Model.User user = _usersListingItemViewModel.User;
 
-            EditUserViewModel editUserViewModel = new EditUserViewModel(user, _usersStore, _modalNavigationStore);
+            EditUserViewModel editUserViewModel = 
+                new EditUserViewModel(user, _usersStore, _modalNavigationStore, _allRoles);
             _modalNavigationStore.CurrentViewModel = editUserViewModel;
         }
 

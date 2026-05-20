@@ -13,6 +13,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
         private readonly SelectedUserStore _selectedUserStore;
         private readonly UsersStore _usersStore;
 
+        private List<Role> _allRoles;
+
         private ObservableCollection<UsersListingItemViewModel> _usersListingItemViewModels;
         public IEnumerable<UsersListingItemViewModel> UsersListingItemViewModels => _usersListingItemViewModels;
         
@@ -42,6 +44,15 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             _usersStore.UserUpdated += UsersStore_UserUpdated;
             _usersStore.UserDeleted += UsersStore_UserDeleted;
 
+            var allRoles = new List<Role>()
+            {
+                new Role() { Id = 1, Name = "Admin", Description = "Administrator" },
+                new Role() { Id = 2, Name = "User", Description = "Ordinal User" },
+                new Role() { Id = 3, Name = "Moderator", Description = "Moderator" }
+            };
+
+            _allRoles = allRoles;
+
             _usersListingItemViewModels = new ObservableCollection<UsersListingItemViewModel>();
             _usersListingItemViewModels.Add(
                 new UsersListingItemViewModel(
@@ -60,6 +71,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                             new Role() { Name = "User", Description = "Ordinal User" },
                         }
                     },
+                    _allRoles,
                     modalNavigationStore,
                     usersStore
                     )
@@ -81,6 +93,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                             new Role() { Name = "User", Description = "Ordinal User" },
                         }
                     },
+                    _allRoles,
                     modalNavigationStore,
                     usersStore)
                 );
@@ -100,6 +113,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                             new Role() { Name = "User", Description = "Ordinal User" },
                         }
                     },
+                    _allRoles,
                     modalNavigationStore,
                     usersStore)
                 );

@@ -16,7 +16,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
         public int UserId { get; }
         public UserDetailsFormViewModel UserDetailsFormViewModel { get; }
 
-        public EditUserViewModel(User user, UsersStore usersStore, ModalNavigationStore modalNavigationStore)
+        public EditUserViewModel(User user, UsersStore usersStore, 
+                                ModalNavigationStore modalNavigationStore, List<Role> allRoles)
         {
             UserId = user.Id;
 
@@ -30,9 +31,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                 BirthDate = user.BirthDate,
                 Email = user.Email,
                 Login = user.Login,
-                Roles = user.Roles,
             };
-
+            UserDetailsFormViewModel.InitRoles(allRoles, user.Roles);
         }
     }
 }

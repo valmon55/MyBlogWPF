@@ -14,6 +14,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
 {
     public class UsersListingItemViewModel : ViewModelBase
     {
+        private readonly List<Role> _allRoles;
         public User User { get; private set; }
         public string Last_Name => User.Last_Name;
         public string First_Name => User.First_Name;
@@ -51,11 +52,12 @@ namespace KFA.MyBlogWPF.ViewModels.Users
         }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
-        public UsersListingItemViewModel(User user, ModalNavigationStore modalNavigationStore, UsersStore usersStore)
+        public UsersListingItemViewModel(User user, List<Role> allRoles, ModalNavigationStore modalNavigationStore, UsersStore usersStore)
         {
             User = user;
+            _allRoles = allRoles;
 
-            EditCommand = new OpenEditUserCommand(this, modalNavigationStore, usersStore);
+            EditCommand = new OpenEditUserCommand(this, modalNavigationStore, usersStore, _allRoles);
             DeleteCommand = new DeleteUserCommand(this, usersStore);
         }
         public void Update(User user)

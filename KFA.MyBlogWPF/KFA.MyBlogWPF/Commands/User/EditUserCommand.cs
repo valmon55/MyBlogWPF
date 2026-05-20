@@ -21,11 +21,17 @@ namespace KFA.MyBlogWPF.Commands.User
             _modalNavigationStore = modalNavigationStore;
             _usersStore = usersStore;
         }
+        public event EventHandler CanExecuteChanged;
+        public bool CanExecute(object parameter)
+        {
+            return _editUserViewModel.UserDetailsFormViewModel.CanSubmit;
+        }
         public override async Task ExecuteAsync(object parameter)
         {
             // Send API request to Add User
 
             UserDetailsFormViewModel formViewModel = _editUserViewModel.UserDetailsFormViewModel;
+
             Models.User user = new Models.User()
             {
                 Id = _editUserViewModel.UserId,
@@ -35,7 +41,7 @@ namespace KFA.MyBlogWPF.Commands.User
                 Email = formViewModel.Email,
                 BirthDate = formViewModel.BirthDate,
                 Login = formViewModel.Login,
-                Roles = formViewModel.Roles.ToList(),
+                Roles = formViewModel.GetSelectedRoles(),
             };
             // Send API request to Edit User
 
