@@ -67,8 +67,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         Login = "Admin",
                         Roles = new List<Role>()
                         {
-                            new Role() { Name = "Admin", Description = "Administrator" },
-                            new Role() { Name = "User", Description = "Ordinal User" },
+                            new Role() { Id = 1, Name = "Admin", Description = "Administrator" },
+                            new Role() { Id = 2, Name = "User", Description = "Ordinal User" },
                         }
                     },
                     _allRoles,
@@ -89,8 +89,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         Login = "fedor",
                         Roles = new List<Role>()
                         {
-                            new Role() { Name = "Moderator", Description = "Moderator" },
-                            new Role() { Name = "User", Description = "Ordinal User" },
+                            new Role() { Id = 3, Name = "Moderator", Description = "Moderator" },
+                            new Role() { Id = 2, Name = "User", Description = "Ordinal User" },
                         }
                     },
                     _allRoles,
@@ -110,7 +110,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                         Login = "usr",
                         Roles = new List<Role>()
                         {
-                            new Role() { Name = "User", Description = "Ordinal User" },
+                            new Role() { Id = 2, Name = "User", Description = "Ordinal User" },
                         }
                     },
                     _allRoles,

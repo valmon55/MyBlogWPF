@@ -112,10 +112,10 @@
                      SelectionMode="Extended">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox IsChecked="{Binding IsAssignment, Mode=TwoWay}">
+                        <CheckBox IsChecked="{Binding IsAssigned, Mode=TwoWay}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Name}" />
-                                <TextBlock Text="{Binding Description}" />
+                                <TextBlock Margin="5 0" Text="{Binding Name}" />
+                                <TextBlock Margin="5 0" Text="{Binding Description}" />
                             </StackPanel>
                         </CheckBox>
                     </DataTemplate>

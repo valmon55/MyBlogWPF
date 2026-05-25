@@ -114,12 +114,12 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             RoleAssignments = allRoles.Select(role => new RoleAssignment()
             {
                 Role = role,
-                IsAssignment = userRoles?.Any(ur => ur.Id == role.Id) ?? false
+                IsAssigned = userRoles?.Any(ur => ur.Id == role.Id) ?? false
             }).ToList();
         }
         public List<Role> GetSelectedRoles()
         {
-            return RoleAssignments?.Where(ra => ra.IsAssignment)
+            return RoleAssignments?.Where(ra => ra.IsAssigned)
                         .Select(ra => ra.Role).ToList() ?? new List<Role>();
         }
     }
