@@ -18,20 +18,30 @@ namespace KFA.MyBlogWPF.ViewModels
         public TagsViewModel TagsViewModel { get; }
         public UsersViewModel UsersViewModel { get; }
         public RolesViewModel RolesViewModel { get; }
+        public SessionState SessionState { get; set; }
+        public bool IsLogin => SessionState == SessionState.Login ? true : false;
+        public bool IsRegister => SessionState == SessionState.Register ? true : false;
+        public bool IsSignedIn => SessionState == SessionState.Signedin ? true : false;
         public LoginViewModel LoginViewModel { get; }
+        public RegisterViewModel RegisterViewModel { get; }
+        public LogoutViewModel LogoutViewModel { get; }
         public MainViewModel(ModalNavigationStore modalNavigationStore,
                             TagsViewModel tagsViewModel,
                             RolesViewModel rolesViewModel,
                             LoginViewModel loginViewModel,
-                            UsersViewModel usersViewModel)
+                            UsersViewModel usersViewModel,
+                            RegisterViewModel registerViewModel)
         {
             _modalNavigationStore = modalNavigationStore;
             TagsViewModel = tagsViewModel;
             RolesViewModel = rolesViewModel;
             LoginViewModel = loginViewModel;
             UsersViewModel = usersViewModel;
+            RegisterViewModel = registerViewModel;
 
             _modalNavigationStore.CurrentViewModelChanged += ModalNavigationStore_CurrentViewModelChanged;
+
+            //IsLogin = true;
 
             //_modalNavigationStore.CurrentViewModel = new EditTagViewModel();
         }
@@ -46,5 +56,12 @@ namespace KFA.MyBlogWPF.ViewModels
             OnPropertyChanged(nameof(CurrentModalViewModal));
             OnPropertyChanged(nameof(IsModalOpen));
         }
+    }
+
+    public enum SessionState
+    {
+        Login,
+        Register,
+        Signedin
     }
 }

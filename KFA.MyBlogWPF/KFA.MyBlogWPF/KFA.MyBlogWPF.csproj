@@ -41,6 +41,8 @@
   <ItemGroup>
     <Folder Include="Commands\Login\" />
     <Folder Include="Commands\Article\" />
+    <Folder Include="ViewModels\Login\" />
+    <Folder Include="Views\Login\" />
   </ItemGroup>
 
 </Project>

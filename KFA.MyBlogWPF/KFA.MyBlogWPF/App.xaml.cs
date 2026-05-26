@@ -46,6 +46,8 @@ namespace KFA.MyBlogWPF
                     services.AddTransient<RolesViewModel>();
                     services.AddTransient<UsersViewModel>();
                     services.AddTransient<LoginViewModel>();
+                    services.AddTransient<RegisterViewModel>();
+                    services.AddTransient<LogoutViewModel>();
 
                     services.AddSingleton<MainViewModel>();
                     services.AddSingleton<MainWindow>();

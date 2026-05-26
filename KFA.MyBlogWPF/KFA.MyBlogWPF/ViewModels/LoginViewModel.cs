@@ -18,7 +18,29 @@ namespace KFA.MyBlogWPF.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         private readonly HttpClient _myBlog;
-        public ICommand LoginCommand { get; }
+        private string login;
+        public string Login
+        {
+            get { return login; }
+            set 
+            { 
+                login = value;
+                OnPropertyChanged(nameof(Login));
+            }
+        }
+        private string password;
+        public string Password
+        {
+            get { return password; }
+            set 
+            { 
+                password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+        public ICommand SubmitCommand { get; }
+        public ICommand CancelCommand { get; }
+        public bool CanSubmit => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password);
         public LoginViewModel(HttpClient myBlog)
         {
             _myBlog = myBlog;
