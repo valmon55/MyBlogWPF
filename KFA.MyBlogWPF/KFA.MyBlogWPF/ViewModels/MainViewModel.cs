@@ -18,10 +18,22 @@ namespace KFA.MyBlogWPF.ViewModels
         public TagsViewModel TagsViewModel { get; }
         public UsersViewModel UsersViewModel { get; }
         public RolesViewModel RolesViewModel { get; }
-        public SessionState SessionState { get; set; }
-        public bool IsLogin => SessionState == SessionState.Login ? true : false;
-        public bool IsRegister => SessionState == SessionState.Register ? true : false;
-        public bool IsSignedIn => SessionState == SessionState.Signedin ? true : false;
+        private SessionState sessionState;
+        public SessionState SessionState 
+        { 
+            get { return sessionState; } 
+            set
+            {
+                sessionState = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsLogin));
+                OnPropertyChanged(nameof(IsRegister));
+                OnPropertyChanged(nameof(IsSignedIn));
+            }
+        }
+        public bool IsLogin => SessionState == SessionState.Login;
+        public bool IsRegister => SessionState == SessionState.Register;
+        public bool IsSignedIn => SessionState == SessionState.Signedin;
         public LoginViewModel LoginViewModel { get; }
         public RegisterViewModel RegisterViewModel { get; }
         public LogoutViewModel LogoutViewModel { get; }
@@ -29,6 +41,7 @@ namespace KFA.MyBlogWPF.ViewModels
                             TagsViewModel tagsViewModel,
                             RolesViewModel rolesViewModel,
                             LoginViewModel loginViewModel,
+                            LogoutViewModel logoutViewModel,
                             UsersViewModel usersViewModel,
                             RegisterViewModel registerViewModel)
         {
@@ -36,18 +49,23 @@ namespace KFA.MyBlogWPF.ViewModels
             TagsViewModel = tagsViewModel;
             RolesViewModel = rolesViewModel;
             LoginViewModel = loginViewModel;
+            LogoutViewModel = logoutViewModel;
             UsersViewModel = usersViewModel;
             RegisterViewModel = registerViewModel;
 
             _modalNavigationStore.CurrentViewModelChanged += ModalNavigationStore_CurrentViewModelChanged;
-
-            //IsLogin = true;
-
-            //_modalNavigationStore.CurrentViewModel = new EditTagViewModel();
+            SessionStateMessenger.SessionStateChanged += OnSessionStateChanged;
         }
+
+        private void OnSessionStateChanged(SessionState state)
+        {
+            SessionState = state;
+        }
+
         protected override void Dispose()
         {
             _modalNavigationStore.CurrentViewModelChanged -= ModalNavigationStore_CurrentViewModelChanged;
+            SessionStateMessenger.SessionStateChanged -= OnSessionStateChanged;
 
             base.Dispose();
         }

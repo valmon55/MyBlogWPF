@@ -1,4 +1,5 @@
 ﻿using KFA.MyBlogWPF.Commands;
+using KFA.MyBlogWPF.Commands.Login;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,7 @@ namespace KFA.MyBlogWPF.ViewModels
             { 
                 login = value;
                 OnPropertyChanged(nameof(Login));
+                OnPropertyChanged(nameof(CanSubmit));
             }
         }
         private string password;
@@ -36,15 +38,17 @@ namespace KFA.MyBlogWPF.ViewModels
             { 
                 password = value;
                 OnPropertyChanged(nameof(Password));
+                OnPropertyChanged(nameof(CanSubmit));
             }
         }
-        public ICommand SubmitCommand { get; }
-        public ICommand CancelCommand { get; }
+        public ICommand LoginCommand { get; }
+        public ICommand GoToRegisterCommand { get; }
         public bool CanSubmit => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password);
         public LoginViewModel(HttpClient myBlog)
         {
             _myBlog = myBlog;
-
+            LoginCommand = new LoginCommand();
+            GoToRegisterCommand = new GoToRegisterCommand();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KFA.MyBlogWPF.Commands.Login;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -11,11 +12,13 @@ namespace KFA.MyBlogWPF.ViewModels
     public class RegisterViewModel : ViewModelBase
     {
         private readonly HttpClient _myBlog;
-        public ICommand SubmitCommand { get; }
-        public ICommand CancelCommand { get; }
+        public ICommand RegisterCommand { get; }
+        public ICommand GoToLoginCommand { get; }
         public RegisterViewModel(HttpClient myBlog)
         {
             _myBlog = myBlog;
+            RegisterCommand = new RegisterCommand();
+            GoToLoginCommand = new GoToLoginCommand();
 
         }
         private string firstName;
@@ -26,6 +29,7 @@ namespace KFA.MyBlogWPF.ViewModels
             {
                 firstName = value;
                 OnPropertyChanged(nameof(FirstName));
+                OnPropertyChanged(nameof(CanSubmit));
             }
         }
         private string lastName;
@@ -36,6 +40,7 @@ namespace KFA.MyBlogWPF.ViewModels
             {
                 lastName = value;
                 OnPropertyChanged(nameof(LastName));
+                OnPropertyChanged(nameof(CanSubmit));
             }
         }
         private string middleName;
@@ -76,6 +81,7 @@ namespace KFA.MyBlogWPF.ViewModels
             {
                 login = value;
                 OnPropertyChanged(nameof(Login));
+                OnPropertyChanged(nameof(CanSubmit));
             }
         }
         private string password;
@@ -86,6 +92,7 @@ namespace KFA.MyBlogWPF.ViewModels
             {
                 password = value;
                 OnPropertyChanged(nameof(Password));
+                OnPropertyChanged(nameof(CanSubmit));
             }
         }
         private string passwordConf;
@@ -98,7 +105,7 @@ namespace KFA.MyBlogWPF.ViewModels
                 OnPropertyChanged(nameof(PasswordConf));
             }
         }
-        public bool CanSubmit => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password);
-
+        public bool CanSubmit => !string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName)
+                                && !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password);
     }
 }

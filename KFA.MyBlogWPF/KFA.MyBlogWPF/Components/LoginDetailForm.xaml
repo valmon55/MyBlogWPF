@@ -42,12 +42,13 @@
                        Text="{Binding Password, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
         <WrapPanel Grid.Row="2" Margin="0 30 0 0">
-            <Button Content="Submit" 
-                    Command="{Binding SubmitCommand}" 
+            <Button Content="Login" 
+                    Command="{Binding LoginCommand}" 
                     Margin="0 0 10 0"
                     IsEnabled="{Binding CanSubmit}"/>
-            <Button Content="Cancel" 
-                    Command="{Binding CancelCommand}" 
+            <TextBlock Margin="10 0" Text="Not a member? Register now" />
+            <Button Content="Register" 
+                    Command="{Binding GoToRegisterCommand}" 
                     Style="{StaticResource ButtonSecondary}" />
         </WrapPanel>
     </Grid>

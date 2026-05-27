@@ -129,11 +129,12 @@
         </Grid>
         <WrapPanel Grid.Row="8" Margin="0 30 0 0">
             <Button Content="Submit" 
-                    Command="{Binding SubmitCommand}" 
+                    Command="{Binding RegisterCommand}" 
                     Margin="0 0 10 0"
                     IsEnabled="{Binding CanSubmit}"/>
-            <Button Content="Cancel" 
-                    Command="{Binding CancelCommand}" 
+            <TextBlock Margin="10 0" Text="Back to Login" />
+            <Button Content="Login" 
+                    Command="{Binding GoToLoginCommand}" 
                     Style="{StaticResource ButtonSecondary}" />
         </WrapPanel>
     </Grid>
