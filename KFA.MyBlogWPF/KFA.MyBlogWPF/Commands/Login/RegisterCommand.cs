@@ -9,11 +9,26 @@ namespace KFA.MyBlogWPF.Commands.Login
 {
     public class RegisterCommand : AsyncCommandBase
     {
+        private RegisterViewModel _registerViewModel;
+
+        public RegisterCommand(RegisterViewModel registerViewModel)
+        {
+            _registerViewModel = registerViewModel;
+        }
+
         public override Task ExecuteAsync(object parameter)
         {
             ///Выполняется регистрация
             ///если все Ок - выводим SignedIn
-            SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
+            _registerViewModel.ErrorString = string.Empty;
+            if ((string)parameter != "Admin")
+            {
+                _registerViewModel.ErrorString = "Login is incorrect";
+            }
+            else
+            {
+                SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
+            }
             return Task.CompletedTask;
         }
     }

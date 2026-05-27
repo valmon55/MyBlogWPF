@@ -26,6 +26,7 @@ namespace KFA.MyBlogWPF.ViewModels
             set 
             { 
                 login = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(Login));
                 OnPropertyChanged(nameof(CanSubmit));
             }
@@ -37,17 +38,30 @@ namespace KFA.MyBlogWPF.ViewModels
             set 
             { 
                 password = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(Password));
                 OnPropertyChanged(nameof(CanSubmit));
             }
         }
+        private string errorString;
+        public string ErrorString
+        {
+            get { return errorString; }
+            set
+            {
+                errorString = value;
+                OnPropertyChanged(nameof(ErrorString));
+                OnPropertyChanged(nameof(HasErrors));
+            }
+        }
+        public bool HasErrors => !string.IsNullOrEmpty(ErrorString);
         public ICommand LoginCommand { get; }
         public ICommand GoToRegisterCommand { get; }
         public bool CanSubmit => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password);
         public LoginViewModel(HttpClient myBlog)
         {
             _myBlog = myBlog;
-            LoginCommand = new LoginCommand();
+            LoginCommand = new LoginCommand(this);
             GoToRegisterCommand = new GoToRegisterCommand();
         }
     }

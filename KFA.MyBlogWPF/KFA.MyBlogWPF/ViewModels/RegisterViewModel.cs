@@ -17,7 +17,7 @@ namespace KFA.MyBlogWPF.ViewModels
         public RegisterViewModel(HttpClient myBlog)
         {
             _myBlog = myBlog;
-            RegisterCommand = new RegisterCommand();
+            RegisterCommand = new RegisterCommand(this);
             GoToLoginCommand = new GoToLoginCommand();
 
         }
@@ -28,6 +28,7 @@ namespace KFA.MyBlogWPF.ViewModels
             set
             {
                 firstName = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(FirstName));
                 OnPropertyChanged(nameof(CanSubmit));
             }
@@ -39,6 +40,7 @@ namespace KFA.MyBlogWPF.ViewModels
             set
             {
                 lastName = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(LastName));
                 OnPropertyChanged(nameof(CanSubmit));
             }
@@ -50,6 +52,7 @@ namespace KFA.MyBlogWPF.ViewModels
             set
             {
                 middleName = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(MiddleName));
             }
         }
@@ -60,6 +63,7 @@ namespace KFA.MyBlogWPF.ViewModels
             set
             {
                 birthDate = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(BirthDate));
             }
         }
@@ -70,6 +74,7 @@ namespace KFA.MyBlogWPF.ViewModels
             set
             {
                 email = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(Email));
             }
         }
@@ -80,6 +85,7 @@ namespace KFA.MyBlogWPF.ViewModels
             set
             {
                 login = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(Login));
                 OnPropertyChanged(nameof(CanSubmit));
             }
@@ -91,6 +97,7 @@ namespace KFA.MyBlogWPF.ViewModels
             set
             {
                 password = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(Password));
                 OnPropertyChanged(nameof(CanSubmit));
             }
@@ -102,10 +109,24 @@ namespace KFA.MyBlogWPF.ViewModels
             set
             {
                 passwordConf = value;
+                ErrorString = string.Empty;
                 OnPropertyChanged(nameof(PasswordConf));
             }
         }
         public bool CanSubmit => !string.IsNullOrEmpty(firstName) && !string.IsNullOrEmpty(lastName)
                                 && !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password);
+        private string errorString;
+        public string ErrorString
+        {
+            get { return errorString; }
+            set
+            {
+                errorString = value;
+                OnPropertyChanged(nameof(ErrorString));
+                OnPropertyChanged(nameof(HasErrors));
+            }
+        }
+        public bool HasErrors => !string.IsNullOrEmpty(ErrorString);
+
     }
 }

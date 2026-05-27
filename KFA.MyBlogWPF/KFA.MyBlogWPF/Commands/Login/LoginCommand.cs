@@ -9,6 +9,13 @@ namespace KFA.MyBlogWPF.Commands.Login
 {
     public class LoginCommand : AsyncCommandBase
     {
+        private LoginViewModel _loginViewModel;
+
+        public LoginCommand(LoginViewModel loginViewModel)
+        {
+            _loginViewModel = loginViewModel;
+        }
+
         //private readonly LoginViewModel _loginViewModel;
 
         //public LoginCommand(LoginViewModel loginViewModel)
@@ -20,7 +27,15 @@ namespace KFA.MyBlogWPF.Commands.Login
         {
             /// Отправляем запрос в API
             /// Получаем ответ, если все ок - делаем вилимой часть "SingedIn"
-            SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
+            _loginViewModel.ErrorString = string.Empty;
+            if ((string)parameter != "Admin")
+            {
+                _loginViewModel.ErrorString = "Login is incorrect";
+            }
+            else
+            {
+                SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
+            }
             return Task.CompletedTask;
         }
     }

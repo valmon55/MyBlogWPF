@@ -4,10 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:KFA.MyBlogWPF.Components"
+             xmlns:converters="clr-namespace:KFA.MyBlogWPF.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    </UserControl.Resources>
     <Grid Grid.IsSharedSizeScope="True">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
@@ -94,6 +99,7 @@
                        FontWeight="Bold"
                        Text="Login" />
             <TextBox Grid.Column="1"
+                       x:Name="LoginTextBox"
                        Margin="20 0 0 0"
                        Text="{Binding Login, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
@@ -127,9 +133,15 @@
                        Margin="20 0 0 0"
                        Text="{Binding PasswordConf, UpdateSourceTrigger=PropertyChanged}" />
         </Grid>
-        <WrapPanel Grid.Row="8" Margin="0 30 0 0">
+        <Grid Grid.Row="8" Margin="20 20 0 0" Visibility="{Binding HasErrors, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock FontWeight="Bold"                              
+                   Foreground="Red"
+                   Text="{Binding ErrorString}" />
+        </Grid>
+        <WrapPanel Grid.Row="9" Margin="0 30 0 0">
             <Button Content="Submit" 
                     Command="{Binding RegisterCommand}" 
+                    CommandParameter="{Binding ElementName=LoginTextBox, Path=Text}"
                     Margin="0 0 10 0"
                     IsEnabled="{Binding CanSubmit}"/>
             <TextBlock Margin="10 0" Text="Back to Login" />
