@@ -1,4 +1,5 @@
 ﻿using KFA.MyBlogWPF.Stores;
+using KFA.MyBlogWPF.ViewModels.Articles;
 using KFA.MyBlogWPF.ViewModels.Roles;
 using KFA.MyBlogWPF.ViewModels.Tags;
 using KFA.MyBlogWPF.ViewModels.Users;
@@ -15,6 +16,7 @@ namespace KFA.MyBlogWPF.ViewModels
         private readonly ModalNavigationStore _modalNavigationStore;
         public ViewModelBase CurrentModalViewModal => _modalNavigationStore.CurrentViewModel;
         public bool IsModalOpen => _modalNavigationStore.IsOpen;
+        public ArticlesViewModel ArticlesViewModel { get; }
         public TagsViewModel TagsViewModel { get; }
         public UsersViewModel UsersViewModel { get; }
         public RolesViewModel RolesViewModel { get; }
@@ -43,7 +45,8 @@ namespace KFA.MyBlogWPF.ViewModels
                             LoginViewModel loginViewModel,
                             LogoutViewModel logoutViewModel,
                             UsersViewModel usersViewModel,
-                            RegisterViewModel registerViewModel)
+                            RegisterViewModel registerViewModel,
+                            ArticlesViewModel articlesViewModel)
         {
             _modalNavigationStore = modalNavigationStore;
             TagsViewModel = tagsViewModel;
@@ -52,6 +55,7 @@ namespace KFA.MyBlogWPF.ViewModels
             LogoutViewModel = logoutViewModel;
             UsersViewModel = usersViewModel;
             RegisterViewModel = registerViewModel;
+            ArticlesViewModel = articlesViewModel;
 
             _modalNavigationStore.CurrentViewModelChanged += ModalNavigationStore_CurrentViewModelChanged;
             SessionStateMessenger.SessionStateChanged += OnSessionStateChanged;

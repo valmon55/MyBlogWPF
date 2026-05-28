@@ -9,9 +9,11 @@ namespace KFA.MyBlogWPF.Models
     public class Comment
     {
         public int Id { get; set; }
-        public string Comment_Text { get; set; }
         public DateTime CommentDate { get; set; }
+        public string Comment_Text { get; set; }
         public int ArticleId { get; set; }
+        public Article Article { get; set; }
         public string UserId { get; set; }
+        public User User { get; set; }  
      }
 }

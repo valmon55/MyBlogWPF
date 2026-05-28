@@ -1,5 +1,6 @@
 ﻿using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
+using KFA.MyBlogWPF.ViewModels.Articles;
 using KFA.MyBlogWPF.ViewModels.Roles;
 using KFA.MyBlogWPF.ViewModels.Tags;
 using KFA.MyBlogWPF.ViewModels.Users;
@@ -39,9 +40,10 @@ namespace KFA.MyBlogWPF
                     services.AddSingleton<UsersStore>();
                     services.AddSingleton<SelectedUserStore>();
 
-                    services.AddTransient<AddTagViewModel>();
-                    services.AddTransient<EditTagViewModel>();
-                    services.AddTransient<TagsListingViewModel>();
+                    //services.AddTransient<AddTagViewModel>();
+                    //services.AddTransient<EditTagViewModel>();
+                    //services.AddTransient<TagsListingViewModel>();
+                    services.AddTransient<ArticlesViewModel>();
                     services.AddTransient<TagsViewModel>();
                     services.AddTransient<RolesViewModel>();
                     services.AddTransient<UsersViewModel>();

@@ -8,6 +8,8 @@
         xmlns:local="clr-namespace:KFA.MyBlogWPF" 
         xmlns:views="clr-namespace:KFA.MyBlogWPF.Views"
         xmlns:tag_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Tags"
+        xmlns:articles_views="clr-namespace:KFA.MyBlogWPF.Views.Article"
+        xmlns:articles_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Articles"
         xmlns:tag_views="clr-namespace:KFA.MyBlogWPF.Views"
         xmlns:user_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Users"
         xmlns:user_views="clr-namespace:KFA.MyBlogWPF.Views.Users"
@@ -35,15 +37,6 @@
         <DataTemplate DataType="{x:Type role_vms:EditRoleViewModel}">
             <role_views:EditRoleView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vms:LoginViewModel}">
-            <views:LoginView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vms:RegisterViewModel}">
-            <views:RegisterView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vms:LogoutViewModel}">
-            <views:LogoutView />
-        </DataTemplate>
     </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto"
                               HorizontalScrollBarVisibility="Auto">
@@ -54,13 +47,13 @@
             <TabControl x:Name="Menu">
                 <TabItem>
                     <TabItem.Header>
-                        <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="Main" />
-                    </TabItem.Header>
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
                         <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="Articles" />
                     </TabItem.Header>
+                    <TabItem.Content>
+                        <Grid>
+                            <articles_views:ArticlesView DataContext="{Binding ArticlesViewModel}"/>
+                        </Grid>
+                    </TabItem.Content>
                 </TabItem>
                 <TabItem>
                     <TabItem.Header>
