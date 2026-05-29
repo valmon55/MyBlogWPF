@@ -17,11 +17,14 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         public ArticlesListingViewModel ArticlesListingViewModel { get; }
         public ArticlesDetailsViewModel ArticlesDetailsViewModel { get; }
         public ICommand AddArticlesCommand { get; }
-        public ArticlesViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore)
+        public ArticlesViewModel(HttpClient myBlog, 
+                                ModalNavigationStore modalNavigationStore,
+                                SelectedArticleStore selectedArticleStore,
+                                ArticleStore articleStore)
         {
             _myBlog = myBlog;
-            ArticlesListingViewModel = new ArticlesListingViewModel(_myBlog, modalNavigationStore);
-            ArticlesDetailsViewModel = new ArticlesDetailsViewModel();
+            ArticlesListingViewModel = new ArticlesListingViewModel(_myBlog, modalNavigationStore, selectedArticleStore,articleStore);
+            ArticlesDetailsViewModel = new ArticlesDetailsViewModel(selectedArticleStore);
         }
     }
 }

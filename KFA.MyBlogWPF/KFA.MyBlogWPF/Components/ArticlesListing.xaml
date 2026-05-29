@@ -28,7 +28,7 @@
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <local:UsersListingItem />
+                            <local:ArticlesListingItem />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>

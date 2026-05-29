@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KFA.MyBlogWPF.Stores;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,11 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
 {
     public class ArticlesDetailsViewModel : ViewModelBase
     {
+        private SelectedArticleStore selectedArticleStore;
+
+        public ArticlesDetailsViewModel(SelectedArticleStore selectedArticleStore)
+        {
+            this.selectedArticleStore = selectedArticleStore;
+        }
     }
 }

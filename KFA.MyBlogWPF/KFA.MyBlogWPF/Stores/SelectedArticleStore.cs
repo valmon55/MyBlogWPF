@@ -1,0 +1,42 @@
+﻿using KFA.MyBlogWPF.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace KFA.MyBlogWPF.Stores
+{
+    public class SelectedArticleStore
+    {
+        private readonly ArticleStore _articleStore;
+
+        public SelectedArticleStore(ArticleStore articleStore)
+        {
+            _articleStore = articleStore;
+            _articleStore.ArticleUpdated += _articleStore_ArticleUpdated;
+        }
+
+        private void _articleStore_ArticleUpdated(Article article)
+        {
+            if(article.Id == SelectedArticle?.Id)
+            {
+
+            }
+        }
+        private Article selectedArticle;
+        public Article SelectedArticle
+        {
+            get 
+            {
+                return selectedArticle;
+            }
+            set 
+            {
+                selectedArticle = value;
+                SelectedArticleChanged?.Invoke();
+            }
+        }
+        public event Action SelectedArticleChanged;
+    }
+}

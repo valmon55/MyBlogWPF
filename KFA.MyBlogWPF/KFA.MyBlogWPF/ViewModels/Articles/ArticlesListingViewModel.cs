@@ -1,5 +1,6 @@
 ﻿using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
+using KFA.MyBlogWPF.ViewModels.Tags;
 using KFA.MyBlogWPF.ViewModels.Users;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,8 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
     {
         private readonly HttpClient _myBlog;
         private readonly ModalNavigationStore _modalNavigationStore;
-
+        private readonly SelectedArticleStore _selectedArticleStore;
+        private readonly ArticleStore _articleStore;
         private List<Tag> _allTags;
         private List<Comment> _allComments;
 
@@ -35,13 +37,19 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 _selectedArticleListingItemViewModel = value;
                 OnPropertyChanged(nameof(SelectedArticleListingItemViewModel));
 
-                //_selectedArticleStore.SelectedUser = _selectedArticleListingItemViewModel?.Article;
+                _selectedArticleStore.SelectedArticle = _selectedArticleListingItemViewModel?.Article;
             }
         }
-        public ArticlesListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore)
+        public ArticlesListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore, SelectedArticleStore selectedArticleStore, ArticleStore articleStore)
         {
             _myBlog = myBlog;
             _modalNavigationStore = modalNavigationStore;
+            _selectedArticleStore = selectedArticleStore;
+            _articleStore = articleStore;
+
+            _articleStore.ArticleAdded += ArticleStore_ArticleAdded;
+            _articleStore.ArticleUpdated += ArticleStore_ArticleUpdated;
+            _articleStore.ArticleDeleted += ArticleStore_ArticleDeleted;
 
             var allTags = new List<Tag>()
             {
@@ -125,7 +133,40 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 );
 
         }
+        protected override void Dispose()
+        {
+            _articleStore.ArticleAdded -= ArticleStore_ArticleAdded;
+            _articleStore.ArticleUpdated -= ArticleStore_ArticleUpdated;
+            _articleStore.ArticleDeleted -= ArticleStore_ArticleDeleted;
 
+            base.Dispose();
+        }
 
+        private void ArticleStore_ArticleDeleted(int Id)
+        {
+            ArticlesListingItemViewModel articleViewModel =
+                _articlessListingItemViewModels.FirstOrDefault(x => x.Article.Id == Id);
+            if (articleViewModel != null)
+            {
+                _articlessListingItemViewModels.Add(articleViewModel);
+            }
+        }
+
+        private void ArticleStore_ArticleUpdated(Article article)
+        {
+            ArticlesListingItemViewModel articleViewModel =
+                _articlessListingItemViewModels.FirstOrDefault(x => x.Article.Id == article.Id);
+            if(articleViewModel != null)
+            {
+                //articleViewModel.Update(article);
+            }
+        }
+
+        private void ArticleStore_ArticleAdded(Article article)
+        {
+            //ArticlesListingItemViewModel articleViewModel =
+            //     new ArticlesListingItemViewModel(article, _modalNavigationStore, _articlesStore);
+            //_articlesListingItemViewModels.Add(articleViewModel);
+        }
     }
 }

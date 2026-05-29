@@ -32,17 +32,15 @@ namespace KFA.MyBlogWPF
                 })
                 .ConfigureServices(services =>
                 {
-                    //services.AddTransient<TagViewModel>();
                     services.AddSingleton<HttpClient>();
                     services.AddSingleton<ModalNavigationStore>();
                     services.AddSingleton<TagsStore>();
                     services.AddSingleton<RolesStore>();
                     services.AddSingleton<UsersStore>();
                     services.AddSingleton<SelectedUserStore>();
+                    services.AddSingleton<ArticleStore>();
+                    services.AddSingleton<SelectedArticleStore>();
 
-                    //services.AddTransient<AddTagViewModel>();
-                    //services.AddTransient<EditTagViewModel>();
-                    //services.AddTransient<TagsListingViewModel>();
                     services.AddTransient<ArticlesViewModel>();
                     services.AddTransient<TagsViewModel>();
                     services.AddTransient<RolesViewModel>();

@@ -11,10 +11,14 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding Title}" />
+            <TextBlock Grid.Column="0" Text="{Binding Last_Name}" />
+            <TextBlock Grid.Column="1" Text="{Binding First_Name}" />
+            <TextBlock Grid.Column="2" Text="{Binding Middle_Name}" />
 
             <custom:DropdownMenu 
                     x:Name="dropdown"
