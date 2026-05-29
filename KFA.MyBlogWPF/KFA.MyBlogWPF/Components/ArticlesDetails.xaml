@@ -27,7 +27,7 @@
                     <TextBlock 
                         FontSize="24"
                         TextWrapping="WrapWithOverflow"
-                        Text="Please select User to see the details"/>
+                        Text="Please select Article to see the details"/>
                 </Grid>
                 <Grid Grid.IsSharedSizeScope="True">
                     <Grid.Style>
@@ -47,6 +47,8 @@
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
                         <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
 
                     <TextBlock Grid.Row="0" FontSize="20" Text="{Binding Title}"/>
@@ -56,8 +58,8 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Birth date" />
-                        <TextBlock Grid.Column="1" Margin="20 0 0 0" Text="{Binding BirthDate}" />
+                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Date" />
+                        <TextBlock Grid.Column="1" Margin="20 0 0 0" Text="{Binding ArticleDate}" />
                     </Grid>
                     <Grid Grid.Row="2" Margin="0 20 0 0">
                         <Grid.ColumnDefinitions>
@@ -65,8 +67,8 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Email" />
-                        <TextBlock Grid.Column="1" Margin="20 0 0 0" Text="{Binding Email}" />
+                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Content" />
+                        <TextBlock Grid.Column="1" Margin="20 0 0 0" Text="{Binding Content}" />
                     </Grid>
                     <Grid Grid.Row="3" Margin="0 20 0 0">
                         <Grid.ColumnDefinitions>
@@ -74,8 +76,8 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Login" />
-                        <TextBlock Grid.Column="1" Margin="20 0 0 0" Text="{Binding Login}" />
+                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="AuthorId" />
+                        <TextBlock Grid.Column="1" Margin="20 0 0 0" Text="{Binding AuthorId}" />
                     </Grid>
                     <Grid Grid.Row="4" Margin="0 20 0 0">
                         <Grid.ColumnDefinitions>
@@ -83,8 +85,17 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Roles" />
-                        <ListView Grid.Column="1" Margin="20 0 0 0" ItemsSource="{Binding Roles}">
+                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Author" />
+                        <TextBlock Grid.Column="1" Margin="20 0 0 0" Text="{Binding ShortName}" />
+                    </Grid>
+                    <Grid Grid.Row="5" Margin="0 20 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Tags" />
+                        <ListView Grid.Column="1" Margin="20 0 0 0" ItemsSource="{Binding Tags}">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Name" Width="auto">
@@ -94,10 +105,31 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Description" Width="auto">
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                    <Grid Grid.Row="6" Margin="0 20 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto" SharedSizeGroup="label" />
+                            <ColumnDefinition Width="auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Tags" />
+                        <ListView Grid.Column="1" Margin="20 0 0 0" ItemsSource="{Binding Comments}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="UserId" Width="auto">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <TextBlock Margin="5 0" Text="{Binding Description}"/>
+                                                <TextBlock Margin="5 0" Text="{Binding UserId}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="CommentText" Width="auto">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Margin="5 0" Text="{Binding Comment_Text}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>

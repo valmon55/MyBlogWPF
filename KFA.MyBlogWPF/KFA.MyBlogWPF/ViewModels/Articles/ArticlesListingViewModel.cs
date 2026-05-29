@@ -71,13 +71,21 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                         User = new User()
                         {
                             Id = 1,
+                            First_Name = "A",
+                            Middle_Name = "a",
+                            Last_Name = "Admin",
                             Login = "Admin"
                         },
                         Tags = new List<Tag>()
                         {
                             new Tag() { Id = 1, Name = "C#" },
                             new Tag() { Id = 2, Name = "ASP" }
-                            }
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment() {Id = 1, ArticleId = 1, CommentDate = DateTime.Now, Comment_Text = "1st comment", UserId = "2"},
+                            new Comment() {Id = 2, ArticleId = 1, CommentDate = DateTime.Now, Comment_Text = "2nd comment", UserId = "1"}
+                        }
                     },
                     allTags,
                     modalNavigationStore
@@ -87,7 +95,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 new ArticlesListingItemViewModel(
                     new Article()
                     {
-                        Id = 1,
+                        Id = 2,
                         Title = "JavaScript",
                         ArticleDate = DateTime.Now,
                         Content = "JS is Modern Language for Web",
@@ -95,13 +103,21 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                         User = new User()
                         {
                             Id = 2,
+                            First_Name = "Fedor",
+                            Middle_Name = "f",
+                            Last_Name = "K",
                             Login = "a"
                         },
                         Tags = new List<Tag>()
                         {
                             new Tag() { Id = 1, Name = "JS" },
                             new Tag() { Id = 2, Name = "ASP" }
-                            }
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment() {Id = 3, ArticleId = 2, CommentDate = DateTime.Now, Comment_Text = "1st comment for JS", UserId = "2"},
+                            new Comment() {Id = 4, ArticleId = 2, CommentDate = DateTime.Now, Comment_Text = "2nd comment for JS", UserId = "1"}
+                        }
                     },
                     allTags,
                     modalNavigationStore
@@ -111,7 +127,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 new ArticlesListingItemViewModel(
                     new Article()
                     {
-                        Id = 1,
+                        Id = 3,
                         Title = "C# Xamarin",
                         ArticleDate = DateTime.Now,
                         Content = "Xamarin platform is Obsolet",
@@ -119,13 +135,21 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                         User = new User()
                         {
                             Id = 1,
+                            First_Name = "Patrick",
+                            Middle_Name = "a",
+                            Last_Name = "Jane",
                             Login = "Admin"
                         },
                         Tags = new List<Tag>()
                         {
                             new Tag() { Id = 1, Name = "C#" },
                             new Tag() { Id = 2, Name = "Xamarin" }
-                            }
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment() {Id = 10, ArticleId = 3, CommentDate = DateTime.Now, Comment_Text = "1st comment XAM", UserId = "2"},
+                            new Comment() {Id = 11, ArticleId = 3, CommentDate = DateTime.Now, Comment_Text = "2nd comment XAMARIN", UserId = "1"}
+                        }
                     },
                     allTags,
                     modalNavigationStore
