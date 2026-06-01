@@ -21,8 +21,8 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         private List<Tag> _allTags;
         private List<Comment> _allComments;
 
-        private ObservableCollection<ArticlesListingItemViewModel> _articlessListingItemViewModels;
-        public IEnumerable<ArticlesListingItemViewModel> ArticlesListingItemViewModels => _articlessListingItemViewModels;
+        private ObservableCollection<ArticlesListingItemViewModel> _articlesListingItemViewModels;
+        public IEnumerable<ArticlesListingItemViewModel> ArticlesListingItemViewModels => _articlesListingItemViewModels;
 
         private ArticlesListingItemViewModel _selectedArticleListingItemViewModel;
 
@@ -58,8 +58,8 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 new Tag() { Id = 3, Name = "Xamarin" }
             };
             _allTags = allTags;
-            _articlessListingItemViewModels = new ObservableCollection<ArticlesListingItemViewModel>();
-            _articlessListingItemViewModels.Add(
+            _articlesListingItemViewModels = new ObservableCollection<ArticlesListingItemViewModel>();
+            _articlesListingItemViewModels.Add(
                 new ArticlesListingItemViewModel(
                     new Article()
                     {
@@ -88,10 +88,11 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                         }
                     },
                     allTags,
-                    modalNavigationStore
+                    modalNavigationStore,
+                    articleStore
                     )
                 );
-            _articlessListingItemViewModels.Add(
+            _articlesListingItemViewModels.Add(
                 new ArticlesListingItemViewModel(
                     new Article()
                     {
@@ -120,10 +121,11 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                         }
                     },
                     allTags,
-                    modalNavigationStore
+                    modalNavigationStore,
+                    articleStore
                     )
                 );
-            _articlessListingItemViewModels.Add(
+            _articlesListingItemViewModels.Add(
                 new ArticlesListingItemViewModel(
                     new Article()
                     {
@@ -152,7 +154,8 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                         }
                     },
                     allTags,
-                    modalNavigationStore
+                    modalNavigationStore,
+                    articleStore
                     )
                 );
 
@@ -169,17 +172,17 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         private void ArticleStore_ArticleDeleted(int Id)
         {
             ArticlesListingItemViewModel articleViewModel =
-                _articlessListingItemViewModels.FirstOrDefault(x => x.Article.Id == Id);
+                _articlesListingItemViewModels.FirstOrDefault(x => x.Article.Id == Id);
             if (articleViewModel != null)
             {
-                _articlessListingItemViewModels.Add(articleViewModel);
+                _articlesListingItemViewModels.Remove(articleViewModel);
             }
         }
 
         private void ArticleStore_ArticleUpdated(Article article)
         {
             ArticlesListingItemViewModel articleViewModel =
-                _articlessListingItemViewModels.FirstOrDefault(x => x.Article.Id == article.Id);
+                _articlesListingItemViewModels.FirstOrDefault(x => x.Article.Id == article.Id);
             if(articleViewModel != null)
             {
                 //articleViewModel.Update(article);
@@ -188,9 +191,9 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
 
         private void ArticleStore_ArticleAdded(Article article)
         {
-            //ArticlesListingItemViewModel articleViewModel =
-            //     new ArticlesListingItemViewModel(article, _modalNavigationStore, _articlesStore);
-            //_articlesListingItemViewModels.Add(articleViewModel);
+            ArticlesListingItemViewModel articleViewModel =
+                 new ArticlesListingItemViewModel(article, _allTags, _modalNavigationStore, _articleStore);
+            _articlesListingItemViewModels.Add(articleViewModel);
         }
     }
 }

@@ -115,7 +115,7 @@
                             <ColumnDefinition Width="auto" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Tags" />
+                        <TextBlock Grid.Column="0" FontWeight="Bold" Text="Comments" />
                         <ListView Grid.Column="1" Margin="20 0 0 0" ItemsSource="{Binding Comments}">
                             <ListView.View>
                                 <GridView>

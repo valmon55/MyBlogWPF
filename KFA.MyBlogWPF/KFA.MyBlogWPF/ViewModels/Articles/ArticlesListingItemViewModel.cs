@@ -49,7 +49,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ArticlesListingItemViewModel(Article article, List<Tag> allTags, ModalNavigationStore modalNavigationStore)
+        public ArticlesListingItemViewModel(Article article, List<Tag> allTags, ModalNavigationStore modalNavigationStore, ArticleStore _articlesStore)
         {
             Article = article;
             _allTags = allTags;

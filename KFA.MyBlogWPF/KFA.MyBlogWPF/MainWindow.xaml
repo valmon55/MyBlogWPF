@@ -22,6 +22,12 @@
         Title="MyBlog" Height="600" Width="800">
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <DataTemplate DataType="{x:Type articles_vms:AddArticleViewModel}">
+            <articles_views:AddArticleView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type articles_vms:EditArticleViewModel}">
+            <articles_views:EditArticleView/>
+        </DataTemplate>
         <DataTemplate DataType="{x:Type vms:AddTagViewModel}">
             <views:AddTagView />
         </DataTemplate>
