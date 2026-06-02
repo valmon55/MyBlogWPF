@@ -22,7 +22,7 @@
             <components:ArticleDetailForm 
             Grid.Row="1" 
             Margin="0 30 0 0"
-            DataContext= "{Binding AriticleDetailsFormViewModel}" />
+            DataContext= "{Binding ArticleDetailsFormViewModel}" />
         </Grid>
     </Grid>
 </UserControl>

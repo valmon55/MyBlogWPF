@@ -28,7 +28,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 Content = article.Content,
                 ArticleDate = article.ArticleDate,
                 AuthorId = article.UserId,
-                ShortName = article.User.Last_Name + " " + article.User.First_Name,
+                ShortName = article.User?.Last_Name + " " + article.User?.First_Name,
             };
             ArticleDetailsFormViewModel.InitTags(allTags, article.Tags);
         }
