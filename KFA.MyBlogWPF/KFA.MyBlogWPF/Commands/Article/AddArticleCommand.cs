@@ -38,7 +38,7 @@ namespace KFA.MyBlogWPF.Commands.Article
                 UserId = formViewModel.AuthorId,
                 Tags = formViewModel.GetSelectedTags()
             };
-            // Send API request to Add Role
+            // Send API request to Add Article
 
             try
             {
