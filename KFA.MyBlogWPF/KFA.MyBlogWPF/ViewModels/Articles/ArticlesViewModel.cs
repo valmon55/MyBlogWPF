@@ -23,7 +23,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         public ArticlesViewModel(HttpClient myBlog, 
                                 ModalNavigationStore modalNavigationStore,
                                 SelectedArticleStore selectedArticleStore,
-                                ArticleStore articleStore)
+                                ArticlesStore articleStore)
         {
             _myBlog = myBlog;
             ArticlesListingViewModel = new ArticlesListingViewModel(_myBlog, modalNavigationStore, selectedArticleStore,articleStore);

@@ -16,7 +16,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         public Article article = new Article(); 
         public ArticleDetailsFormViewModel ArticleDetailsFormViewModel { get; }
 
-        public AddArticleViewModel(ModalNavigationStore modalNavigationStore, ArticleStore articleStore, List<Tag> tags)
+        public AddArticleViewModel(ModalNavigationStore modalNavigationStore, ArticlesStore articleStore, List<Tag> tags)
         {
             ICommand submitCommand = new AddArticleCommand(this, modalNavigationStore, articleStore);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);

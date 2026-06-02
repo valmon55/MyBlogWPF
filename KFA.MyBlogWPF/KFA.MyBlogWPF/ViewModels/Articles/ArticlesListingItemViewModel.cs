@@ -16,6 +16,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         private readonly List<Tag> _allTags;
         public Article Article { get; private set; }
         public string Title => Article.Title;
+        public string Content => Article.Content;
         public DateTime ArticleDate => Article.ArticleDate;
         public IEnumerable<Tag> Tags => Article.Tags;
         public IEnumerable<Comment> Comments => Article.Comments;
@@ -50,14 +51,26 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ArticlesListingItemViewModel(Article article, List<Tag> allTags, ModalNavigationStore modalNavigationStore, ArticleStore articlesStore)
+        public ArticlesListingItemViewModel(Article article, List<Tag> allTags, ModalNavigationStore modalNavigationStore, ArticlesStore articlesStore)
         {
             Article = article;
             _allTags = allTags;
 
-            //EditCommand = new OpenEditUserCommand(this, modalNavigationStore, usersStore, _allRoles);
+            EditCommand = new OpenEditArticleCommand(this, modalNavigationStore, articlesStore, _allTags);
             DeleteCommand = new DeleteArticleCommand(this, articlesStore);
 
         }
+        public void Update(Article article)
+        {
+            Article = article;
+
+            OnPropertyChanged(nameof(Title));
+            OnPropertyChanged(nameof(Content));
+            OnPropertyChanged(nameof(ArticleDate));
+            OnPropertyChanged(nameof(UserId));
+            OnPropertyChanged(nameof(User));
+            OnPropertyChanged(nameof(Tags));
+        }
+
     }
 }

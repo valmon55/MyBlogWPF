@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KFA.MyBlogWPF.Stores
 {
-    public class ArticleStore
+    public class ArticlesStore
     {
         public event Action<Article> ArticleAdded;
         public event Action<Article> ArticleUpdated;

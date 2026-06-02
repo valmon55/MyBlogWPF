@@ -17,7 +17,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         private readonly HttpClient _myBlog;
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly SelectedArticleStore _selectedArticleStore;
-        private readonly ArticleStore _articleStore;
+        private readonly ArticlesStore _articleStore;
         private List<Tag> _allTags;
         private List<Comment> _allComments;
 
@@ -40,7 +40,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 _selectedArticleStore.SelectedArticle = _selectedArticleListingItemViewModel?.Article;
             }
         }
-        public ArticlesListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore, SelectedArticleStore selectedArticleStore, ArticleStore articleStore)
+        public ArticlesListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore, SelectedArticleStore selectedArticleStore, ArticlesStore articleStore)
         {
             _myBlog = myBlog;
             _modalNavigationStore = modalNavigationStore;
@@ -185,7 +185,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 _articlesListingItemViewModels.FirstOrDefault(x => x.Article.Id == article.Id);
             if(articleViewModel != null)
             {
-                //articleViewModel.Update(article);
+                articleViewModel.Update(article);
             }
         }
 

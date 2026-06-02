@@ -14,9 +14,9 @@ namespace KFA.MyBlogWPF.Commands.Article
     {
         private AddArticleViewModel _addArticleViewModel;
         private ModalNavigationStore _modalNavigationStore;
-        private ArticleStore _articleStore;
+        private ArticlesStore _articleStore;
 
-        public AddArticleCommand(AddArticleViewModel addArticleViewModel, ModalNavigationStore modalNavigationStore, ArticleStore articleStore)
+        public AddArticleCommand(AddArticleViewModel addArticleViewModel, ModalNavigationStore modalNavigationStore, ArticlesStore articleStore)
         {
             _addArticleViewModel = addArticleViewModel;
             _modalNavigationStore = modalNavigationStore;

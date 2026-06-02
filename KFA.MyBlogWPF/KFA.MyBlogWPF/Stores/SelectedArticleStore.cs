@@ -9,9 +9,9 @@ namespace KFA.MyBlogWPF.Stores
 {
     public class SelectedArticleStore
     {
-        private readonly ArticleStore _articleStore;
+        private readonly ArticlesStore _articleStore;
 
-        public SelectedArticleStore(ArticleStore articleStore)
+        public SelectedArticleStore(ArticlesStore articleStore)
         {
             _articleStore = articleStore;
             _articleStore.ArticleUpdated += _articleStore_ArticleUpdated;

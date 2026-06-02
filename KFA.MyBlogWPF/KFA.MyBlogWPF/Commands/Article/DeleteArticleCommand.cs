@@ -12,9 +12,9 @@ namespace KFA.MyBlogWPF.Commands.Article
     public class DeleteArticleCommand : AsyncCommandBase
     {
         private readonly ArticlesListingItemViewModel _articlesListingItemViewModel;
-        private readonly ArticleStore _articleStore;
+        private readonly ArticlesStore _articleStore;
 
-        public DeleteArticleCommand(ArticlesListingItemViewModel articlesListingItemViewModel, ArticleStore articleStore)
+        public DeleteArticleCommand(ArticlesListingItemViewModel articlesListingItemViewModel, ArticlesStore articleStore)
         {
             _articlesListingItemViewModel = articlesListingItemViewModel;
             _articleStore = articleStore;

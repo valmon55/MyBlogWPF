@@ -12,10 +12,10 @@ namespace KFA.MyBlogWPF.Commands.Article
     public class OpenAddArticleCommand : AsyncCommandBase
     {
         private readonly ModalNavigationStore _modalNavigationStore;
-        private readonly ArticleStore _articleStore;
+        private readonly ArticlesStore _articleStore;
         private readonly List<Model.Tag> _allTags;
 
-        public OpenAddArticleCommand(ModalNavigationStore modalNavigationStore, ArticleStore articleStore, List<Model.Tag> allTags)
+        public OpenAddArticleCommand(ModalNavigationStore modalNavigationStore, ArticlesStore articleStore, List<Model.Tag> allTags)
         {
             _modalNavigationStore = modalNavigationStore;
             _articleStore = articleStore;

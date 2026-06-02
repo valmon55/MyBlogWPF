@@ -38,7 +38,7 @@ namespace KFA.MyBlogWPF
                     services.AddSingleton<RolesStore>();
                     services.AddSingleton<UsersStore>();
                     services.AddSingleton<SelectedUserStore>();
-                    services.AddSingleton<ArticleStore>();
+                    services.AddSingleton<ArticlesStore>();
                     services.AddSingleton<SelectedArticleStore>();
 
                     services.AddTransient<ArticlesViewModel>();
