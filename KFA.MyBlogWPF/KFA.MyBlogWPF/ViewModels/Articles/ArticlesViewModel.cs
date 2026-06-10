@@ -23,11 +23,12 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         public ArticlesViewModel(HttpClient myBlog, 
                                 ModalNavigationStore modalNavigationStore,
                                 SelectedArticleStore selectedArticleStore,
-                                ArticlesStore articleStore)
+                                ArticlesStore articleStore,
+                                CommentsStore commentsStore)
         {
             _myBlog = myBlog;
             ArticlesListingViewModel = new ArticlesListingViewModel(_myBlog, modalNavigationStore, selectedArticleStore,articleStore);
-            ArticlesDetailsViewModel = new ArticlesDetailsViewModel(selectedArticleStore);
+            ArticlesDetailsViewModel = new ArticlesDetailsViewModel(selectedArticleStore, modalNavigationStore, commentsStore);
             
             List<Tag> allTags = new List<Tag>()
             {

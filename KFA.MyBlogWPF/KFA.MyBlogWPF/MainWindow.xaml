@@ -10,6 +10,8 @@
         xmlns:tag_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Tags"
         xmlns:articles_views="clr-namespace:KFA.MyBlogWPF.Views.Article"
         xmlns:articles_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Articles"
+        xmlns:comments_views="clr-namespace:KFA.MyBlogWPF.Views.Comments"
+        xmlns:comments_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Comments"
         xmlns:tag_views="clr-namespace:KFA.MyBlogWPF.Views"
         xmlns:user_vms="clr-namespace:KFA.MyBlogWPF.ViewModels.Users"
         xmlns:user_views="clr-namespace:KFA.MyBlogWPF.Views.Users"
@@ -26,6 +28,12 @@
             <articles_views:AddArticleView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type articles_vms:EditArticleViewModel}">
+            <articles_views:EditArticleView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type comments_vms:AddCommentViewModel}">
+            <comments_views:AddCommentView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type comments_vms:EditCommentViewModel}">
             <articles_views:EditArticleView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vms:AddTagViewModel}">

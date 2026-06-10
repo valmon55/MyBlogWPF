@@ -33,7 +33,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         {
             get
             {
-                return ErrorMessage;
+                return errorMessage;
             }
             set
             {

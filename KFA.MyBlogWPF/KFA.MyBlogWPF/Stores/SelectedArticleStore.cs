@@ -21,7 +21,7 @@ namespace KFA.MyBlogWPF.Stores
         {
             if(article.Id == SelectedArticle?.Id)
             {
-
+                SelectedArticle = article;
             }
         }
         private Article selectedArticle;

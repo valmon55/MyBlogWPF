@@ -1,16 +1,21 @@
-﻿using KFA.MyBlogWPF.Models;
+﻿using KFA.MyBlogWPF.Commands.Comment;
+using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Stores;
+using KFA.MyBlogWPF.ViewModels.Comments;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KFA.MyBlogWPF.ViewModels.Articles
 {
     public class ArticlesDetailsViewModel : ViewModelBase
     {
         private readonly SelectedArticleStore _selectedArticleStore;
+        private readonly ModalNavigationStore _modalNavigationStore;
+        private readonly CommentsStore _commentsStore;
         private Article SelectedArticle => _selectedArticleStore.SelectedArticle;
         public bool HasSelectedArticle => SelectedArticle != null;
         public string Title => SelectedArticle?.Title;
@@ -22,11 +27,28 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         public IEnumerable<Tag> Tags => SelectedArticle?.Tags;
         public IEnumerable<Comment> Comments => SelectedArticle?.Comments;
 
-
-        public ArticlesDetailsViewModel(SelectedArticleStore selectedArticleStore)
+        private CommentsListingViewModel _commentsListingViewModel;
+        public CommentsListingViewModel CommentsListingViewModel
+        {
+            get { return _commentsListingViewModel; }
+            set
+            {
+                _commentsListingViewModel = value;
+                OnPropertyChanged(nameof(CommentsListingViewModel));
+            }
+        }
+        public ICommand AddCommentCommand { get; }
+        public ArticlesDetailsViewModel(SelectedArticleStore selectedArticleStore, 
+                                        ModalNavigationStore modalNavigationStore,
+                                        CommentsStore commentsStore)
         {
             _selectedArticleStore = selectedArticleStore;
+            _modalNavigationStore = modalNavigationStore;
+            _commentsStore = commentsStore;
+
             _selectedArticleStore.SelectedArticleChanged += SelectedArticleStore_SelectedArticleChanged;
+
+            AddCommentCommand = new OpenAddCommentCommand(modalNavigationStore, commentsStore, SelectedArticle?.Id);
         }
 
         protected override void Dispose()
@@ -44,6 +66,10 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
             OnPropertyChanged(nameof(Author));
             OnPropertyChanged(nameof(Tags));
             OnPropertyChanged(nameof(Comments));
+        }
+        public void LoadCommentsForArticle(int articleId)
+        {
+            CommentsListingViewModel = new CommentsListingViewModel(articleId, _modalNavigationStore, _commentsStore);
         }
     }
 }
