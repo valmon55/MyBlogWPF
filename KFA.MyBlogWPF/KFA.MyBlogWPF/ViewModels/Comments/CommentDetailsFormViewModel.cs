@@ -17,8 +17,10 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
             {
                 commentText = value;
                 OnPropertyChanged(nameof(CommentText));
+                OnPropertyChanged(nameof(CanSubmit));
             }
         }
+        public bool CanSubmit => !string.IsNullOrEmpty(CommentText);
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
 

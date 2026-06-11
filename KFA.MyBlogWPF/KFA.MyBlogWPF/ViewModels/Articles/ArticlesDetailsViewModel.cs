@@ -37,7 +37,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 OnPropertyChanged(nameof(CommentsListingViewModel));
             }
         }
-        public ICommand AddCommentCommand { get; }
+        public ICommand AddCommentCommand { get; private set; }
         public ArticlesDetailsViewModel(SelectedArticleStore selectedArticleStore, 
                                         ModalNavigationStore modalNavigationStore,
                                         CommentsStore commentsStore)
@@ -45,15 +45,27 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
             _selectedArticleStore = selectedArticleStore;
             _modalNavigationStore = modalNavigationStore;
             _commentsStore = commentsStore;
+            //_commentsListingViewModel = new CommentsListingViewModel(SelectedArticle.Id, modalNavigationStore, commentsStore);
 
             _selectedArticleStore.SelectedArticleChanged += SelectedArticleStore_SelectedArticleChanged;
 
-            AddCommentCommand = new OpenAddCommentCommand(modalNavigationStore, commentsStore, SelectedArticle?.Id);
+            _commentsStore.CommentAdded += CommentsStore_CommentAdded;
+
+            //AddCommentCommand = new OpenAddCommentCommand(modalNavigationStore, commentsStore, SelectedArticle?.Id);
+        }
+
+        private void CommentsStore_CommentAdded(Comment comment)
+        {
+            if (HasSelectedArticle != null)
+            {
+                _commentsListingViewModel.CommentsStore_CommentAdded(comment);
+            }
         }
 
         protected override void Dispose()
         {
             _selectedArticleStore.SelectedArticleChanged -= SelectedArticleStore_SelectedArticleChanged;
+            _commentsStore.CommentAdded -= CommentsStore_CommentAdded;
             base.Dispose();
         }
         private void SelectedArticleStore_SelectedArticleChanged()
@@ -66,6 +78,11 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
             OnPropertyChanged(nameof(Author));
             OnPropertyChanged(nameof(Tags));
             OnPropertyChanged(nameof(Comments));
+            if (HasSelectedArticle)
+            {
+                _commentsListingViewModel = new CommentsListingViewModel(SelectedArticle.Id, _modalNavigationStore, _commentsStore);
+                AddCommentCommand = new OpenAddCommentCommand(_modalNavigationStore, _commentsStore, SelectedArticle.Id);
+            }
         }
         public void LoadCommentsForArticle(int articleId)
         {

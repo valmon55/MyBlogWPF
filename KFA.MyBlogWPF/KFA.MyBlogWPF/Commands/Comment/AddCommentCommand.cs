@@ -19,12 +19,12 @@ namespace KFA.MyBlogWPF.Commands.Comment
 
         public AddCommentCommand(AddCommentViewModel addCommentViewModel,   
                                 ModalNavigationStore modalNavigationStore, 
-                                CommentsStore commentsStore)
+                                CommentsStore commentsStore, int articleId)
         {
             _addCommentViewModel = addCommentViewModel;
             _modalNavigationStore = modalNavigationStore;
             _commentsStore = commentsStore;
-            //_articleId = _addCommentViewModel.CommentDetailsFormViewModel.ArticleId;
+            _articleId = articleId;
         }
 
         public override async Task ExecuteAsync(object parameter)

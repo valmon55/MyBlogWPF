@@ -12,11 +12,11 @@ namespace KFA.MyBlogWPF.Commands.Comment
     {
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly CommentsStore _commentsStore;
-        private readonly int? _articleId;
+        private readonly int _articleId;
 
         public OpenAddCommentCommand(ModalNavigationStore modalNavigationStore, 
                                     CommentsStore commentsStore,
-                                    int? articleId)
+                                    int articleId)
         {
             _modalNavigationStore = modalNavigationStore;
             _commentsStore = commentsStore;

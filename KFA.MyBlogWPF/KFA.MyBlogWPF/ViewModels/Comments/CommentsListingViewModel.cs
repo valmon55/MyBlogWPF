@@ -34,7 +34,7 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
             _modalNavigationStore = modalNavigationStore;
             _commentsStore = commentsStore;
             ///Пока так
-            ///TODO: при иртеграции запрашивать список комментариев 
+            ///TODO: при интеграции запрашивать список комментариев 
             _commentsListingItemViewModels = new ObservableCollection<CommentsListingItemViewModel>();
             comments = new ObservableCollection<Comment>();
 
@@ -81,7 +81,7 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
             }
         }
 
-        private void CommentsStore_CommentAdded(Comment comment)
+        public void CommentsStore_CommentAdded(Comment comment)
         {
             AddComment(comment);
         }
