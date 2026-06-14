@@ -13,7 +13,10 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
     public class AddCommentViewModel : ViewModelBase
     {
         public CommentDetailsFormViewModel CommentDetailsFormViewModel { get; }
-        public AddCommentViewModel(int articleId,ModalNavigationStore modalNavigationStore, CommentsStore commentsStore)
+        public AddCommentViewModel(
+                int articleId,
+                ModalNavigationStore modalNavigationStore, 
+                CommentsStore commentsStore)
         {
             ICommand submitCommand = new AddCommentCommand(this, modalNavigationStore, commentsStore, articleId);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);

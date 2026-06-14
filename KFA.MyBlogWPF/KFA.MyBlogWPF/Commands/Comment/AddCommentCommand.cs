@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace KFA.MyBlogWPF.Commands.Comment
 {
@@ -26,20 +27,25 @@ namespace KFA.MyBlogWPF.Commands.Comment
             _commentsStore = commentsStore;
             _articleId = articleId;
         }
-
+        public event EventHandler CanExecuteChanged;
+        public bool CanExecute(object parameter) => true;
         public override async Task ExecuteAsync(object parameter)
         {
-            Random random = new Random();
-            int n = random.Next(1, 100);
-
-            CommentDetailsFormViewModel formViewModel = _addCommentViewModel.CommentDetailsFormViewModel;
             Models.Comment comment = new Models.Comment()
             {
-                Id = n,
                 ArticleId = _articleId,
-                //UserId,
-                //CommentDate = formViewModel,
-                Comment_Text = formViewModel.CommentText
+                Comment_Text = _addCommentViewModel.CommentDetailsFormViewModel.CommentText,
+                CommentDate = DateTime.Now,
+                UserId  = "1", //временно
+                User = new Models.User() { 
+                    Id = 1, 
+                    First_Name = "Fedor",
+                    Last_Name = "Kr",
+                    Middle_Name = "A",
+                    BirthDate = DateTime.Now,
+                    Email = "KFA@a.a",
+                    Login = "FEDOR"
+                }
             };
             // Send API request to Add Role
 

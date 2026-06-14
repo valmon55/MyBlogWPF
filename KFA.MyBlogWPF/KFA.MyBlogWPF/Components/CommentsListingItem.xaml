@@ -16,9 +16,9 @@
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0" Text="{Binding UserShortName}" />
+            <TextBlock Grid.Column="0" Text="{Binding UserName}" />
             <TextBlock Grid.Column="1" Text="{Binding CommentDate}" />
-            <TextBlock Grid.Column="2" Text="{Binding Comment_Text}" />
+            <TextBlock Grid.Column="2" Text="{Binding CommentText}" />
 
             <custom:DropdownMenu 
                     x:Name="dropdown"

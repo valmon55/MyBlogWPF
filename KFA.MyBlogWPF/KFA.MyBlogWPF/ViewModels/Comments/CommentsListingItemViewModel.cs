@@ -11,16 +11,19 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
 {
     public class CommentsListingItemViewModel : ViewModelBase
     {
-        public Comment Comment { get; private set; }
+        private Comment _comment;
         private readonly int _articleId;
+        private readonly ModalNavigationStore _modalNavigationStore;
         private readonly CommentsStore _commentsStore;
 
         public CommentsListingItemViewModel(int articleId, Comment comment, ModalNavigationStore modalNavigationStore, CommentsStore commentsStore)
         {
-            Comment = comment;
+            _comment = comment;
             _articleId = articleId;
-            //EditCommand = new OpenEditCommentCommand()
-            //DeleteCommand = new DeleteCommentCommand()
+            _modalNavigationStore = modalNavigationStore;
+            _commentsStore = commentsStore;
+            //EditCommand = new OpenEditCommentCommand();
+            //DeleteCommand = new DeleteCommentCommand();
         }
         private bool isDeleting;
         public bool IsDeleting
@@ -48,16 +51,16 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
                 OnPropertyChanged(nameof(ErrorMessage));
             }
         }
-        public int Id => Comment.Id;
-        public string CommentText => Comment.Comment_Text;
-        public string CommentDate => Comment.CommentDate.ToShortDateString();
-        public string UserName => Comment?.User.First_Name + " " + Comment?.User.Last_Name;
+        public int Id => _comment.Id;
+        public string CommentText => _comment.Comment_Text;
+        public string CommentDate => _comment.CommentDate.ToShortDateString();
+        public string UserName => _comment?.User.First_Name + " " + _comment?.User.Last_Name;
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
 
         public void Update(Comment comment)
         {
-            Comment = comment;
+            _comment = comment;
             OnPropertyChanged(nameof(CommentText));
             OnPropertyChanged(nameof(CommentDate));
         }

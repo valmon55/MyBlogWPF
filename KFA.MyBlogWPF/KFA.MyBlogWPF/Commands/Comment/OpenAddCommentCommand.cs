@@ -12,21 +12,33 @@ namespace KFA.MyBlogWPF.Commands.Comment
     {
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly CommentsStore _commentsStore;
-        private readonly int _articleId;
+        private readonly int? _articleId;
 
         public OpenAddCommentCommand(ModalNavigationStore modalNavigationStore, 
                                     CommentsStore commentsStore,
-                                    int articleId)
+                                    int? articleId)
         {
             _modalNavigationStore = modalNavigationStore;
             _commentsStore = commentsStore;
             _articleId = articleId;
         }
-
+        public event EventHandler CanExecuteChanged;
+        public bool CanExecute(object parameter)
+        {
+            return _articleId.HasValue;
+        }
         public override void Execute(object parameter)
         {
-            AddCommentViewModel addCommentViewModel = new AddCommentViewModel(_articleId, _modalNavigationStore, _commentsStore);
-            _modalNavigationStore.CurrentViewModel = addCommentViewModel;
+            if (_articleId.HasValue)
+            {
+                AddCommentViewModel addCommentViewModel = new AddCommentViewModel(
+                    _articleId.Value, _modalNavigationStore, _commentsStore);
+                _modalNavigationStore.CurrentViewModel = addCommentViewModel;
+            }
+        }
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

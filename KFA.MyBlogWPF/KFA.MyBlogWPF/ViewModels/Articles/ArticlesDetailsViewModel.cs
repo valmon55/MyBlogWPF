@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Xml.Linq;
 
 namespace KFA.MyBlogWPF.ViewModels.Articles
 {
@@ -37,7 +38,15 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 OnPropertyChanged(nameof(CommentsListingViewModel));
             }
         }
-        public ICommand AddCommentCommand { get; private set; }
+        private ICommand _addCommentButton;
+        public ICommand AddCommentCommand {
+            get { return _addCommentButton; }
+            private set
+            {
+                _addCommentButton = value;
+                OnPropertyChanged(nameof(AddCommentCommand));
+            }     
+        }
         public ArticlesDetailsViewModel(SelectedArticleStore selectedArticleStore, 
                                         ModalNavigationStore modalNavigationStore,
                                         CommentsStore commentsStore)
@@ -50,15 +59,30 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
             _selectedArticleStore.SelectedArticleChanged += SelectedArticleStore_SelectedArticleChanged;
 
             _commentsStore.CommentAdded += CommentsStore_CommentAdded;
+            _commentsStore.CommentUpdated += CommentsStore_CommentUpdated;
+            _commentsStore.CommentDeleted += CommentsStore_CommentDeleted;
 
-            //AddCommentCommand = new OpenAddCommentCommand(modalNavigationStore, commentsStore, SelectedArticle?.Id);
+            AddCommentCommand = new OpenAddCommentCommand(modalNavigationStore, commentsStore, null);
+        }
+
+        private void CommentsStore_CommentDeleted(int Id)
+        {
+            CommentsListingViewModel?.DeleteComment(Id);
+        }
+
+        private void CommentsStore_CommentUpdated(Comment comment)
+        {
+            if (SelectedArticle != null && comment.ArticleId == SelectedArticle.Id)
+            {
+                CommentsListingViewModel?.UpdateComment(comment);
+            }
         }
 
         private void CommentsStore_CommentAdded(Comment comment)
         {
-            if (HasSelectedArticle != null)
+            if (SelectedArticle != null  && comment.ArticleId ==SelectedArticle.Id)
             {
-                _commentsListingViewModel.CommentsStore_CommentAdded(comment);
+                CommentsListingViewModel?.AddComment(comment);
             }
         }
 
@@ -66,6 +90,8 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         {
             _selectedArticleStore.SelectedArticleChanged -= SelectedArticleStore_SelectedArticleChanged;
             _commentsStore.CommentAdded -= CommentsStore_CommentAdded;
+            _commentsStore.CommentUpdated -= CommentsStore_CommentUpdated;
+            _commentsStore.CommentDeleted -= CommentsStore_CommentDeleted;
             base.Dispose();
         }
         private void SelectedArticleStore_SelectedArticleChanged()
@@ -78,15 +104,21 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
             OnPropertyChanged(nameof(Author));
             OnPropertyChanged(nameof(Tags));
             OnPropertyChanged(nameof(Comments));
-            if (HasSelectedArticle)
+            if (SelectedArticle != null)
             {
-                _commentsListingViewModel = new CommentsListingViewModel(SelectedArticle.Id, _modalNavigationStore, _commentsStore);
                 AddCommentCommand = new OpenAddCommentCommand(_modalNavigationStore, _commentsStore, SelectedArticle.Id);
+                LoadCommentsForArticle(SelectedArticle.Id);
+            }
+            else
+            {
+                AddCommentCommand = new OpenAddCommentCommand(_modalNavigationStore, _commentsStore, null);
+                CommentsListingViewModel = null;
             }
         }
         public void LoadCommentsForArticle(int articleId)
         {
             CommentsListingViewModel = new CommentsListingViewModel(articleId, _modalNavigationStore, _commentsStore);
+            CommentsListingViewModel.LoadComments();
         }
     }
 }

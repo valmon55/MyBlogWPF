@@ -7,6 +7,7 @@ using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace KFA.MyBlogWPF.ViewModels.Comments
 {
@@ -16,16 +17,6 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
         private ModalNavigationStore _modalNavigationStore;
         private CommentsStore _commentsStore;
 
-        private ObservableCollection<Comment> comments;
-        public ObservableCollection<Comment> Comments
-        {
-            get { return comments;}
-            set
-            {
-                comments = value;
-                OnPropertyChanged();
-            }
-        }
         private readonly ObservableCollection<CommentsListingItemViewModel> _commentsListingItemViewModels;
         public IEnumerable<CommentsListingItemViewModel> CommentsListingItemViewModels => _commentsListingItemViewModels;
         public CommentsListingViewModel(int articleId, ModalNavigationStore modalNavigationStore, CommentsStore commentsStore)
@@ -36,20 +27,27 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
             ///Пока так
             ///TODO: при интеграции запрашивать список комментариев 
             _commentsListingItemViewModels = new ObservableCollection<CommentsListingItemViewModel>();
-            comments = new ObservableCollection<Comment>();
+            
+            //comments = new ObservableCollection<Comment>();
 
-            _commentsStore.CommentAdded += CommentsStore_CommentAdded;
-            _commentsStore.CommentUpdated += CommentsStore_CommentUpdated;
-            _commentsStore.CommentDeleted += CommentsStore_CommentDeleted;
+            //_commentsStore.CommentAdded += CommentsStore_CommentAdded;
+            //_commentsStore.CommentUpdated += CommentsStore_CommentUpdated;
+            //_commentsStore.CommentDeleted += CommentsStore_CommentDeleted;
 
-            LoadComments();
+            //LoadComments();
         }
-        private void LoadComments()
+        public void LoadComments()
         {
             var comments = new List<Comment>()
             {
-                new Comment(){ Id = 1, ArticleId = 1, CommentDate = DateTime.Now, Comment_Text = "Comment 1" },
-                new Comment(){ Id = 2, ArticleId = 1, CommentDate = DateTime.Now, Comment_Text = "Comment 2" }
+                new Comment(){ Id = 1, ArticleId = _articleId, CommentDate = DateTime.Now, 
+                    Comment_Text = "Comment 1",
+                    User = new User(){ Id = 1, First_Name = "Sherlok", Last_Name = "Holms"}
+                },
+                new Comment(){ Id = 2, ArticleId = _articleId, CommentDate = DateTime.Now, 
+                    Comment_Text = "Comment 2", 
+                    User = new User(){ Id = 2, First_Name = "Patric", Last_Name = "Jane" }
+                }
             };
             foreach(var comment in comments)
             {
@@ -57,23 +55,27 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
             }
         }
 
-        protected override void Dispose()
-        {
-            _commentsStore.CommentAdded -= CommentsStore_CommentAdded;
-            _commentsStore.CommentUpdated -= CommentsStore_CommentUpdated;
-            _commentsStore.CommentDeleted -= CommentsStore_CommentDeleted;
+        //protected override void Dispose()
+        //{
+        //    _commentsStore.CommentAdded -= CommentsStore_CommentAdded;
+        //    _commentsStore.CommentUpdated -= CommentsStore_CommentUpdated;
+        //    _commentsStore.CommentDeleted -= CommentsStore_CommentDeleted;
 
-            base.Dispose();
-        }
-        private void CommentsStore_CommentDeleted(int commentId)
+        //    base.Dispose();
+        //}
+        public void DeleteComment(int commentId)
         {
             CommentsListingItemViewModel commentViewModel = 
                 _commentsListingItemViewModels.FirstOrDefault(x => x.Id == commentId);
+            if (commentViewModel != null)
+            {
+                _commentsListingItemViewModels.Remove(commentViewModel);
+            }
         }
 
-        private void CommentsStore_CommentUpdated(Comment comment)
+        public void UpdateComment(Comment comment)
         {
-            CommentsListingItemViewModel? commentViewModel = 
+            CommentsListingItemViewModel commentViewModel = 
                 _commentsListingItemViewModels.FirstOrDefault(x => x.Id == comment.Id);
             if(commentViewModel != null)
             {
@@ -81,15 +83,15 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
             }
         }
 
-        public void CommentsStore_CommentAdded(Comment comment)
+        public void AddComment(Comment comment)
         {
-            AddComment(comment);
-        }
-
-        private void AddComment(Comment comment)
-        {
-            CommentsListingItemViewModel itemViewModel = new CommentsListingItemViewModel(_articleId, comment, _modalNavigationStore, _commentsStore);
-            _commentsListingItemViewModels.Add(itemViewModel);
+            CommentsListingItemViewModel commentViewModel = new CommentsListingItemViewModel(
+                _articleId,
+                comment,
+                _modalNavigationStore,
+                _commentsStore
+                );
+            _commentsListingItemViewModels.Add(commentViewModel);
         }
     }
 }
