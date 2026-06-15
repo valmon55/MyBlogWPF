@@ -34,7 +34,7 @@
             <comments_views:AddCommentView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type comments_vms:EditCommentViewModel}">
-            <articles_views:EditArticleView/>
+            <comments_views:EditCommentView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type vms:AddTagViewModel}">
             <views:AddTagView />

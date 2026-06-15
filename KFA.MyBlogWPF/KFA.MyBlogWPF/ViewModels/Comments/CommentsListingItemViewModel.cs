@@ -23,7 +23,7 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
             _articleId = articleId;
             _modalNavigationStore = modalNavigationStore;
             _commentsStore = commentsStore;
-            //EditCommand = new OpenEditCommentCommand();
+            EditCommand = new OpenEditCommentCommand(this, modalNavigationStore, commentsStore);
             DeleteCommand = new DeleteCommentCommand(this, commentsStore);
         }
         private bool isDeleting;
