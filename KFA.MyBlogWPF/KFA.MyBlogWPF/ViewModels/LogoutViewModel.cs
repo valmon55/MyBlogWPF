@@ -16,7 +16,7 @@ namespace KFA.MyBlogWPF.ViewModels
         public LogoutViewModel(HttpClient myBlog)
         {
             _myBlog = myBlog;
-            LogoutCommand = new LogoutCommand();
+            LogoutCommand = new LogoutCommand(_myBlog);
         }
     }
 }

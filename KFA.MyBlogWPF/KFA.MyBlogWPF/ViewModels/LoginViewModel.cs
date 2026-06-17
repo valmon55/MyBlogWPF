@@ -61,7 +61,7 @@ namespace KFA.MyBlogWPF.ViewModels
         public LoginViewModel(HttpClient myBlog)
         {
             _myBlog = myBlog;
-            LoginCommand = new LoginCommand(this);
+            LoginCommand = new LoginCommand(this, _myBlog);
             GoToRegisterCommand = new GoToRegisterCommand();
         }
     }
