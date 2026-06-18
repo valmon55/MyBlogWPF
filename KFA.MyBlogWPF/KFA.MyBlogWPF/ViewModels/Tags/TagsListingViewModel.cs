@@ -65,14 +65,31 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
 
             base.Dispose();
         }
-        private void TagsStore_TagUpdated(Tag tag)
+        private async void TagsStore_TagUpdated(Tag tag)
         {
             TagsListingItemViewModel? tagViewModel =
                 _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == tag.Id);
+            var oldTag = tagViewModel.Tag;
 
             if (tagViewModel != null)
             {
                 tagViewModel.Update(tag);
+            }
+            try
+            {
+                var resp = await _myBlog.PostAsJsonAsync("https://localhost:7007/Tag/Update", tag);
+                //var createdTag = await resp.Content.ReadFromJsonAsync<Tag>();
+                if (!resp.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Ошибка обновления тега: {tagViewModel.TagName}" +
+                        Environment.NewLine + $"Код ошибки: {resp.StatusCode}");
+                    //Откат в UI
+                    tagViewModel.Update(oldTag);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
             }
         }
         private void TagsStore_TagAdded(Tag tag)
@@ -91,7 +108,14 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             {
                 var resp = await _myBlog.PostAsJsonAsync("https://localhost:7007/Tag/AddTag",
                                     new Tag() { Name = itemViewModel.TagName });
-                var createdTag = await resp.Content.ReadFromJsonAsync<Tag>();
+                //var createdTag = await resp.Content.ReadFromJsonAsync<Tag>();
+                if(!resp.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Ошибка добавления тега: {itemViewModel.TagName}" + 
+                        Environment.NewLine + $"Код ошибки: {resp.StatusCode}");
+                    //Откат в UI
+                    _tagsListingItemViewModels.Remove(itemViewModel);
+                }
 
             }
             catch (Exception ex)
@@ -100,13 +124,28 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             }
         }
 
-        private void TagsStore_TagDeleted(int id)
+        private async void TagsStore_TagDeleted(int id)
         {
             TagsListingItemViewModel? tagViewModel =
                 _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == id);
             if (tagViewModel != null)
             {
                 _tagsListingItemViewModels.Remove(tagViewModel);
+            }
+            try
+            {
+                var resp = await _myBlog.DeleteAsync($"https://localhost:7007/Tag/DeleteTag?id={id}");
+                if (!resp.IsSuccessStatusCode)
+                {
+                    MessageBox.Show($"Ошибка удаления тега: {tagViewModel.TagName}" +
+                        Environment.NewLine + $"Код ошибки: {resp.StatusCode}");
+                    //Откат в UI
+                    _tagsListingItemViewModels.Add(tagViewModel);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
         public async void LoadTagsAsync()
