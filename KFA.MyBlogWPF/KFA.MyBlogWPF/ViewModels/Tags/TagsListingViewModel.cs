@@ -1,4 +1,6 @@
-﻿using KFA.MyBlogWPF.Models;
+﻿using KFA.MyBlogWPF.Configuration;
+using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -18,8 +20,14 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
     public class TagsListingViewModel : ViewModelBase
     {
         private readonly HttpClient _myBlog;
+        private readonly IApiClient _apiClient;
+        private readonly ApiSettings _apiSettings;
+        private readonly AppSettings _appSettings;
+        private readonly FeatureFlags _featureFlags;
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly TagsStore _tagsStore;
+
+        public string ApplicationName { get; }
         private ObservableCollection<Tag> tags;
         public ObservableCollection<Tag> Tags
         {
@@ -32,9 +40,27 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         }
         private readonly ObservableCollection<TagsListingItemViewModel> _tagsListingItemViewModels;
         public IEnumerable<TagsListingItemViewModel> TagsListingItemViewModels => _tagsListingItemViewModels;
-        public TagsListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore, TagsStore tagsStore)
+        public TagsListingViewModel(
+            IApiClient apiClient,
+            ApiSettings apiSettings,
+            AppSettings appSettings,
+            FeatureFlags featureFlags, 
+            ModalNavigationStore modalNavigationStore, 
+            TagsStore tagsStore) 
         {
-            _myBlog = myBlog;
+            _apiClient = apiClient;
+            _apiSettings = apiSettings;
+            _appSettings = appSettings;
+            _featureFlags = featureFlags;
+
+            ApplicationName = _appSettings.ApplicationName;
+
+            // Проверяем фичу-флаг
+            if (_featureFlags.EnableExperimentalFeatures)
+            {
+                // Показываем экспериментальный UI
+            }
+
             _modalNavigationStore = modalNavigationStore;
             _tagsStore = tagsStore;
             _tagsListingItemViewModels = new ObservableCollection<TagsListingItemViewModel>();
@@ -150,27 +176,24 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         }
         public async void LoadTagsAsync()
         {
-            if (_myBlog is null)
-                return;
             try
             {
-                var resp = await _myBlog.GetAsync("https://localhost:7007/Tag/AllTags");
-                if (resp.IsSuccessStatusCode)
-                {
-                    var body = await _myBlog.GetStringAsync("https://localhost:7007/Tag/AllTags");
-                    var tags = JsonSerializer.Deserialize<List<Tag>>(body);
+                const string endpoint = "Tag/AllTags";
 
-                    Tags.Clear();
-                    foreach (var tag in tags)
-                    {
-                        Tags.Add(tag);
-                        _tagsListingItemViewModels.Add(new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore));
-                    }
+                var tags = await _apiClient.GetAsync<List<Tag>>(endpoint);
+
+                Tags.Clear();
+                foreach (var tag in tags)
+                {
+                    Tags.Add(tag);
+                    _tagsListingItemViewModels.Add(new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore));
                 }
+                
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+                //MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+                Debug.WriteLine($"Ошибка загрузки данных: {ex.Message}");
             }
         }
     }

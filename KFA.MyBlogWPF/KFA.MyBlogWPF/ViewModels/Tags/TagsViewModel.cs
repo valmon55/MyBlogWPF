@@ -1,4 +1,6 @@
 ﻿using KFA.MyBlogWPF.Commands.Tag;
+using KFA.MyBlogWPF.Configuration;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -16,15 +18,24 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
     /// </summary>
     public class TagsViewModel : ViewModelBase
     {
-        private readonly HttpClient _myBlog;
+        //private readonly HttpClient _myBlog;
         public TagsListingViewModel TagsListingViewModel { get; }
         public ICommand AddTagsCommand { get; }
-        public TagsViewModel(HttpClient myBlog,
+        public TagsViewModel(//HttpClient myBlog,
+            IApiClient apiClient,
+            ApiSettings apiSettings,
+            AppSettings appSettings,
+            FeatureFlags featureFlags,
                             ModalNavigationStore modalNavigationStore,
                             TagsStore tagsStore)
         {
-            _myBlog = myBlog;
-            TagsListingViewModel = new TagsListingViewModel(_myBlog, modalNavigationStore, tagsStore);
+            //_myBlog = myBlog;
+            TagsListingViewModel = new TagsListingViewModel(/*_myBlog,*/ 
+                apiClient,
+                apiSettings,
+                appSettings,
+                featureFlags,
+                modalNavigationStore, tagsStore);
 
             AddTagsCommand = new OpenAddTagCommand(modalNavigationStore, tagsStore);
         }
