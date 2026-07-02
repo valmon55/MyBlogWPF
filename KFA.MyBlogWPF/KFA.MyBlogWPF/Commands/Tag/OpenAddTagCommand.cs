@@ -1,4 +1,5 @@
-﻿using KFA.MyBlogWPF.Stores;
+﻿using KFA.MyBlogWPF.Services;
+using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
 using System;
 using System.Collections.Generic;

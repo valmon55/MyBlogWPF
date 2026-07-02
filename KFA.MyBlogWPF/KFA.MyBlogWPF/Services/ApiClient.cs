@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -31,7 +32,11 @@ namespace KFA.MyBlogWPF.Services
             {
                 // TODO: Вернуть MockHttpClient
             }
-            return _httpClientFactory.CreateClient("MyBlogApi");
+            var client = _httpClientFactory.CreateClient("MyBlogApi");
+            Debug.WriteLine($"🌐 BaseAddress: {client.BaseAddress}");
+            Debug.WriteLine($"🍪 Куки в клиенте: {client.DefaultRequestHeaders.Contains("Cookie")}");
+
+            return client;
         }
 
         public async Task<T?> GetAsync<T>(string endpoint)
@@ -49,7 +54,13 @@ namespace KFA.MyBlogWPF.Services
             var client = CreateClient();
             var json = JsonSerializer.Serialize(data);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-            return await client.PostAsync(endpoint, content);
+            var response = await client.PostAsync(endpoint, content);
+
+            Debug.WriteLine($"➡️ POST {client.BaseAddress}{endpoint}");
+            Debug.WriteLine($"📦 Body: {json}");
+            Debug.WriteLine($"⬅️ Status: {response.StatusCode}");
+
+            return response;
         }
 
         public async Task<HttpResponseMessage> PutAsync<T>(string endpoint, T data)
@@ -60,7 +71,7 @@ namespace KFA.MyBlogWPF.Services
             return await client.PutAsync(endpoint, content);
         }
 
-        public async Task<HttpResponseMessage> DeleteAsync<T>(string endpoint)
+        public async Task<HttpResponseMessage> DeleteAsync(string endpoint)
         {
             var client = CreateClient();
             return await client.DeleteAsync(endpoint);

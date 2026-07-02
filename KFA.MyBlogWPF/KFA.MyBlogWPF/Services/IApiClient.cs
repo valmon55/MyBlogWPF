@@ -12,6 +12,6 @@ namespace KFA.MyBlogWPF.Services
         Task<T?> GetAsync<T>(string endpoint);
         Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data);
         Task<HttpResponseMessage> PutAsync<T>(string endpoint, T data);
-        Task<HttpResponseMessage> DeleteAsync<T>(string endpoint);
+        Task<HttpResponseMessage> DeleteAsync(string endpoint);
     }
 }

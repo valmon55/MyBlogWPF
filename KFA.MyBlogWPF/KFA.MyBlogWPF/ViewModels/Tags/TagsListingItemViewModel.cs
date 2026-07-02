@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Commands;
 using KFA.MyBlogWPF.Commands.Tag;
 using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -43,12 +44,16 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
-        public TagsListingItemViewModel(Tag tag, ModalNavigationStore modalNavigationStore, TagsStore tagsStore)
+        public TagsListingItemViewModel(
+            Tag tag, 
+            ModalNavigationStore modalNavigationStore, 
+            TagsStore tagsStore,
+            IApiClient apiClient)
         {
             Tag = tag;
 
             EditCommand = new OpenEditTagCommand(this, modalNavigationStore, tagsStore);
-            DeleteCommand = new DeleteTagCommand(this, tagsStore);
+            DeleteCommand = new DeleteTagCommand(this, tagsStore, apiClient);
         }
 
         public void Update(Tag tag)

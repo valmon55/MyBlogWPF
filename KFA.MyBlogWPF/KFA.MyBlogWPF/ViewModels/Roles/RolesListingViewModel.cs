@@ -43,7 +43,7 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             _rolesStore.RoleUpdated += RolesStore_RoleUpdated;
             _rolesStore.RoleDeleted += RolesStore_RoleDeleted;
 
-            LoadRolesAsync();
+            //LoadRolesAsync();
 
         }
 

@@ -12,10 +12,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Polly;
 using Polly.Extensions.Http;
+using System;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Windows;
 
@@ -51,8 +53,8 @@ namespace KFA.MyBlogWPF
                     var baseUrl = apiSettings.BaseURL.TrimEnd('/');
                     services.AddSingleton(apiSettings);
 
-                    //Debug.WriteLine($"🔍 Загружен BaseURL: '{apiSettings.BaseURL}'");
-                    //Debug.WriteLine($"🔍 Загружен Timeout: {apiSettings.Timeouts.RequestTimeoutSeconds}");
+                    Debug.WriteLine($"🔍 Загружен BaseURL: '{apiSettings.BaseURL}'");
+                    Debug.WriteLine($"🔍 Загружен Timeout: {apiSettings.Timeouts.RequestTimeoutSeconds}");
 
                     var appSettings = new AppSettings();
                     context.Configuration.GetSection("AppSettings").Bind(appSettings);
@@ -62,14 +64,26 @@ namespace KFA.MyBlogWPF
                     context.Configuration.GetSection("FeatureFlags").Bind(featureFlags);
                     services.AddSingleton(featureFlags);
 
+                    var cookieContainer = new CookieContainer();
+                    services.AddSingleton<CookieContainer>(cookieContainer);
+
                     services.AddHttpClient("MyBlogApi", client =>
                     {
                         client.BaseAddress = new Uri(baseUrl);
                         client.Timeout = TimeSpan.FromSeconds(apiSettings.Timeouts.RequestTimeoutSeconds);
                         client.DefaultRequestHeaders.Add("Accept", "application/json");
                     })
+                    .ConfigurePrimaryHttpMessageHandler((serviceProvider) =>
+                    {
+                        var container = serviceProvider.GetRequiredService<CookieContainer>();
+                        return new HttpClientHandler
+                        {
+                            UseCookies = true,
+                            CookieContainer = container
+                        };
+                    })
                     .AddPolicyHandler((serviceProvider, request) =>
-                    { 
+                    {                         
                         return HttpPolicyExtensions
                             .HandleTransientHttpError()
                             .WaitAndRetryAsync(
@@ -81,7 +95,7 @@ namespace KFA.MyBlogWPF
                                 }); 
                     });
 
-                    services.AddSingleton<HttpClient>();
+                    //services.AddSingleton<HttpClient>();
                     // Регистрируем IApiClient вместо HttpClient
                     services.AddSingleton<IApiClient, ApiClient>();
 

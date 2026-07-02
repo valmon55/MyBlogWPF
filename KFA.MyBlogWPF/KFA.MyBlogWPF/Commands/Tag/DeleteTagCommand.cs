@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using KFA.MyBlogWPF.ViewModels.Tags;
+using KFA.MyBlogWPF.Services;
+using System.Diagnostics;
 
 namespace KFA.MyBlogWPF.Commands.Tag
 {
@@ -13,11 +15,13 @@ namespace KFA.MyBlogWPF.Commands.Tag
     {
         private readonly TagsListingItemViewModel _tagsListingItemViewModel;
         private readonly TagsStore _tagsStore;
+        private readonly IApiClient _apiClient;
 
-        public DeleteTagCommand(TagsListingItemViewModel tagsListingItemViewModel, TagsStore tagsStore)
+        public DeleteTagCommand(TagsListingItemViewModel tagsListingItemViewModel, TagsStore tagsStore, IApiClient apiClient)
         {
             _tagsListingItemViewModel = tagsListingItemViewModel;
             _tagsStore = tagsStore;
+            _apiClient = apiClient;
         }
 
         public override async Task ExecuteAsync(object parameter)
@@ -28,17 +32,32 @@ namespace KFA.MyBlogWPF.Commands.Tag
             Model.Tag tag = _tagsListingItemViewModel.Tag;
             try
             {
-                await _tagsStore.Delete(tag.Id);
+                var endpoint = $"Tag/DeleteTag?id={tag.Id}";
+                var response = await _apiClient.DeleteAsync(endpoint);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    await _tagsStore.Delete(tag.Id);
+                    Debug.WriteLine($"✅ Тег '{tag.Name}' (ID: {tag.Id}) удален");
+                }
+                else
+                {
+                    var errorBody = await response.Content.ReadAsStringAsync();
+                    _tagsListingItemViewModel.ErrorMessage =
+                        $"Ошибка удаления: {response.StatusCode} - {errorBody}";
+
+                    Debug.WriteLine($"❌ Ошибка удаления: {response.StatusCode} - {errorBody}");
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _tagsListingItemViewModel.ErrorMessage = $"Failed to delete Tag {tag.Name}";
+                _tagsListingItemViewModel.ErrorMessage = $"Исключение: {ex.Message}";
+                Debug.WriteLine($"❌ Исключение при удалении: {ex.Message}");
             }
             finally
             {
                 _tagsListingItemViewModel.IsDeleting = false;
             }
-
         }
     }
 }

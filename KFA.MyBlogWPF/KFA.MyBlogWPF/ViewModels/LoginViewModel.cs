@@ -1,5 +1,6 @@
 ﻿using KFA.MyBlogWPF.Commands;
 using KFA.MyBlogWPF.Commands.Login;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace KFA.MyBlogWPF.ViewModels
     /// </summary>
     public class LoginViewModel : ViewModelBase
     {
-        private readonly HttpClient _myBlog;
+        //private readonly HttpClient _myBlog;
         private string login;
         public string Login
         {
@@ -58,10 +59,10 @@ namespace KFA.MyBlogWPF.ViewModels
         public ICommand LoginCommand { get; }
         public ICommand GoToRegisterCommand { get; }
         public bool CanSubmit => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password);
-        public LoginViewModel(HttpClient myBlog)
+        public LoginViewModel(IApiClient apiClient)
         {
-            _myBlog = myBlog;
-            LoginCommand = new LoginCommand(this, _myBlog);
+            //_myBlog = myBlog;
+            LoginCommand = new LoginCommand(this, apiClient);
             GoToRegisterCommand = new GoToRegisterCommand();
         }
     }
