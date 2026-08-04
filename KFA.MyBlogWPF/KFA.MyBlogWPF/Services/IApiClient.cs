@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KFA.MyBlogWPF.Services.DTOs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -11,6 +12,7 @@ namespace KFA.MyBlogWPF.Services
     {
         Task<T?> GetAsync<T>(string endpoint);
         Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data);
+        Task<ApiResponse<TResponse>> PostAsync<TRequest, TResponse>(string endpoint, TRequest data);
         Task<HttpResponseMessage> PutAsync<T>(string endpoint, T data);
         Task<HttpResponseMessage> DeleteAsync(string endpoint);
     }

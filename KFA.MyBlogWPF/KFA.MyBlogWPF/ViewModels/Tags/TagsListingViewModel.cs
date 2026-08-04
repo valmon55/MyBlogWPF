@@ -124,33 +124,33 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             TagsListingItemViewModel itemViewModel = new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient);
             _tagsListingItemViewModels.Add(itemViewModel);
             
-            try
-            {
-                const string endpoint = "Tag/AddTag";
+            //try
+            //{
+            //    const string endpoint = "Tag/AddTag";
 
-                var request = new AddTagRequest() { Name = tag.Name };
+            //    var request = new AddTagRequest() { Name = tag.Name };
 
-                var responseMessage = await _apiClient.PostAsync<AddTagRequest>(endpoint, request);
-                if( responseMessage.IsSuccessStatusCode)
-                {
-                    Debug.WriteLine($"✅ Тег {request.Name} успешно добавлен");
-                }
-                else
-                {
-                    var errorBody = await responseMessage.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"Ошибка добавления тега: {itemViewModel.TagName}" + Environment.NewLine +
-                        $"Status: {responseMessage.StatusCode}");
-                    Debug.WriteLine($"📄 Тело ответа: {errorBody}");
-                    //Откат в UI
-                    _tagsListingItemViewModels.Remove(itemViewModel);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"❌ Исключение: {ex.Message}");
-                //Откат в UI
-                _tagsListingItemViewModels.Remove(itemViewModel);
-            }
+            //    var responseMessage = await _apiClient.PostAsync<AddTagRequest>(endpoint, request);
+            //    if( responseMessage.IsSuccessStatusCode)
+            //    {
+            //        Debug.WriteLine($"✅ Тег {request.Name} успешно добавлен");
+            //    }
+            //    else
+            //    {
+            //        var errorBody = await responseMessage.Content.ReadAsStringAsync();
+            //        Debug.WriteLine($"Ошибка добавления тега: {itemViewModel.TagName}" + Environment.NewLine +
+            //            $"Status: {responseMessage.StatusCode}");
+            //        Debug.WriteLine($"📄 Тело ответа: {errorBody}");
+            //        //Откат в UI
+            //        _tagsListingItemViewModels.Remove(itemViewModel);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine($"❌ Исключение: {ex.Message}");
+            //    //Откат в UI
+            //    _tagsListingItemViewModels.Remove(itemViewModel);
+            //}
         }
 
         private async void TagsStore_TagDeleted(int id)
@@ -166,20 +166,32 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         {
             try
             {
+                IsLoading = true;
+                ErrorMessage = null;
+
                 const string endpoint = "Tag/AllTags";
 
                 var tags = await _apiClient.GetAsync<List<Tag>>(endpoint);
 
-                Tags.Clear();
-                foreach (var tag in tags)
+                if (tags != null)
                 {
-                    Tags.Add(tag);
-                    _tagsListingItemViewModels.Add(new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient));
-                }                
+                    //Tags.Clear();
+                    _tagsListingItemViewModels.Clear();
+                    foreach (var tag in tags)
+                    {
+                        //Tags.Add(tag);
+                        _tagsListingItemViewModels.Add(
+                            new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient));
+                    }
+                }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Ошибка загрузки данных: {ex.Message}");
+            }
+            finally 
+            { 
+                IsLoading = false; 
             }
         }
     }

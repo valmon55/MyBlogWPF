@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace KFA.MyBlogWPF.Models
+namespace KFA.MyBlogWPF.Services.DTOs
 {
-    public class AddTagRequest
+    public class TagResponse
     {
-        [JsonPropertyName("tag_Name")]
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
     }
 }
