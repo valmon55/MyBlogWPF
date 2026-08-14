@@ -14,9 +14,13 @@ namespace KFA.MyBlogWPF.ViewModels
     public class AddTagViewModel : ViewModelBase
     {
         public TagDetailsFormViewModel TagDetailsFormViewModel { get; }
-        public AddTagViewModel(ModalNavigationStore modalNavigationStore, TagsStore tagsStore, IApiClient apiClient)
+        public AddTagViewModel(
+            ModalNavigationStore modalNavigationStore, 
+            TagsStore tagsStore, 
+            IApiClient apiClient, 
+            ITagService tagService)
         {
-            ICommand submitCommand = new AddTagCommand(this, modalNavigationStore, tagsStore, apiClient);
+            ICommand submitCommand = new AddTagCommand(this, modalNavigationStore, tagsStore, apiClient, tagService);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
             TagDetailsFormViewModel = new TagDetailsFormViewModel(submitCommand, cancelCommand);
         }

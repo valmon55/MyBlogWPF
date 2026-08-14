@@ -27,7 +27,8 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             AppSettings appSettings,
             FeatureFlags featureFlags,
             ModalNavigationStore modalNavigationStore,
-            TagsStore tagsStore)
+            TagsStore tagsStore,
+            ITagService tagService)
         {
             //_myBlog = myBlog;
             TagsListingViewModel = new TagsListingViewModel(/*_myBlog,*/ 
@@ -37,7 +38,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
                 featureFlags,
                 modalNavigationStore, tagsStore);
 
-            AddTagsCommand = new OpenAddTagCommand(modalNavigationStore, tagsStore, apiClient);
+            AddTagsCommand = new OpenAddTagCommand(modalNavigationStore, tagsStore, apiClient, tagService);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Configuration;
 using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.Services;
+using KFA.MyBlogWPF.Services.DTOs;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -67,7 +68,8 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             _tagsListingItemViewModels = new ObservableCollection<TagsListingItemViewModel>();
             Tags = new ObservableCollection<Tag>();
 
-            _tagsStore.TagAdded += TagsStore_TagAdded;
+            //_tagsStore.TagAdded += TagsStore_TagAdded;
+            _tagsStore.TagAdded += OnTagAdded;
             _tagsStore.TagUpdated += TagsStore_TagUpdated;
             _tagsStore.TagDeleted += TagsStore_TagDeleted;
 
@@ -84,6 +86,53 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("ASP.Net"));
         }
 
+        private async void OnTagAdded(Tag tag)
+        {
+            TagsListingItemViewModel itemViewModel = new TagsListingItemViewModel(
+                tag, _modalNavigationStore, _tagsStore, _apiClient
+                );
+            _tagsListingItemViewModels.Add(itemViewModel);
+            try
+            {
+                var request = new AddTagRequest { Name = tag.Name };
+                var response = await _apiClient.PostAsync<AddTagRequest, TagResponse>("Tag/AddTag", request);
+
+                if (response.IsSuccess && response.Data != null)
+                {
+                    // ✅ Успех: обновляем ID тега (который пришел с сервера)
+                    itemViewModel.UpdateWithServerData(response.Data);
+
+                    // Показываем временное уведомление об успехе (опционально)
+                    Debug.WriteLine($"✅ Тег '{tag.Name}' успешно добавлен с ID {response.Data.Id}");
+                }
+                else
+                {
+                    // ❌ Ошибка сервера: откатываем UI
+                    await RollbackAddOperation(itemViewModel, response.Error?.Message ?? "Неизвестная ошибка сервера");
+                }
+            }
+            catch (Exception ex)
+            {
+                // ❌ Исключение: откатываем UI
+                await RollbackAddOperation(itemViewModel, $"Исключение: {ex.Message}");
+            }
+        }
+        private async Task RollbackAddOperation(TagsListingItemViewModel itemViewModel, string errorMessage)
+        {
+            // 1. Удаляем из UI (откат)
+            _tagsListingItemViewModels.Remove(itemViewModel);
+
+            // 2. Показываем ошибку пользователю
+            ErrorMessage = $"Не удалось добавить тег: {errorMessage}";
+
+            // 3. Логируем ошибку
+            Debug.WriteLine($"❌ Ошибка добавления тега '{itemViewModel.TagName}': {errorMessage}");
+
+            // 4. Можно также показать модальное окно с ошибкой (опционально)
+            // _modalNavigationStore.CurrentViewModel = new ErrorViewModel(errorMessage);
+
+            await Task.CompletedTask; // Для соблюдения async сигнатуры
+        }
         protected override void Dispose()
         {
             _tagsStore.TagAdded -= TagsStore_TagAdded;

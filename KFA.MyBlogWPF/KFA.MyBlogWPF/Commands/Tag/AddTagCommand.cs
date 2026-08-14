@@ -5,6 +5,7 @@ using KFA.MyBlogWPF.ViewModels;
 using KFA.MyBlogWPF.ViewModels.Tags;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -18,68 +19,45 @@ namespace KFA.MyBlogWPF.Commands.Tag
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly TagsStore _tagsStore;
         private readonly IApiClient _apiClient;
-
-        public AddTagCommand(AddTagViewModel addTagViewModel, ModalNavigationStore modalNavigationStore, TagsStore tagsStore, IApiClient apiClient)
+        private readonly ITagService _tagService;
+        public AddTagCommand(AddTagViewModel addTagViewModel, 
+                             ModalNavigationStore modalNavigationStore, 
+                             TagsStore tagsStore, 
+                             IApiClient apiClient, 
+                             ITagService tagService)
         {
             _addTagViewModel = addTagViewModel;
             _modalNavigationStore = modalNavigationStore;
             _tagsStore = tagsStore;
             _apiClient = apiClient;
+            _tagService = tagService;
         }
         public override async Task ExecuteAsync(object parameter)
         {
-            Random random = new Random();
-            int n = random.Next(1, 100);
-
             TagDetailsFormViewModel formViewModel = _addTagViewModel.TagDetailsFormViewModel;
             var tagName = formViewModel.TagName;
-            
-            Models.Tag pendingTag = new Models.Tag()
-            {
-                Id = n,
-                Name = formViewModel.TagName
-            };
-            // Send API request to Edit Tag
 
+            // Send API request to Edit Tag
             try
             {
-                const string endpoint = "Tag/AddTag";
+                var tag = await _tagService.AddTagAsync(tagName);
 
-                var request = new AddTagRequest() { Name = tagName };
-
-                var responseMessage = await _apiClient.PostAsync<AddTagRequest>(endpoint, request);
-                if (responseMessage.IsSuccessStatusCode)
-                {
-                    Debug.WriteLine($"✅ Тег {request.Name} успешно добавлен");
-                    await _tagsStore.Add(pendingTag);
-
-                    var responseBody = await responseMessage.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"BODY {responseBody}");
-                }
-                else
-                {
-                    var errorBody = await responseMessage.Content.ReadAsStringAsync();
-                    Debug.WriteLine($"Ошибка добавления тега: {responseMessage.StatusCode}");
-                    Debug.WriteLine($"📄 Тело ответа: {errorBody}");
-                }
-
-                _modalNavigationStore.Close();
+                await _tagsStore.Add(tag);
+            }
+            catch (ValidationException ex)
+            {
+                Debug.WriteLine($"❌ Ошибка валидации при добавлении тега: {ex.Message}");
+                _addTagViewModel.ErrorMessage = ex.Message;
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"❌ Исключение при добавлении тега: {ex.Message}");
+                _addTagViewModel.ErrorMessage = $"❌ Исключение при добавлении тега: {ex.Message}";
             }
-            //try
-            //{
-            //    await _tagsStore.Add(tag);
-
-            //    _modalNavigationStore.Close();
-            //}
-            //catch (Exception)
-            //{
-
-            //    throw;
-            //}
+            finally
+            {
+                _modalNavigationStore.Close();
+            }
         }
-        }
+    }
 }

@@ -77,8 +77,45 @@ namespace KFA.MyBlogWPF.Services
 
             if (response.IsSuccessStatusCode)
             {
-                var result = JsonSerializer.Deserialize<TResponse>(responseBody);
-                return ApiResponse<TResponse>.Success(result);
+                if (string.IsNullOrEmpty(responseBody))
+                {
+                    if (typeof(TResponse) == typeof(bool))
+                    {
+                        var result = (TResponse)(object)true;
+                        return ApiResponse<TResponse>.Success(result);
+                    }
+                    // Если ожидаем void или пустой ответ - используем default
+                    if (typeof(TResponse) == typeof(object))
+                    {
+                        return ApiResponse<TResponse>.Success(default!);
+                    }
+
+                    // Если ожидаем другой тип, но ответ пустой - ошибка
+                    return ApiResponse<TResponse>.Failure(new ApiError
+                    {
+                        Message = "Сервер вернул пустой ответ, но ожидались данные",
+                        Code = (int)response.StatusCode
+                    });
+                }
+
+                try
+                {
+                    // Пытаемся десериализовать ответ
+                    var result = JsonSerializer.Deserialize<TResponse>(responseBody);
+                    return ApiResponse<TResponse>.Success(result!);
+                }
+                catch (JsonException ex)
+                {
+                    Debug.WriteLine($"❌ Ошибка десериализации: {ex.Message}");
+                    Debug.WriteLine($"📄 Некорректный JSON: {responseBody}");
+
+                    return ApiResponse<TResponse>.Failure(new ApiError
+                    {
+                        Message = $"Ошибка обработки ответа сервера: {ex.Message}",
+                        Details = responseBody,
+                        Code = (int)response.StatusCode
+                    });
+                }
             }
 
             return ApiResponse<TResponse>.Failure(await ParseErrorResponse(response, responseBody));

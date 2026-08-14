@@ -15,17 +15,19 @@ namespace KFA.MyBlogWPF.Commands.Tag
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly TagsStore _tagsStore;
         private readonly IApiClient _apiClient;
+        private readonly ITagService _tagService;
 
-        public OpenAddTagCommand(ModalNavigationStore modalNavigationStore, TagsStore tagsStore, IApiClient apiClient)
+        public OpenAddTagCommand(ModalNavigationStore modalNavigationStore, TagsStore tagsStore, IApiClient apiClient, ITagService tagService)
         {
             _modalNavigationStore = modalNavigationStore;
             _tagsStore = tagsStore;
-            _apiClient = apiClient; 
+            _apiClient = apiClient;
+            _tagService = tagService;
         }
 
         public override void Execute(object? parameter)
         {
-            AddTagViewModel addTagViewModel = new AddTagViewModel(_modalNavigationStore, _tagsStore, _apiClient);
+            AddTagViewModel addTagViewModel = new AddTagViewModel(_modalNavigationStore, _tagsStore, _apiClient, _tagService);
             _modalNavigationStore.CurrentViewModel = addTagViewModel;
         }
     }
