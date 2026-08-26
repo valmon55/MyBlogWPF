@@ -65,60 +65,109 @@ namespace KFA.MyBlogWPF.Services
             var json = JsonSerializer.Serialize(data);
             var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
 
-                var response = await client.PostAsync(endpoint, content);
-                var responseBody = await response.Content.ReadAsStringAsync();
+            var response = await client.PostAsync(endpoint, content);
+            var responseBody = await response.Content.ReadAsStringAsync();
 
-                Debug.WriteLine($"➡️ POST {client.BaseAddress}{endpoint}");
-                Debug.WriteLine($"📦 Body: {json}");
-                Debug.WriteLine($"⬅️ Status: {response.StatusCode}");
-                Debug.WriteLine($"📄 Response: {responseBody}");
+            Debug.WriteLine($"➡️ POST {client.BaseAddress}{endpoint}");
+            Debug.WriteLine($"📦 Body: {json}");
+            Debug.WriteLine($"⬅️ Status Code: {(int)response.StatusCode} {response.StatusCode}");
+            Debug.WriteLine($"📄 Response Body: '{responseBody ?? "<null>"}'");
+            Debug.WriteLine($"📄 Response Body Length: {responseBody?.Length ?? 0}");
+            Debug.WriteLine($"📄 Response Headers: {string.Join(", ", response.Headers.Select(h => $"{h.Key}={string.Join(",", h.Value)}"))}");
+            Debug.WriteLine($"🔍 Content-Type: {response.Content.Headers.ContentType?.MediaType}");
 
             //return response;
 
-            if (response.IsSuccessStatusCode)
+            if (!response.IsSuccessStatusCode)
             {
-                if (string.IsNullOrEmpty(responseBody))
-                {
-                    if (typeof(TResponse) == typeof(bool))
-                    {
-                        var result = (TResponse)(object)true;
-                        return ApiResponse<TResponse>.Success(result);
-                    }
-                    // Если ожидаем void или пустой ответ - используем default
-                    if (typeof(TResponse) == typeof(object))
-                    {
-                        return ApiResponse<TResponse>.Success(default!);
-                    }
-
-                    // Если ожидаем другой тип, но ответ пустой - ошибка
-                    return ApiResponse<TResponse>.Failure(new ApiError
-                    {
-                        Message = "Сервер вернул пустой ответ, но ожидались данные",
-                        Code = (int)response.StatusCode
-                    });
-                }
-
-                try
-                {
-                    // Пытаемся десериализовать ответ
-                    var result = JsonSerializer.Deserialize<TResponse>(responseBody);
-                    return ApiResponse<TResponse>.Success(result!);
-                }
-                catch (JsonException ex)
-                {
-                    Debug.WriteLine($"❌ Ошибка десериализации: {ex.Message}");
-                    Debug.WriteLine($"📄 Некорректный JSON: {responseBody}");
-
-                    return ApiResponse<TResponse>.Failure(new ApiError
-                    {
-                        Message = $"Ошибка обработки ответа сервера: {ex.Message}",
-                        Details = responseBody,
-                        Code = (int)response.StatusCode
-                    });
-                }
+                return ApiResponse<TResponse>.Failure(await ParseErrorResponse(response, responseBody));
             }
 
-            return ApiResponse<TResponse>.Failure(await ParseErrorResponse(response, responseBody));
+            if (string.IsNullOrEmpty(responseBody))
+            {
+                if (typeof(TResponse) == typeof(bool))
+                {
+                    var result = (TResponse)(object)true;
+                    return ApiResponse<TResponse>.Success(result);
+                }
+                // Если ожидаем void или пустой ответ - используем default
+                if (typeof(TResponse) == typeof(object) ||
+                    typeof(TResponse) == typeof(NoContentResponse) ||
+                    typeof(TResponse) == typeof(string) )
+                {
+                    return ApiResponse<TResponse>.Success(default!);
+                }
+
+                // Для остальных типов - пробуем создать пустой объект через конструктор
+                try
+                {
+                    // Пытаемся создать экземпляр TResponse через параметрический конструктор
+                    // Если у TResponse есть конструктор без параметров
+                    var instance = Activator.CreateInstance<TResponse>();
+                    return ApiResponse<TResponse>.Success(instance);
+                }
+                catch (MissingMethodException)
+                {
+                    // Если нет конструктора без параметров - ошибка
+                    return ApiResponse<TResponse>.Failure(new ApiError
+                    {
+                        Message = $"Сервер вернул пустой ответ, но тип {typeof(TResponse).Name} ожидает данные",
+                        Code = (int)response.StatusCode
+                    });
+                }
+
+                // Если ожидаем другой тип, но ответ пустой - ошибка
+                return ApiResponse<TResponse>.Failure(new ApiError
+                {
+                    Message = "Сервер вернул пустой ответ, но ожидались данные",
+                    Code = (int)response.StatusCode
+                });
+            }
+            // Случай 2: Есть тело ответа - десериализуем
+            try
+            {
+                // Для строки - возвращаем как есть
+                if (typeof(TResponse) == typeof(string))
+                {
+                    return ApiResponse<TResponse>.Success((TResponse)(object)responseBody);
+                }
+
+                // Для bool - пытаемся распарсить
+                if (typeof(TResponse) == typeof(bool) && bool.TryParse(responseBody, out var boolResult))
+                {
+                    return ApiResponse<TResponse>.Success((TResponse)(object)boolResult);
+                }
+
+                // Обычная десериализация JSON
+                var result = JsonSerializer.Deserialize<TResponse>(responseBody);
+                return ApiResponse<TResponse>.Success(result!);
+            }
+            catch (JsonException ex)
+            {
+                Debug.WriteLine($"❌ Ошибка десериализации: {ex.Message}");
+                Debug.WriteLine($"📄 Некорректный JSON: {responseBody}");
+
+                // Пробуем интерпретировать как простой тип (int, bool, string)
+                try
+                {
+                    if (typeof(TResponse) == typeof(int) && int.TryParse(responseBody.Trim(), out var intResult))
+                        return ApiResponse<TResponse>.Success((TResponse)(object)intResult);
+
+                    if (typeof(TResponse) == typeof(long) && long.TryParse(responseBody.Trim(), out var longResult))
+                        return ApiResponse<TResponse>.Success((TResponse)(object)longResult);
+                }
+                catch(Exception e) 
+                {
+                    Debug.WriteLine($"❌ Ошибка интерпретации после ошибки десериализации: {e.Message}");
+                }
+
+                return ApiResponse<TResponse>.Failure(new ApiError
+                {
+                    Message = $"Ошибка обработки ответа сервера: {ex.Message}",
+                    Details = responseBody,
+                    Code = (int)response.StatusCode
+                });
+            }
         }
         private async Task HandleErrorResponse(HttpResponseMessage response)
         {

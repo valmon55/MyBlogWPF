@@ -68,55 +68,89 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             _tagsListingItemViewModels = new ObservableCollection<TagsListingItemViewModel>();
             Tags = new ObservableCollection<Tag>();
 
+            // 🔍 ЛОГ: проверяем, сколько раз подписываемся
+            // 🔍 ЛОГ: проверяем количество подписчиков ДО подписки
+            Debug.WriteLine($"📌 ДО подписки: количество подписчиков = {_tagsStore.GetTagAddedSubscriberCount()}");
+            Debug.WriteLine($"📌 ДО подписки: {_tagsStore.GetTagAddedSubscribersInfo()}");
+
+
             //_tagsStore.TagAdded += TagsStore_TagAdded;
             _tagsStore.TagAdded += OnTagAdded;
             _tagsStore.TagUpdated += TagsStore_TagUpdated;
             _tagsStore.TagDeleted += TagsStore_TagDeleted;
 
             LoadTagsAsync();
-
-            //AddTag(new Tag() { Name = "C#" }, modalNavigationStore);
-            //AddTag(new Tag() { Name = "JavaScript" }, modalNavigationStore);
-            //AddTag(new Tag() { Name = "WPF" }, modalNavigationStore);
-            //AddTag(new Tag() { Name = "ASP.Net" }, modalNavigationStore);
-            //AddTag(new Tag() { Name = "Xamarin" }, modalNavigationStore);
-            //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("C#"));
-            //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("JavaScript"));
-            //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("WPF"));
-            //_tagsListingItemViewModels.Add(new TagsListingItemViewModel("ASP.Net"));
         }
 
         private async void OnTagAdded(Tag tag)
         {
+            // 🔍 ЛОГ: кто вызвал и сколько подписчиков
+            Debug.WriteLine($"🔔 OnTagAdded вызван для тега '{tag.Name}'");
+            Debug.WriteLine($"📌 Текущее количество подписчиков: {_tagsStore.GetTagAddedSubscriberCount()}");
+            Debug.WriteLine($"📌 Список подписчиков: {_tagsStore.GetTagAddedSubscribersInfo()}");
+
             TagsListingItemViewModel itemViewModel = new TagsListingItemViewModel(
-                tag, _modalNavigationStore, _tagsStore, _apiClient
+                tag, 
+                _modalNavigationStore, 
+                _tagsStore, 
+                _apiClient
+                //,isNew
                 );
             _tagsListingItemViewModels.Add(itemViewModel);
+            await ReloadAllTagsAsync();
+
+            //try
+            //{
+            //    var request = new AddTagRequest { Name = tag.Name };
+            //    var response = await _apiClient.PostAsync<AddTagRequest, NoContentResponse>("Tag/AddTag", request);
+
+            //    if (response.IsSuccess)
+            //    {
+            //        // ✅ Успех: перезагружаем ВСЕ теги с сервера
+            //        Debug.WriteLine($"✅ Тег '{tag.Name}' добавлен, перезагружаем список...");
+            //        await ReloadAllTagsAsync();
+            //    }
+            //    else
+            //    {
+            //        // ❌ Ошибка сервера: откатываем UI
+            //        await RollbackAddOperation(itemViewModel, response.Error?.Message ?? "Неизвестная ошибка сервера");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    // ❌ Исключение: откатываем UI
+            //    await RollbackAddOperation(itemViewModel, $"Исключение: {ex.Message}");
+            //}
+        }
+
+        private async Task ReloadAllTagsAsync()
+        {
             try
             {
-                var request = new AddTagRequest { Name = tag.Name };
-                var response = await _apiClient.PostAsync<AddTagRequest, TagResponse>("Tag/AddTag", request);
+                var tags = await _apiClient.GetAsync<List<Tag>>("Tag/AllTags");
 
-                if (response.IsSuccess && response.Data != null)
-                {
-                    // ✅ Успех: обновляем ID тега (который пришел с сервера)
-                    itemViewModel.UpdateWithServerData(response.Data);
+                _tagsListingItemViewModels.Clear();
 
-                    // Показываем временное уведомление об успехе (опционально)
-                    Debug.WriteLine($"✅ Тег '{tag.Name}' успешно добавлен с ID {response.Data.Id}");
-                }
-                else
+                if (tags != null)
                 {
-                    // ❌ Ошибка сервера: откатываем UI
-                    await RollbackAddOperation(itemViewModel, response.Error?.Message ?? "Неизвестная ошибка сервера");
+                    foreach (var tag in tags)
+                    {
+                        _tagsListingItemViewModels.Add(
+                            new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient)
+                        );
+                    }
                 }
+
+                Debug.WriteLine($"🔄 Загружено {tags?.Count ?? 0} тегов");
             }
             catch (Exception ex)
             {
-                // ❌ Исключение: откатываем UI
-                await RollbackAddOperation(itemViewModel, $"Исключение: {ex.Message}");
+                Debug.WriteLine($"❌ Ошибка перезагрузки тегов: {ex.Message}");
+                // Можно показать ошибку пользователю
+                ErrorMessage = "Не удалось обновить список тегов";
             }
         }
+
         private async Task RollbackAddOperation(TagsListingItemViewModel itemViewModel, string errorMessage)
         {
             // 1. Удаляем из UI (откат)
@@ -135,7 +169,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         }
         protected override void Dispose()
         {
-            _tagsStore.TagAdded -= TagsStore_TagAdded;
+            _tagsStore.TagAdded -= OnTagAdded;
             _tagsStore.TagUpdated -= TagsStore_TagUpdated;
             _tagsStore.TagDeleted -= TagsStore_TagDeleted;
 
@@ -168,40 +202,6 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
                 MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
             }
         }
-        private async void TagsStore_TagAdded(Tag tag)
-        {
-            TagsListingItemViewModel itemViewModel = new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient);
-            _tagsListingItemViewModels.Add(itemViewModel);
-            
-            //try
-            //{
-            //    const string endpoint = "Tag/AddTag";
-
-            //    var request = new AddTagRequest() { Name = tag.Name };
-
-            //    var responseMessage = await _apiClient.PostAsync<AddTagRequest>(endpoint, request);
-            //    if( responseMessage.IsSuccessStatusCode)
-            //    {
-            //        Debug.WriteLine($"✅ Тег {request.Name} успешно добавлен");
-            //    }
-            //    else
-            //    {
-            //        var errorBody = await responseMessage.Content.ReadAsStringAsync();
-            //        Debug.WriteLine($"Ошибка добавления тега: {itemViewModel.TagName}" + Environment.NewLine +
-            //            $"Status: {responseMessage.StatusCode}");
-            //        Debug.WriteLine($"📄 Тело ответа: {errorBody}");
-            //        //Откат в UI
-            //        _tagsListingItemViewModels.Remove(itemViewModel);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    Debug.WriteLine($"❌ Исключение: {ex.Message}");
-            //    //Откат в UI
-            //    _tagsListingItemViewModels.Remove(itemViewModel);
-            //}
-        }
-
         private async void TagsStore_TagDeleted(int id)
         {
             TagsListingItemViewModel? tagViewModel =

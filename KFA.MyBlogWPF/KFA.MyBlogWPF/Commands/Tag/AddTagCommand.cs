@@ -3,6 +3,7 @@ using KFA.MyBlogWPF.Services.DTOs;
 using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
 using KFA.MyBlogWPF.ViewModels.Tags;
+using Model = KFA.MyBlogWPF.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,6 +11,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace KFA.MyBlogWPF.Commands.Tag
 {
@@ -34,15 +36,25 @@ namespace KFA.MyBlogWPF.Commands.Tag
         }
         public override async Task ExecuteAsync(object parameter)
         {
-            TagDetailsFormViewModel formViewModel = _addTagViewModel.TagDetailsFormViewModel;
-            var tagName = formViewModel.TagName;
-
-            // Send API request to Edit Tag
+            Debug.WriteLine($"⚡ AddTagCommand.ExecuteAsync вызван (Thread: {Thread.CurrentThread.ManagedThreadId})");
             try
             {
-                var tag = await _tagService.AddTagAsync(tagName);
+                TagDetailsFormViewModel formViewModel = _addTagViewModel.TagDetailsFormViewModel;
+                var tagName = formViewModel.TagName;
+                if (string.IsNullOrEmpty(tagName))
+                {
+                    _addTagViewModel.ErrorMessage = "Имя тега не может быть пустым";
+                    return;
+                }
 
-                await _tagsStore.Add(tag);
+                _addTagViewModel.ErrorMessage = null;
+                _addTagViewModel.IsLoading = true;
+
+                var success = await _tagService.AddTagAsync(tagName);
+                if (!success)
+                {
+                    _addTagViewModel.ErrorMessage = "Не удалось добавить тег на сервере";
+                }
             }
             catch (ValidationException ex)
             {
@@ -56,6 +68,7 @@ namespace KFA.MyBlogWPF.Commands.Tag
             }
             finally
             {
+                _addTagViewModel.IsLoading = false;
                 _modalNavigationStore.Close();
             }
         }
