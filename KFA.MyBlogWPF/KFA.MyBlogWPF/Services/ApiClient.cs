@@ -208,8 +208,26 @@ namespace KFA.MyBlogWPF.Services
 
         public async Task<HttpResponseMessage> DeleteAsync(string endpoint)
         {
-            var client = CreateClient();
-            return await client.DeleteAsync(endpoint);
+            try
+            {
+                var client = CreateClient();
+                var response = await client.DeleteAsync(endpoint);
+                Debug.WriteLine($"➡️ DELETE {client.BaseAddress}{endpoint}");
+                Debug.WriteLine($"⬅️ Status: {response.StatusCode}");
+
+                return response;
+            }
+            catch(HttpRequestException ex)
+            {
+                Debug.WriteLine($"Возникла ошибка: {ex.Message}");
+                throw new HttpRequestException($"Возникла ошибка: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Возникла ошибка: {ex.Message}");
+                throw new Exception($"Возникла ошибка: {ex.Message}");
+            }
+
         }
 
         public Task<HttpResponseMessage> PostAsync<T>(string endpoint, T data)

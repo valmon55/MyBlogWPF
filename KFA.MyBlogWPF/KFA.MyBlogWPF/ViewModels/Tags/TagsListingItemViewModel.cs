@@ -45,13 +45,14 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             ModalNavigationStore modalNavigationStore, 
             TagsStore tagsStore,
             IApiClient apiClient,
+            ITagService tagService,
             bool isNew = false)
         {
             _tag = tag;
             _isNew = isNew;
 
             EditCommand = new OpenEditTagCommand(this, modalNavigationStore, tagsStore);
-            DeleteCommand = new DeleteTagCommand(this, tagsStore, apiClient);
+            DeleteCommand = new DeleteTagCommand(this, tagsStore, apiClient, tagService);
         }
 
         public void Update(Tag tag)

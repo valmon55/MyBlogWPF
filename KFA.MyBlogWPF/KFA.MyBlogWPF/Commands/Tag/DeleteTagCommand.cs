@@ -8,20 +8,24 @@ using System.Threading.Tasks;
 using KFA.MyBlogWPF.ViewModels.Tags;
 using KFA.MyBlogWPF.Services;
 using System.Diagnostics;
+using KFA.MyBlogWPF.Models;
 
 namespace KFA.MyBlogWPF.Commands.Tag
 {
     public class DeleteTagCommand : AsyncCommandBase
     {
         private readonly TagsListingItemViewModel _tagsListingItemViewModel;
+        private readonly ITagService _tagService;
         private readonly TagsStore _tagsStore;
         private readonly IApiClient _apiClient;
 
-        public DeleteTagCommand(TagsListingItemViewModel tagsListingItemViewModel, TagsStore tagsStore, IApiClient apiClient)
+        public DeleteTagCommand(TagsListingItemViewModel tagsListingItemViewModel, 
+            TagsStore tagsStore, IApiClient apiClient, ITagService tagService)
         {
             _tagsListingItemViewModel = tagsListingItemViewModel;
             _tagsStore = tagsStore;
             _apiClient = apiClient;
+            _tagService = tagService;
         }
 
         public override async Task ExecuteAsync(object parameter)
@@ -33,20 +37,11 @@ namespace KFA.MyBlogWPF.Commands.Tag
             try
             {
                 var endpoint = $"Tag/DeleteTag?id={tag.Id}";
-                var response = await _apiClient.DeleteAsync(endpoint);
 
-                if (response.IsSuccessStatusCode)
+                var success = await _tagService.DeleteTagAsync(endpoint, tag);
+                if (!success) 
                 {
-                    await _tagsStore.Delete(tag.Id);
-                    Debug.WriteLine($"✅ Тег '{tag.Name}' (ID: {tag.Id}) удален");
-                }
-                else
-                {
-                    var errorBody = await response.Content.ReadAsStringAsync();
-                    _tagsListingItemViewModel.ErrorMessage =
-                        $"Ошибка удаления: {response.StatusCode} - {errorBody}";
-
-                    Debug.WriteLine($"❌ Ошибка удаления: {response.StatusCode} - {errorBody}");
+                     _tagsListingItemViewModel.ErrorMessage = "Не удалось добавить тег на сервере";
                 }
             }
             catch (Exception ex)

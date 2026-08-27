@@ -28,6 +28,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         private readonly FeatureFlags _featureFlags;
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly TagsStore _tagsStore;
+        private readonly ITagService _tagService;
 
         public string ApplicationName { get; }
         private ObservableCollection<Tag> tags;
@@ -46,9 +47,10 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             IApiClient apiClient,
             ApiSettings apiSettings,
             AppSettings appSettings,
-            FeatureFlags featureFlags, 
-            ModalNavigationStore modalNavigationStore, 
-            TagsStore tagsStore) 
+            FeatureFlags featureFlags,
+            ModalNavigationStore modalNavigationStore,
+            TagsStore tagsStore,
+            ITagService tagService)
         {
             _apiClient = apiClient;
             _apiSettings = apiSettings;
@@ -77,9 +79,21 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             //_tagsStore.TagAdded += TagsStore_TagAdded;
             _tagsStore.TagAdded += OnTagAdded;
             _tagsStore.TagUpdated += TagsStore_TagUpdated;
-            _tagsStore.TagDeleted += TagsStore_TagDeleted;
+            //_tagsStore.TagDeleted += TagsStore_TagDeleted;
+            _tagsStore.TagDeleted += OnTagDeleted;
 
             LoadTagsAsync();
+            _tagService = tagService;
+        }
+
+        private void OnTagDeleted(int id)
+        {
+            TagsListingItemViewModel? tagViewModel =
+                _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == id);
+            if (tagViewModel != null)
+            {
+                _tagsListingItemViewModels.Remove(tagViewModel);
+            }
         }
 
         private async void OnTagAdded(Tag tag)
@@ -93,34 +107,11 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
                 tag, 
                 _modalNavigationStore, 
                 _tagsStore, 
-                _apiClient
-                //,isNew
+                _apiClient,
+                _tagService
                 );
             _tagsListingItemViewModels.Add(itemViewModel);
             await ReloadAllTagsAsync();
-
-            //try
-            //{
-            //    var request = new AddTagRequest { Name = tag.Name };
-            //    var response = await _apiClient.PostAsync<AddTagRequest, NoContentResponse>("Tag/AddTag", request);
-
-            //    if (response.IsSuccess)
-            //    {
-            //        // ✅ Успех: перезагружаем ВСЕ теги с сервера
-            //        Debug.WriteLine($"✅ Тег '{tag.Name}' добавлен, перезагружаем список...");
-            //        await ReloadAllTagsAsync();
-            //    }
-            //    else
-            //    {
-            //        // ❌ Ошибка сервера: откатываем UI
-            //        await RollbackAddOperation(itemViewModel, response.Error?.Message ?? "Неизвестная ошибка сервера");
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    // ❌ Исключение: откатываем UI
-            //    await RollbackAddOperation(itemViewModel, $"Исключение: {ex.Message}");
-            //}
         }
 
         private async Task ReloadAllTagsAsync()
@@ -136,7 +127,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
                     foreach (var tag in tags)
                     {
                         _tagsListingItemViewModels.Add(
-                            new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient)
+                            new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient, _tagService)
                         );
                     }
                 }
@@ -151,27 +142,27 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             }
         }
 
-        private async Task RollbackAddOperation(TagsListingItemViewModel itemViewModel, string errorMessage)
-        {
-            // 1. Удаляем из UI (откат)
-            _tagsListingItemViewModels.Remove(itemViewModel);
+        //private async Task RollbackAddOperation(TagsListingItemViewModel itemViewModel, string errorMessage)
+        //{
+        //    // 1. Удаляем из UI (откат)
+        //    _tagsListingItemViewModels.Remove(itemViewModel);
 
-            // 2. Показываем ошибку пользователю
-            ErrorMessage = $"Не удалось добавить тег: {errorMessage}";
+        //    // 2. Показываем ошибку пользователю
+        //    ErrorMessage = $"Не удалось добавить тег: {errorMessage}";
 
-            // 3. Логируем ошибку
-            Debug.WriteLine($"❌ Ошибка добавления тега '{itemViewModel.TagName}': {errorMessage}");
+        //    // 3. Логируем ошибку
+        //    Debug.WriteLine($"❌ Ошибка добавления тега '{itemViewModel.TagName}': {errorMessage}");
 
-            // 4. Можно также показать модальное окно с ошибкой (опционально)
-            // _modalNavigationStore.CurrentViewModel = new ErrorViewModel(errorMessage);
+        //    // 4. Можно также показать модальное окно с ошибкой (опционально)
+        //    // _modalNavigationStore.CurrentViewModel = new ErrorViewModel(errorMessage);
 
-            await Task.CompletedTask; // Для соблюдения async сигнатуры
-        }
+        //    await Task.CompletedTask; // Для соблюдения async сигнатуры
+        //}
         protected override void Dispose()
         {
             _tagsStore.TagAdded -= OnTagAdded;
             _tagsStore.TagUpdated -= TagsStore_TagUpdated;
-            _tagsStore.TagDeleted -= TagsStore_TagDeleted;
+            _tagsStore.TagDeleted -= OnTagDeleted;
 
             base.Dispose();
         }
@@ -230,7 +221,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
                     {
                         //Tags.Add(tag);
                         _tagsListingItemViewModels.Add(
-                            new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient));
+                            new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient, _tagService));
                     }
                 }
             }

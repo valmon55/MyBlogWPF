@@ -12,6 +12,6 @@ namespace KFA.MyBlogWPF.Services
         Task<bool> AddTagAsync(string name);
         Task<IReadOnlyList<Tag>> GetAllTagAsync();
         Task<bool> UpdateTagAsync(int id, string name);
-        Task<bool> DeleteTagAsync(int id);
+        Task<bool> DeleteTagAsync(string endpoint, Tag tag);
     }
 }

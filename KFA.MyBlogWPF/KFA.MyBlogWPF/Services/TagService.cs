@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KFA.MyBlogWPF.Services
@@ -49,9 +50,24 @@ namespace KFA.MyBlogWPF.Services
             }
         }
 
-        public Task<bool> DeleteTagAsync(int id)
+        public async Task<bool> DeleteTagAsync(string endpoint, Tag tag)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _apiClient.DeleteAsync(endpoint);
+                if (response.IsSuccessStatusCode)
+                {
+                    Debug.WriteLine($"✅ Тег {tag.Name} c id = {tag.Id} удален");
+                    await _tagsStore.Delete(tag.Id);
+                    return true;
+                }
+                Debug.WriteLine($"Ошибка при удалении тега {tag.Name}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"❌ Исключение при удалении тега: {tag.Name}");
+            }
         }
 
         public Task<IReadOnlyList<Tag>> GetAllTagAsync()

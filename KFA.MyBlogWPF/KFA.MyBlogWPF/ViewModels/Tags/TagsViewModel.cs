@@ -18,10 +18,9 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
     /// </summary>
     public class TagsViewModel : ViewModelBase
     {
-        //private readonly HttpClient _myBlog;
         public TagsListingViewModel TagsListingViewModel { get; }
         public ICommand AddTagsCommand { get; }
-        public TagsViewModel(//HttpClient myBlog,
+        public TagsViewModel(
             IApiClient apiClient,
             ApiSettings apiSettings,
             AppSettings appSettings,
@@ -30,13 +29,14 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             TagsStore tagsStore,
             ITagService tagService)
         {
-            //_myBlog = myBlog;
-            TagsListingViewModel = new TagsListingViewModel(/*_myBlog,*/ 
+            TagsListingViewModel = new TagsListingViewModel(
                 apiClient,
                 apiSettings,
                 appSettings,
                 featureFlags,
-                modalNavigationStore, tagsStore);
+                modalNavigationStore, 
+                tagsStore,
+                tagService);
 
             AddTagsCommand = new OpenAddTagCommand(modalNavigationStore, tagsStore, apiClient, tagService);
         }
