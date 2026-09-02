@@ -56,6 +56,9 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             _apiSettings = apiSettings;
             _appSettings = appSettings;
             _featureFlags = featureFlags;
+            _modalNavigationStore = modalNavigationStore;
+            _tagsStore = tagsStore;
+            _tagService = tagService;
 
             ApplicationName = _appSettings.ApplicationName;
 
@@ -65,8 +68,6 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
                 // Показываем экспериментальный UI
             }
 
-            _modalNavigationStore = modalNavigationStore;
-            _tagsStore = tagsStore;
             _tagsListingItemViewModels = new ObservableCollection<TagsListingItemViewModel>();
             Tags = new ObservableCollection<Tag>();
 
@@ -78,12 +79,12 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
 
             //_tagsStore.TagAdded += TagsStore_TagAdded;
             _tagsStore.TagAdded += OnTagAdded;
-            _tagsStore.TagUpdated += TagsStore_TagUpdated;
+            _tagsStore.TagUpdated += OnTagUpdated;
+            _tagsStore.TagUpdated += OnTagUpdated;
             //_tagsStore.TagDeleted += TagsStore_TagDeleted;
             _tagsStore.TagDeleted += OnTagDeleted;
 
-            LoadTagsAsync();
-            _tagService = tagService;
+            ReloadAllTagsAsync();
         }
 
         private void OnTagDeleted(int id)
@@ -118,7 +119,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         {
             try
             {
-                var tags = await _apiClient.GetAsync<List<Tag>>("Tag/AllTags");
+                var tags = await _tagService.GetAllTagAsync();
 
                 _tagsListingItemViewModels.Clear();
 
@@ -131,7 +132,6 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
                         );
                     }
                 }
-
                 Debug.WriteLine($"🔄 Загружено {tags?.Count ?? 0} тегов");
             }
             catch (Exception ex)
@@ -141,98 +141,57 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
                 ErrorMessage = "Не удалось обновить список тегов";
             }
         }
-
-        //private async Task RollbackAddOperation(TagsListingItemViewModel itemViewModel, string errorMessage)
-        //{
-        //    // 1. Удаляем из UI (откат)
-        //    _tagsListingItemViewModels.Remove(itemViewModel);
-
-        //    // 2. Показываем ошибку пользователю
-        //    ErrorMessage = $"Не удалось добавить тег: {errorMessage}";
-
-        //    // 3. Логируем ошибку
-        //    Debug.WriteLine($"❌ Ошибка добавления тега '{itemViewModel.TagName}': {errorMessage}");
-
-        //    // 4. Можно также показать модальное окно с ошибкой (опционально)
-        //    // _modalNavigationStore.CurrentViewModel = new ErrorViewModel(errorMessage);
-
-        //    await Task.CompletedTask; // Для соблюдения async сигнатуры
-        //}
         protected override void Dispose()
         {
             _tagsStore.TagAdded -= OnTagAdded;
-            _tagsStore.TagUpdated -= TagsStore_TagUpdated;
+            _tagsStore.TagUpdated -= OnTagUpdated;
             _tagsStore.TagDeleted -= OnTagDeleted;
 
             base.Dispose();
         }
-        private async void TagsStore_TagUpdated(Tag tag)
+        private async void OnTagUpdated(Tag tag)
         {
-            TagsListingItemViewModel? tagViewModel =
-                _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == tag.Id);
-            var oldTag = tagViewModel.Tag;
-
-            if (tagViewModel != null)
+            foreach(var itemViewModel in _tagsListingItemViewModels)
             {
-                tagViewModel.Update(tag);
-            }
-            try
-            {
-                var resp = await _myBlog.PostAsJsonAsync("https://localhost:7007/Tag/Update", tag);
-                //var createdTag = await resp.Content.ReadFromJsonAsync<Tag>();
-                if (!resp.IsSuccessStatusCode)
+                if (itemViewModel.Tag.Id == tag.Id)
                 {
-                    MessageBox.Show($"Ошибка обновления тега: {tagViewModel.TagName}" +
-                        Environment.NewLine + $"Код ошибки: {resp.StatusCode}");
-                    //Откат в UI
-                    tagViewModel.Update(oldTag);
+                    itemViewModel.Tag.Name = tag.Name;
+                    break;
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
-            }
+            await ReloadAllTagsAsync();
         }
-        private async void TagsStore_TagDeleted(int id)
-        {
-            TagsListingItemViewModel? tagViewModel =
-                _tagsListingItemViewModels.FirstOrDefault(x => x.Tag.Id == id);
-            if (tagViewModel != null)
-            {
-                _tagsListingItemViewModels.Remove(tagViewModel);
-            }
-        }
-        public async void LoadTagsAsync()
-        {
-            try
-            {
-                IsLoading = true;
-                ErrorMessage = null;
+        //public async void LoadTagsAsync()
+        //{
+        //    try
+        //    {
+        //        IsLoading = true;
+        //        ErrorMessage = null;
 
-                const string endpoint = "Tag/AllTags";
+        //        const string endpoint = "Tag/AllTags";
 
-                var tags = await _apiClient.GetAsync<List<Tag>>(endpoint);
+        //        var tags = await _apiClient.GetAsync<List<Tag>>(endpoint);
 
-                if (tags != null)
-                {
-                    //Tags.Clear();
-                    _tagsListingItemViewModels.Clear();
-                    foreach (var tag in tags)
-                    {
-                        //Tags.Add(tag);
-                        _tagsListingItemViewModels.Add(
-                            new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient, _tagService));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Ошибка загрузки данных: {ex.Message}");
-            }
-            finally 
-            { 
-                IsLoading = false; 
-            }
-        }
+        //        if (tags != null)
+        //        {
+        //            //Tags.Clear();
+        //            _tagsListingItemViewModels.Clear();
+        //            foreach (var tag in tags)
+        //            {
+        //                //Tags.Add(tag);
+        //                _tagsListingItemViewModels.Add(
+        //                    new TagsListingItemViewModel(tag, _modalNavigationStore, _tagsStore, _apiClient, _tagService));
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Debug.WriteLine($"Ошибка загрузки данных: {ex.Message}");
+        //    }
+        //    finally 
+        //    { 
+        //        IsLoading = false; 
+        //    }
+        //}
     }
 }

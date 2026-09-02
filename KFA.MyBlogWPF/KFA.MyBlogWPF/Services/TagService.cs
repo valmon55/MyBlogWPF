@@ -49,11 +49,12 @@ namespace KFA.MyBlogWPF.Services
                 throw new Exception($"❌ Исключение при добавлении тега: {name}");
             }
         }
-
-        public async Task<bool> DeleteTagAsync(string endpoint, Tag tag)
+        public async Task<bool> DeleteTagAsync(Tag tag)
         {
             try
             {
+                var endpoint = $"Tag/DeleteTag?id={tag.Id}";
+
                 var response = await _apiClient.DeleteAsync(endpoint);
                 if (response.IsSuccessStatusCode)
                 {
@@ -70,14 +71,35 @@ namespace KFA.MyBlogWPF.Services
             }
         }
 
-        public Task<IReadOnlyList<Tag>> GetAllTagAsync()
+        public async Task<List<Tag>> GetAllTagAsync()
         {
-            throw new NotImplementedException();
+            return await _apiClient.GetAsync<List<Tag>>("Tag/AllTags");
         }
 
-        public Task<bool> UpdateTagAsync(int id, string name)
+        public async Task<bool> UpdateTagAsync(Tag tag)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(tag.Name))
+                throw new ArgumentException("Имя тега не должно быть пустым", nameof(tag.Name));
+
+            const string endpoint = "Tag/Update";
+            try
+            {
+                var request = new EditTagRequest() { Id = tag.Id, Name = tag.Name.Trim() };
+
+                var response = await _apiClient.PostAsync<EditTagRequest, TagResponse>(endpoint, request);
+                if (response.IsSuccess)
+                {
+                    Debug.WriteLine($"✅ Тег c Id: {request.Id} и Name: {request.Name} успешно обновлен");
+                    await _tagsStore.Update(tag);
+                    return true;
+                }
+                Debug.WriteLine($"Ошибка при добавлении тега {tag.Name}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"❌ Исключение при добавлении тега c Id: {tag.Id} и Name: {tag.Name}");
+            }
         }
     }
 }

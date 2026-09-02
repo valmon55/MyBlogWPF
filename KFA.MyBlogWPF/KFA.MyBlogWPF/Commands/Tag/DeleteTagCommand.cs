@@ -36,9 +36,7 @@ namespace KFA.MyBlogWPF.Commands.Tag
             Model.Tag tag = _tagsListingItemViewModel.Tag;
             try
             {
-                var endpoint = $"Tag/DeleteTag?id={tag.Id}";
-
-                var success = await _tagService.DeleteTagAsync(endpoint, tag);
+                var success = await _tagService.DeleteTagAsync(tag);
                 if (!success) 
                 {
                      _tagsListingItemViewModel.ErrorMessage = "Не удалось добавить тег на сервере";

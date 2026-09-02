@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Commands;
 using KFA.MyBlogWPF.Commands.Tag;
 using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,15 @@ namespace KFA.MyBlogWPF.ViewModels
     {
         public int TagId { get; }
         public TagDetailsFormViewModel TagDetailsFormViewModel { get; }
-        public EditTagViewModel(Tag tag, TagsStore tagsStore, ModalNavigationStore modalNavigationStore)
+        public EditTagViewModel(Tag tag, 
+            TagsStore tagsStore, 
+            ModalNavigationStore modalNavigationStore, 
+            IApiClient apiClient,
+            ITagService tagService)
         {
             TagId = tag.Id;
 
-            ICommand submitCommand = new EditTagCommand(this, modalNavigationStore, tagsStore);
+            ICommand submitCommand = new EditTagCommand(this, modalNavigationStore, tagsStore, apiClient, tagService);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
             TagDetailsFormViewModel = new TagDetailsFormViewModel(submitCommand, cancelCommand)
             {

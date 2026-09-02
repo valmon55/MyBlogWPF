@@ -10,8 +10,8 @@ namespace KFA.MyBlogWPF.Services
     public interface ITagService
     {
         Task<bool> AddTagAsync(string name);
-        Task<IReadOnlyList<Tag>> GetAllTagAsync();
-        Task<bool> UpdateTagAsync(int id, string name);
-        Task<bool> DeleteTagAsync(string endpoint, Tag tag);
+        Task<List<Tag>> GetAllTagAsync();
+        Task<bool> UpdateTagAsync(Tag tag);
+        Task<bool> DeleteTagAsync(Tag tag);
     }
 }

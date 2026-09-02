@@ -51,7 +51,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             _tag = tag;
             _isNew = isNew;
 
-            EditCommand = new OpenEditTagCommand(this, modalNavigationStore, tagsStore);
+            EditCommand = new OpenEditTagCommand(this, modalNavigationStore, tagsStore, apiClient, tagService);
             DeleteCommand = new DeleteTagCommand(this, tagsStore, apiClient, tagService);
         }
 
