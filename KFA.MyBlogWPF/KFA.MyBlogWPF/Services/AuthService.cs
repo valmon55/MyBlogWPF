@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Services.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -56,9 +57,30 @@ namespace KFA.MyBlogWPF.Services
             }
         }
 
-        public Task<bool> LogoutAsync()
+        public async Task<bool> LogoutAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                Debug.WriteLine("🔓 Выполняется выход из системы...");
+                var response = await _apiClient.GetAsync<object>("User/Logout");
+                Debug.WriteLine("✅ Запрос на выход отправлен успешно");
+
+                return true;
+            }
+            catch (HttpRequestException ex)
+            {
+                // Сетевая ошибка - логируем, но НЕ выбрасываем исключение
+                Debug.WriteLine($"⚠️ Сетевая ошибка при выходе: {ex.Message}");
+                // Возвращаем true, так как выход на клиенте всё равно нужно выполнить
+                return true;
+            }
+            catch (Exception ex)
+            {
+                // Любая другая ошибка - логируем, но не блокируем выход
+                Debug.WriteLine($"⚠️ Ошибка при выходе: {ex.Message}");
+                // Возвращаем true, чтобы не блокировать выход на клиенте
+                return true;
+            }
         }
 
         public Task<bool> RegisterAsync(RegisterRequest registerRequest)

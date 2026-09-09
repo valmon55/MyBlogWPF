@@ -1,4 +1,6 @@
 ﻿using KFA.MyBlogWPF.Commands.Login;
+using KFA.MyBlogWPF.Services;
+using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +13,10 @@ namespace KFA.MyBlogWPF.ViewModels
 {
     public class LogoutViewModel : ViewModelBase
     {
-        private readonly HttpClient _myBlog;
         public ICommand LogoutCommand { get; }
-        public LogoutViewModel(HttpClient myBlog)
+        public LogoutViewModel(IAuthService authService, ModalNavigationStore modalNavigationStore)
         {
-            _myBlog = myBlog;
-            LogoutCommand = new LogoutCommand(_myBlog);
+            LogoutCommand = new LogoutCommand(this, authService, modalNavigationStore);
         }
     }
 }

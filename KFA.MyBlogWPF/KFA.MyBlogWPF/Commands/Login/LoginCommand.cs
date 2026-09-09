@@ -21,12 +21,15 @@ namespace KFA.MyBlogWPF.Commands.Login
     {
         private LoginViewModel _loginViewModel;
         private readonly ModalNavigationStore _modalNavigationStore;
-        private readonly IApiClient _apiClient;
+        //private readonly IApiClient _apiClient;
         private readonly IAuthService _authService;
-        public LoginCommand(LoginViewModel loginViewModel, IApiClient apiClient, IAuthService authService, ModalNavigationStore modalNavigationStore)
+        public LoginCommand(LoginViewModel loginViewModel, 
+            //IApiClient apiClient, 
+            IAuthService authService, 
+            ModalNavigationStore modalNavigationStore)
         {
             _loginViewModel = loginViewModel;
-            _apiClient = apiClient;
+            //_apiClient = apiClient;
             _authService = authService;
             _modalNavigationStore = modalNavigationStore;
         }

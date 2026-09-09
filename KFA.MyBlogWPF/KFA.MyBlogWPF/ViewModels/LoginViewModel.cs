@@ -59,10 +59,10 @@ namespace KFA.MyBlogWPF.ViewModels
         public ICommand LoginCommand { get; }
         public ICommand GoToRegisterCommand { get; }
         public bool CanSubmit => !string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(password);
-        public LoginViewModel(IApiClient apiClient, IAuthService authService, ModalNavigationStore modalNavigationStore)
+        public LoginViewModel(IAuthService authService, ModalNavigationStore modalNavigationStore)
         {
             //_myBlog = myBlog;
-            LoginCommand = new LoginCommand(this, apiClient, authService, modalNavigationStore);
+            LoginCommand = new LoginCommand(this, authService, modalNavigationStore);
             GoToRegisterCommand = new GoToRegisterCommand();
         }
     }
