@@ -12,6 +12,7 @@ namespace KFA.MyBlogWPF.Stores
         public event Action<Role> RoleAdded;
         public event Action<Role> RoleUpdated;
         public event Action<int> RoleDeleted;
+        public event Action RolesRequested;
         public async Task Add(Role role)
         {
             RoleAdded?.Invoke(role);
@@ -20,10 +21,13 @@ namespace KFA.MyBlogWPF.Stores
         {
             RoleUpdated?.Invoke(role);
         }
-
         public async Task Delete(int id)
         {
             RoleDeleted?.Invoke(id);
+        }
+        public async Task Get()
+        {
+            RolesRequested?.Invoke();
         }
     }
 }

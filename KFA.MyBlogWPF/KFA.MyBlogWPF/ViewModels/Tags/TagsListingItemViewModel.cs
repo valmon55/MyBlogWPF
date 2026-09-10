@@ -29,8 +29,7 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
         public bool IsDeleting
         {
             get => isDeleting;
-            set => SetField(ref isDeleting, value);
-                
+            set => SetField(ref isDeleting, value);                
         }
         private string errorMessage;
         public string ErrorMessage

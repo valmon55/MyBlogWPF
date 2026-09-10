@@ -1,5 +1,7 @@
 ﻿using KFA.MyBlogWPF.Commands;
 using KFA.MyBlogWPF.Commands.Role;
+using KFA.MyBlogWPF.Configuration;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -13,15 +15,25 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
 {
     public class RolesViewModel : ViewModelBase
     {
-        private readonly HttpClient _myBlog;
         public RolesListingViewModel RolesListingViewModel { get; }
         public ICommand AddRolesCommand { get; }
-        public RolesViewModel(HttpClient myBlog,
-                            ModalNavigationStore modalNavigationStore,
-                            RolesStore rolesStore)
+        public RolesViewModel(
+            IApiClient apiClient,
+            ApiSettings apiSettings,
+            AppSettings appSettings,
+            FeatureFlags featureFlags,
+            ModalNavigationStore modalNavigationStore,
+            RolesStore rolesStore,
+            IRoleService roleService)
         {
-            _myBlog = myBlog;
-            RolesListingViewModel = new RolesListingViewModel(_myBlog, modalNavigationStore, rolesStore);
+            RolesListingViewModel = new RolesListingViewModel(
+                apiClient, 
+                apiSettings,
+                appSettings,
+                featureFlags,
+                modalNavigationStore, 
+                rolesStore,
+                roleService);
 
             AddRolesCommand = new OpenAddRoleCommand(modalNavigationStore, rolesStore);
         }

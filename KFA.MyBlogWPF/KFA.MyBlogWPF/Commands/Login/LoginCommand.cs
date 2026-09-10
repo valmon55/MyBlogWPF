@@ -21,23 +21,17 @@ namespace KFA.MyBlogWPF.Commands.Login
     {
         private LoginViewModel _loginViewModel;
         private readonly ModalNavigationStore _modalNavigationStore;
-        //private readonly IApiClient _apiClient;
         private readonly IAuthService _authService;
-        public LoginCommand(LoginViewModel loginViewModel, 
-            //IApiClient apiClient, 
-            IAuthService authService, 
+        public LoginCommand(LoginViewModel loginViewModel,
+            IAuthService authService,
             ModalNavigationStore modalNavigationStore)
         {
             _loginViewModel = loginViewModel;
-            //_apiClient = apiClient;
             _authService = authService;
             _modalNavigationStore = modalNavigationStore;
         }
         public override async Task ExecuteAsync(object parameter)
         {
-            /// Отправляем запрос в API
-            /// Получаем ответ, если все ок - делаем вилимой часть "SingedIn"
-
             try
             {
                 _loginViewModel.ErrorMessage = string.Empty;
@@ -54,9 +48,10 @@ namespace KFA.MyBlogWPF.Commands.Login
                 if (response.IsSuccess)
                 {
                     SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
-                    //_authStore.SetAuthState(response.Data);
                     Debug.WriteLine($"✅ Logged in as {request.Login}");
                     _modalNavigationStore.Close();
+                    //подгружаем роли для пользователей имеющих соответствующие права
+                    //вызываем событие
                 }
                 else
                 {

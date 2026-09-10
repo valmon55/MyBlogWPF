@@ -21,7 +21,6 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
 {
     public class TagsListingViewModel : ViewModelBase
     {
-        private readonly HttpClient _myBlog;
         private readonly IApiClient _apiClient;
         private readonly ApiSettings _apiSettings;
         private readonly AppSettings _appSettings;
