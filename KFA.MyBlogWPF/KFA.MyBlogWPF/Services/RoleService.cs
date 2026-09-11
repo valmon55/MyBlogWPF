@@ -53,7 +53,7 @@ namespace KFA.MyBlogWPF.Services
         {
             try
             {
-                var endpoint = $"Role/Delete?id={role.Id}";
+                var endpoint = $"Role/Delete?roleId={role.Id}";
 
                 var response = await _apiClient.DeleteAsync(endpoint);
                 if (response.IsSuccessStatusCode)

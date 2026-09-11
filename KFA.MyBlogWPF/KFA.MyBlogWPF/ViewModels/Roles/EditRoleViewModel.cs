@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Commands;
 using KFA.MyBlogWPF.Commands.Role;
 using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,15 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
     {
         public string RoleId { get; }
         public RoleDetailsFormViewModel RoleDetailsFormViewModel { get; }
-        public EditRoleViewModel(Role role, ModalNavigationStore modalNavigationStore, RolesStore rolesStore)
+        public EditRoleViewModel(Role role, 
+            ModalNavigationStore modalNavigationStore, 
+            RolesStore rolesStore,
+            IApiClient apiClient,
+            IRoleService roleService)
         {
             RoleId = role.Id;
 
-            ICommand submitCommand = new EditRoleCommand(this, modalNavigationStore, rolesStore);
+            ICommand submitCommand = new EditRoleCommand(this, modalNavigationStore, rolesStore, apiClient, roleService);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
             RoleDetailsFormViewModel = new RoleDetailsFormViewModel(submitCommand, cancelCommand)
             {

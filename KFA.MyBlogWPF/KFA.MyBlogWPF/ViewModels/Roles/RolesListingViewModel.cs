@@ -66,8 +66,19 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             _rolesStore.RoleAdded += OnRoleAddedAsync;
             //_rolesStore.RoleUpdated += RolesStore_RoleUpdated;
             //_rolesStore.RoleDeleted += RolesStore_RoleDeleted;
+            _rolesStore.RoleDeleted += OnRolesDeleted;
             _rolesStore.RolesRequested += OnRolesRequested;
             //LoadRolesAsync();
+        }
+
+        private void OnRolesDeleted(string id)
+        {
+            RolesListingItemViewModel? roleViewModel =
+                _rolesListingItemViewModels.FirstOrDefault(x => x.Role.Id == id);
+            if (roleViewModel != null)
+            {
+                _rolesListingItemViewModels.Remove(roleViewModel);
+            }
         }
 
         private async void OnRoleAddedAsync(Role role)
@@ -163,6 +174,7 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             _rolesStore.RoleAdded -= OnRoleAddedAsync;
             //_rolesStore.RoleUpdated -= RolesStore_RoleUpdated;
             //_rolesStore.RoleDeleted -= RolesStore_RoleDeleted;
+            _rolesStore.RoleDeleted -= OnRolesDeleted;
             _rolesStore.RolesRequested -= OnRolesRequested;
 
             base.Dispose();

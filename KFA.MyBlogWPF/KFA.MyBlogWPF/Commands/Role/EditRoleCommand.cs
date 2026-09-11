@@ -1,4 +1,5 @@
-﻿using KFA.MyBlogWPF.Stores;
+﻿using KFA.MyBlogWPF.Services;
+using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels;
 using KFA.MyBlogWPF.ViewModels.Roles;
 using System;
@@ -14,12 +15,20 @@ namespace KFA.MyBlogWPF.Commands
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly RolesStore _rolesStore;
         private readonly EditRoleViewModel _editRoleViewModel;
+        private readonly IApiClient _apiClient;
+        private readonly IRoleService _roleService;
 
-        public EditRoleCommand(EditRoleViewModel editRoleViewModel, ModalNavigationStore modalNavigationStore, RolesStore rolesStore)
+        public EditRoleCommand(EditRoleViewModel editRoleViewModel,
+            ModalNavigationStore modalNavigationStore,
+            RolesStore rolesStore,
+            IApiClient apiClient,
+            IRoleService roleService)
         {
             _editRoleViewModel = editRoleViewModel;
             _modalNavigationStore = modalNavigationStore;
             _rolesStore = rolesStore;
+            _apiClient = apiClient;
+            _roleService = roleService;
         }
         public override async Task ExecuteAsync(object parameter)
         {

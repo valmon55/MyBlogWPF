@@ -59,7 +59,7 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
         {
             _role = role;
 
-            EditCommand = new OpenEditRoleCommand(this, modalNavigationStore, rolesStore);
+            EditCommand = new OpenEditRoleCommand(this, modalNavigationStore, rolesStore, apiClient, roleService);
             DeleteCommand = new DeleteRoleCommand(this, rolesStore, apiClient, roleService);
         }
 
