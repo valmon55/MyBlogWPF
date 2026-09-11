@@ -23,13 +23,14 @@ namespace KFA.MyBlogWPF.Services
 
         public async Task<bool> AddRoleAsync(Role role)
         {
-            if (string.IsNullOrWhiteSpace(role.Name))
-                throw new ArgumentException("Имя роли не должно быть пустым", nameof(role.Name));
+            if (string.IsNullOrWhiteSpace(role.Name) || string.IsNullOrWhiteSpace(role.Description))
+                Debug.WriteLine("❌ Имя роли и его описание не должно быть пустым");
 
             const string endpoint = "Role/AddRole";
             try
             {
-                var request = new AddRoleRequest() { Name = role.Name.Trim(), Description = role.Description.Trim() };
+                var request = new AddRoleRequest() { Name = role.Name.Trim(), 
+                    Description = role.Description == null ? "" : role.Description.Trim() };
 
                 var response = await _apiClient.PostAsync<AddRoleRequest, RoleResponse>(endpoint, request);
                 if (response.IsSuccess)

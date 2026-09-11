@@ -13,7 +13,7 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
 {
     public class EditRoleViewModel : ViewModelBase
     {
-        public int RoleId { get; }
+        public string RoleId { get; }
         public RoleDetailsFormViewModel RoleDetailsFormViewModel { get; }
         public EditRoleViewModel(Role role, ModalNavigationStore modalNavigationStore, RolesStore rolesStore)
         {

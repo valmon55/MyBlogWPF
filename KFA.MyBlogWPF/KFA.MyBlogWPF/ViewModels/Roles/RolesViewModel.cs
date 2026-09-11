@@ -35,7 +35,7 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
                 rolesStore,
                 roleService);
 
-            AddRolesCommand = new OpenAddRoleCommand(modalNavigationStore, rolesStore);
+            AddRolesCommand = new OpenAddRoleCommand(modalNavigationStore, rolesStore, apiClient, roleService);
         }
 
     }

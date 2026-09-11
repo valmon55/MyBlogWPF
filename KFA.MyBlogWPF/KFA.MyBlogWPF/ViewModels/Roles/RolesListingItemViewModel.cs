@@ -21,7 +21,17 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             set => SetField(ref _isNew, value);
         }
         private Role _role;
-        public Role Role => _role;
+        public Role Role
+        { 
+            get => _role;
+            set
+            {
+                _role = value;
+                OnPropertyChanged(nameof(Role));
+                OnPropertyChanged(nameof(RoleName));
+                OnPropertyChanged(nameof(Description));
+            }
+        }
         public string RoleName => Role.Name;
         public string Description => Role.Description;
 
@@ -58,6 +68,7 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             _role = role;
             _isNew = false;
 
+            OnPropertyChanged(nameof(Role));
             OnPropertyChanged(nameof(RoleName));
             OnPropertyChanged(nameof(Description));
             OnPropertyChanged(nameof(IsNew));

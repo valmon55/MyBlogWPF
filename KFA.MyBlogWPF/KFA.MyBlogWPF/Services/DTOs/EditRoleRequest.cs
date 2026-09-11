@@ -10,7 +10,7 @@ namespace KFA.MyBlogWPF.Services.DTOs
     public class EditRoleRequest
     {
         [JsonPropertyName("id")]
-        public int Id { get; set; }
+        public string Id { get; set; }
         [JsonPropertyName("name")]
         public string Name { get; set; } = string.Empty;
         [JsonPropertyName("description")]

@@ -6,6 +6,7 @@ using KFA.MyBlogWPF.ViewModels.Tags;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -61,16 +62,55 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             _rolesListingItemViewModels = new ObservableCollection<RolesListingItemViewModel>();
             Roles = new ObservableCollection<Role>();
 
-            _rolesStore.RoleAdded += RolesStore_RoleAdded;
+            //_rolesStore.RoleAdded += RolesStore_RoleAdded;
+            _rolesStore.RoleAdded += OnRoleAddedAsync;
             //_rolesStore.RoleUpdated += RolesStore_RoleUpdated;
             //_rolesStore.RoleDeleted += RolesStore_RoleDeleted;
             _rolesStore.RolesRequested += OnRolesRequested;
             //LoadRolesAsync();
         }
 
-        private void OnRolesRequested()
+        private async void OnRoleAddedAsync(Role role)
         {
-            throw new NotImplementedException();
+            RolesListingItemViewModel itemViewModel = new RolesListingItemViewModel(
+                role,
+                _modalNavigationStore,
+                _rolesStore,
+                _apiClient,
+                _roleService
+                );
+            _rolesListingItemViewModels.Add(itemViewModel);
+            await ReloadAllRolesAsync();
+        }
+        private async Task ReloadAllRolesAsync()
+        {
+            try
+            {
+                var roles = await _roleService.GetAllRoleAsync();
+
+                _rolesListingItemViewModels.Clear();
+
+                if (roles != null)
+                {
+                    foreach (var role in roles)
+                    {
+                        _rolesListingItemViewModels.Add(
+                            new RolesListingItemViewModel(role, _modalNavigationStore, _rolesStore, _apiClient, _roleService)
+                        );
+                    }
+                }
+                Debug.WriteLine($"🔄 Загружено {roles?.Count ?? 0} ролей");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ Ошибка перезагрузки ролей: {ex.Message}");
+                // Можно показать ошибку пользователю
+                ErrorMessage = "Не удалось обновить список ролей";
+            }
+        }
+        private async void OnRolesRequested()
+        {
+            await ReloadAllRolesAsync();
         }
 
         //private async void LoadRolesAsync()
@@ -119,7 +159,8 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
 
         protected override void Dispose()
         {
-            _rolesStore.RoleAdded -= RolesStore_RoleAdded;
+            //_rolesStore.RoleAdded -= RolesStore_RoleAdded;
+            _rolesStore.RoleAdded -= OnRoleAddedAsync;
             //_rolesStore.RoleUpdated -= RolesStore_RoleUpdated;
             //_rolesStore.RoleDeleted -= RolesStore_RoleDeleted;
             _rolesStore.RolesRequested -= OnRolesRequested;
