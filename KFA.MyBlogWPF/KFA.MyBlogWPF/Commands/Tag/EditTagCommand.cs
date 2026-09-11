@@ -33,7 +33,6 @@ namespace KFA.MyBlogWPF.Commands.Tag
         }
         public override async Task ExecuteAsync(object parameter)
         {
-            // Send API request to Add Tag
             try
             {
                 TagDetailsFormViewModel formViewModel = _editTagViewModel.TagDetailsFormViewModel;

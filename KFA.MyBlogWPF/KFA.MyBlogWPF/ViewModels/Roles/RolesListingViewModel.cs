@@ -65,13 +65,28 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             //_rolesStore.RoleAdded += RolesStore_RoleAdded;
             _rolesStore.RoleAdded += OnRoleAddedAsync;
             //_rolesStore.RoleUpdated += RolesStore_RoleUpdated;
+            _rolesStore.RoleUpdated += OnRoleUpdatedAsync;
             //_rolesStore.RoleDeleted += RolesStore_RoleDeleted;
-            _rolesStore.RoleDeleted += OnRolesDeleted;
+            _rolesStore.RoleDeleted += OnRoleDeleted;
             _rolesStore.RolesRequested += OnRolesRequested;
             //LoadRolesAsync();
         }
 
-        private void OnRolesDeleted(string id)
+        private async void OnRoleUpdatedAsync(Role role)
+        {
+            foreach (var itemViewModel in _rolesListingItemViewModels)
+            {
+                if (itemViewModel.Role.Id == role.Id)
+                {
+                    itemViewModel.Role.Name = role.Name;
+                    itemViewModel.Role.Description = role.Description;
+                    break;
+                }
+            }
+            await ReloadAllRolesAsync();
+        }
+
+        private void OnRoleDeleted(string id)
         {
             RolesListingItemViewModel? roleViewModel =
                 _rolesListingItemViewModels.FirstOrDefault(x => x.Role.Id == id);
@@ -173,8 +188,9 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             //_rolesStore.RoleAdded -= RolesStore_RoleAdded;
             _rolesStore.RoleAdded -= OnRoleAddedAsync;
             //_rolesStore.RoleUpdated -= RolesStore_RoleUpdated;
+            _rolesStore.RoleUpdated -= OnRoleUpdatedAsync;
             //_rolesStore.RoleDeleted -= RolesStore_RoleDeleted;
-            _rolesStore.RoleDeleted -= OnRolesDeleted;
+            _rolesStore.RoleDeleted -= OnRoleDeleted;
             _rolesStore.RolesRequested -= OnRolesRequested;
 
             base.Dispose();
