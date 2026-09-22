@@ -120,6 +120,7 @@ namespace KFA.MyBlogWPF
                     services.AddScoped<IAuthService, AuthService>();
                     services.AddScoped<ITagService, TagService>();
                     services.AddScoped<IRoleService, RoleService>();
+                    services.AddScoped<IUserService, UserService>();
 
                     services.AddSingleton<MainViewModel>();
                     services.AddSingleton<MainWindow>();

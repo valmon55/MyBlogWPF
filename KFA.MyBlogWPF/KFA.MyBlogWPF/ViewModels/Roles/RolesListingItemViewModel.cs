@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace KFA.MyBlogWPF.ViewModels.Roles
 {
-    public class RolesListingItemViewModel :ViewModelBase
+    public class RolesListingItemViewModel : ViewModelBase
     {
         private bool _isNew; 
         public bool IsNew
