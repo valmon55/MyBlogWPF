@@ -71,6 +71,29 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             _rolesStore.RolesRequested += OnRolesRequested;
             //LoadRolesAsync();
         }
+        /// <summary>
+        /// 🔥 Публичный метод для загрузки ролей
+        /// </summary>
+        public void LoadRoles(List<Role>? roles)
+        {
+            _rolesListingItemViewModels.Clear();
+
+            if (roles == null) return;
+
+            foreach (var role in roles)
+            {
+                _rolesListingItemViewModels.Add(
+                    new RolesListingItemViewModel(
+                        role,
+                        _modalNavigationStore,
+                        _rolesStore, 
+                        _apiClient,
+                        _roleService)
+                );
+            }
+
+            Debug.WriteLine($"📋 Загружено {_rolesListingItemViewModels.Count} ролей в UI");
+        }
 
         private async void OnRoleUpdatedAsync(Role role)
         {

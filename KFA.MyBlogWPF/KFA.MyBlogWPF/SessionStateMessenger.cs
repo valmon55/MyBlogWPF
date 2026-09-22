@@ -9,7 +9,7 @@ namespace KFA.MyBlogWPF
 {
     public static class SessionStateMessenger
     {
-        public static event Action<SessionState> SessionStateChanged; 
+        public static event Action<SessionState> SessionStateChanged;
         public static void SendSessionStateChanged(SessionState state)
         {
             SessionStateChanged?.Invoke(state);

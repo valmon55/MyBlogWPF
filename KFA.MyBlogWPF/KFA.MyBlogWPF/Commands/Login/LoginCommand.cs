@@ -48,6 +48,7 @@ namespace KFA.MyBlogWPF.Commands.Login
                 if (response.IsSuccess)
                 {
                     SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
+                    //SessionStateMessenger.SendAuthStateChanged(AuthState.Unknown);
                     Debug.WriteLine($"✅ Logged in as {request.Login}");
                     _modalNavigationStore.Close();
                     //подгружаем роли для пользователей имеющих соответствующие права

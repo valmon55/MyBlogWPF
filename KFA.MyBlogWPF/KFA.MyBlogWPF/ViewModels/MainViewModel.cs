@@ -5,9 +5,11 @@ using KFA.MyBlogWPF.ViewModels.Tags;
 using KFA.MyBlogWPF.ViewModels.Users;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace KFA.MyBlogWPF.ViewModels
 {
@@ -31,11 +33,19 @@ namespace KFA.MyBlogWPF.ViewModels
                 OnPropertyChanged(nameof(IsLogin));
                 OnPropertyChanged(nameof(IsRegister));
                 OnPropertyChanged(nameof(IsSignedIn));
+                OnPropertyChanged(nameof(IsRolesTabVisible));
             }
         }
         public bool IsLogin => SessionState == SessionState.Login;
         public bool IsRegister => SessionState == SessionState.Register;
         public bool IsSignedIn => SessionState == SessionState.Signedin;
+        // 🔥 Видимость вкладки Roles
+        private bool _isRolesTabVisible;
+        public bool IsRolesTabVisible
+        {
+            get => _isRolesTabVisible;
+            set => SetField(ref _isRolesTabVisible, value);
+        }
         public LoginViewModel LoginViewModel { get; }
         public RegisterViewModel RegisterViewModel { get; }
         public LogoutViewModel LogoutViewModel { get; }
@@ -59,18 +69,39 @@ namespace KFA.MyBlogWPF.ViewModels
 
             _modalNavigationStore.CurrentViewModelChanged += ModalNavigationStore_CurrentViewModelChanged;
             SessionStateMessenger.SessionStateChanged += OnSessionStateChanged;
+            // 🔥 Подписываемся на событие загрузки ролей
+            RolesViewModel.RolesLoaded += OnRolesLoaded;
+
+            // Изначально вкладка скрыта
+            IsRolesTabVisible = false;
+        }
+
+        private void OnRolesLoaded(bool success)
+        {
+            // 🔥 Если роли успешно загружены — показываем вкладку
+            // Если ошибка — скрываем
+            Application.Current?.Dispatcher.Invoke(() =>
+            {
+                IsRolesTabVisible = success && IsSignedIn;
+                Debug.WriteLine($"👁️ IsRolesTabVisible = {IsRolesTabVisible} (success={success}, signedIn={IsSignedIn})");
+            });
         }
 
         private void OnSessionStateChanged(SessionState state)
         {
             SessionState = state;
+            // 🔥 При смене состояния — если пользователь вышел, скрываем вкладку Roles
+            if (state != SessionState.Signedin)
+            {
+                IsRolesTabVisible = false;
+            }
         }
 
         protected override void Dispose()
         {
             _modalNavigationStore.CurrentViewModelChanged -= ModalNavigationStore_CurrentViewModelChanged;
             SessionStateMessenger.SessionStateChanged -= OnSessionStateChanged;
-
+            RolesViewModel.RolesLoaded -= OnRolesLoaded;
             base.Dispose();
         }
         private void ModalNavigationStore_CurrentViewModelChanged()
@@ -85,5 +116,11 @@ namespace KFA.MyBlogWPF.ViewModels
         Login,
         Register,
         Signedin
+    }
+    public enum AuthState
+    {
+        Unknown,
+        Granted,
+        Denied
     }
 }
