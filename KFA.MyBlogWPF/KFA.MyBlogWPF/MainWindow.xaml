@@ -81,7 +81,7 @@
                             </Grid>
                     </TabItem.Content>
                 </TabItem>
-                <TabItem>
+                <TabItem Visibility="{Binding IsUsersTabVisible, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TabItem.Header>
                         <TextBlock Style="{StaticResource TabHeader}" Margin="5" Text="User" />
                     </TabItem.Header>

@@ -31,27 +31,27 @@ namespace KFA.MyBlogWPF.Commands.Comment
         public bool CanExecute(object parameter) => true;
         public override async Task ExecuteAsync(object parameter)
         {
-            Models.Comment comment = new Models.Comment()
-            {
-                ArticleId = _articleId,
-                Comment_Text = _addCommentViewModel.CommentDetailsFormViewModel.CommentText,
-                CommentDate = DateTime.Now,
-                UserId  = "1", //временно
-                User = new Models.User() { 
-                    Id = 1, 
-                    First_Name = "Fedor",
-                    Last_Name = "Kr",
-                    Middle_Name = "A",
-                    BirthDate = DateTime.Now,
-                    Email = "KFA@a.a",
-                    Login = "FEDOR"
-                }
-            };
+            //Models.Comment comment = new Models.Comment()
+            //{
+            //    ArticleId = _articleId,
+            //    Comment_Text = _addCommentViewModel.CommentDetailsFormViewModel.CommentText,
+            //    CommentDate = DateTime.Now,
+            //    UserId  = "1", //временно
+            //    User = new Models.User() { 
+            //        Id = 1, 
+            //        First_Name = "Fedor",
+            //        Last_Name = "Kr",
+            //        Middle_Name = "A",
+            //        BirthDate = DateTime.Now,
+            //        Email = "KFA@a.a",
+            //        Login = "FEDOR"
+            //    }
+            //};
             // Send API request to Add Role
 
             try
             {
-                await _commentsStore.Add(comment);
+                //await _commentsStore.Add(comment);
 
                 _modalNavigationStore.Close();
             }

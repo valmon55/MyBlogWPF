@@ -1,4 +1,5 @@
 ﻿using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Services.DTOs;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -26,7 +27,19 @@ namespace KFA.MyBlogWPF.Services
 
         public async Task<List<User>> GetAllUsersAsync()
         {
-            return await _apiClient.GetAsync<List<User>>("User/AllUsers");
+            var usersRequest = await _apiClient.GetAsync<List<UsersRequest>>("User/AllUsers");
+            var users = usersRequest.Select(x => new User()
+            {
+                Id = x.Id,
+                First_Name = x.First_Name,
+                Last_Name = x.Last_Name,
+                Middle_Name = x.Middle_Name, 
+                Email = x.Email,
+                BirthDate = x.BirthDate,
+                Login = x.Login,
+                Roles = x.Roles
+            }).ToList();            
+            return users;
         }
 
         public Task<bool> UpdateUserAsync(User user)

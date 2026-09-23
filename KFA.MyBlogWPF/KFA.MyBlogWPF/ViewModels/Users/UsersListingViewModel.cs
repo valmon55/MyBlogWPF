@@ -232,7 +232,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             }
         }
 
-        private void UsersStore_UserDeleted(int id)
+        private void UsersStore_UserDeleted(string id)
         {
             UsersListingItemViewModel userViewModel =
                 _usersListingItemViewModels.FirstOrDefault(x => x.User.Id == id);

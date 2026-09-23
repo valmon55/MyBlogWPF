@@ -10,13 +10,13 @@ namespace KFA.MyBlogWPF.Stores
     public class UsersStore
     {
         public event Action<User> UserUpdated;
-        public event Action<int> UserDeleted;
+        public event Action<string> UserDeleted;
         public async Task Update(User user)
         {
             UserUpdated?.Invoke(user);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string id)
         {
             UserDeleted?.Invoke(id);
         }

@@ -38,21 +38,21 @@ namespace KFA.MyBlogWPF.ViewModels.Comments
         }
         public void LoadComments()
         {
-            var comments = new List<Comment>()
-            {
-                new Comment(){ Id = 1, ArticleId = _articleId, CommentDate = DateTime.Now, 
-                    Comment_Text = "Comment 1",
-                    User = new User(){ Id = 1, First_Name = "Sherlok", Last_Name = "Holms"}
-                },
-                new Comment(){ Id = 2, ArticleId = _articleId, CommentDate = DateTime.Now, 
-                    Comment_Text = "Comment 2", 
-                    User = new User(){ Id = 2, First_Name = "Patric", Last_Name = "Jane" }
-                }
-            };
-            foreach(var comment in comments)
-            {
-                AddComment(comment);
-            }
+            //var comments = new List<Comment>()
+            //{
+            //    new Comment(){ Id = 1, ArticleId = _articleId, CommentDate = DateTime.Now, 
+            //        Comment_Text = "Comment 1",
+            //        User = new User(){ Id = 1, First_Name = "Sherlok", Last_Name = "Holms"}
+            //    },
+            //    new Comment(){ Id = 2, ArticleId = _articleId, CommentDate = DateTime.Now, 
+            //        Comment_Text = "Comment 2", 
+            //        User = new User(){ Id = 2, First_Name = "Patric", Last_Name = "Jane" }
+            //    }
+            //};
+            //foreach(var comment in comments)
+            //{
+            //    AddComment(comment);
+            //}
         }
 
         //protected override void Dispose()

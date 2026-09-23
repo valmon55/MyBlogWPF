@@ -13,7 +13,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
 {
     public class EditUserViewModel : ViewModelBase
     {
-        public int UserId { get; }
+        public string UserId { get; }
         public UserDetailsFormViewModel UserDetailsFormViewModel { get; }
 
         public EditUserViewModel(User user, UsersStore usersStore, 
