@@ -39,7 +39,8 @@ namespace KFA.MyBlogWPF.Commands.Role
         {
             Models.Role role = _rolesListingItemViewModel.Role;
 
-            EditRoleViewModel editRoleViewModel = new EditRoleViewModel(role, _modalNavigationStore, _rolesStore, _apiClient, _roleService);
+            EditRoleViewModel editRoleViewModel = 
+                new EditRoleViewModel(role, _modalNavigationStore, _rolesStore, _apiClient, _roleService);
             _modalNavigationStore.CurrentViewModel = editRoleViewModel;
         }
         public override bool CanExecute(object? parameter)

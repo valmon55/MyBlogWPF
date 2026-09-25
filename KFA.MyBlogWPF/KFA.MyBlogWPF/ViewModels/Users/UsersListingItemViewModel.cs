@@ -83,14 +83,9 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             User = user;
             //_allRoles = allRoles;
             //var allRoles = roleService.GetAllRoleAsync().Result;
-            var allRoles = new List<Role>()
-            {
-                new Role() { Id = "1", Name = "Admin", Description = "Administrator" },
-                new Role() { Id = "2", Name = "User", Description = "Ordinal User" },
-                new Role() { Id = "3", Name = "Moderator", Description = "Moderator" }
-            };
-            EditCommand = new OpenEditUserCommand(this, modalNavigationStore, usersStore, allRoles);
-            DeleteCommand = new DeleteUserCommand(this, usersStore);
+            //var allRoles = new List<Role>();
+            EditCommand = new OpenEditUserCommand(this, modalNavigationStore, usersStore, apiClient, userService, roleService);
+            DeleteCommand = new DeleteUserCommand(this, usersStore, apiClient, userService);
         }
         public void Update(User user)
         {

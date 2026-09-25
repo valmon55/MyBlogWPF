@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Commands;
 using KFA.MyBlogWPF.Commands.User;
 using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,17 @@ namespace KFA.MyBlogWPF.ViewModels.Users
         public string UserId { get; }
         public UserDetailsFormViewModel UserDetailsFormViewModel { get; }
 
-        public EditUserViewModel(User user, UsersStore usersStore, 
-                                ModalNavigationStore modalNavigationStore, List<Role> allRoles)
+        public EditUserViewModel(
+            User user, 
+            UsersStore usersStore, 
+            ModalNavigationStore modalNavigationStore, 
+            IApiClient apiClient,
+            IUserService userService,
+            List<Role> allRoles)
         {
             UserId = user.Id;
 
-            ICommand submitCommand = new EditUserCommand(this, modalNavigationStore, usersStore);
+            ICommand submitCommand = new EditUserCommand(this, modalNavigationStore, usersStore, apiClient, userService);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
             UserDetailsFormViewModel = new UserDetailsFormViewModel(submitCommand, cancelCommand)
             {

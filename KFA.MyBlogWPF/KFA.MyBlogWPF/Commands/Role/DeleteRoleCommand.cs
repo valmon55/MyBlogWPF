@@ -42,7 +42,7 @@ namespace KFA.MyBlogWPF.Commands.Role
                 var success = await _roleService.DeleteRoleAsync(role);
                 if( !success )
                 {
-                    _rolesListingItemViewModel.ErrorMessage = "Не удалось добавить роль на сервере";
+                    _rolesListingItemViewModel.ErrorMessage = "Не удалось удалить роль на сервере";
                 }
             }
             catch (Exception ex)
