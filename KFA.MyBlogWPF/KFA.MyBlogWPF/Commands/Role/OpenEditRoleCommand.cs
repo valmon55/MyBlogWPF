@@ -6,6 +6,7 @@ using KFA.MyBlogWPF.ViewModels.Roles;
 using KFA.MyBlogWPF.ViewModels.Users;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -40,6 +41,17 @@ namespace KFA.MyBlogWPF.Commands.Role
 
             EditRoleViewModel editRoleViewModel = new EditRoleViewModel(role, _modalNavigationStore, _rolesStore, _apiClient, _roleService);
             _modalNavigationStore.CurrentViewModel = editRoleViewModel;
+        }
+        public override bool CanExecute(object? parameter)
+        {
+            // 🔥 Защита: нельзя редактировать Admin
+            if (_rolesListingItemViewModel.IsSystemRole)
+            {
+                Debug.WriteLine($"⛔ Редактирование роли '{_rolesListingItemViewModel.RoleName}' запрещено (системная роль)");
+                return false;
+            }
+
+            return !_rolesListingItemViewModel.IsDeleting;
         }
     }
 }

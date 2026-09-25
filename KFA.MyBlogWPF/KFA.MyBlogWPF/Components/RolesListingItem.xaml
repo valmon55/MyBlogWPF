@@ -14,8 +14,12 @@
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0" Text="{Binding RoleName}" />
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="{Binding RoleName}" />
+                <TextBlock Text=" 🔒" 
+                           ToolTip="{Binding LockReason}"
+                           Visibility="{Binding IsSystemRole, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </StackPanel>
             <TextBlock Grid.Column="1" Text="{Binding Description}" />
             
             <custom:DropdownMenu 

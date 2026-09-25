@@ -1,9 +1,11 @@
 ﻿<Application x:Class="KFA.MyBlogWPF.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:KFA.MyBlogWPF">
+             xmlns:local="clr-namespace:KFA.MyBlogWPF"
+             xmlns:converters="clr-namespace:KFA.MyBlogWPF.Converters">
     <Application.Resources>
         <ResourceDictionary>
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <SolidColorBrush x:Key="BorderPrimary" Color="Gray" />
 
             <Style x:Key="TabHeader" TargetType="TextBlock">

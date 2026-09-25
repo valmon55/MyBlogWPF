@@ -19,6 +19,7 @@ namespace KFA.MyBlogWPF.Commands.Role
         private readonly IRoleService _roleService;
         private readonly RolesStore _rolesStore;
         private readonly IApiClient _apiClient;
+        private bool _isExecuting;
 
         public DeleteRoleCommand(RolesListingItemViewModel rolesListingItemViewModel, 
             RolesStore rolesStore, Services.IApiClient apiClient, Services.IRoleService roleService)
@@ -31,6 +32,7 @@ namespace KFA.MyBlogWPF.Commands.Role
 
         public override async Task ExecuteAsync(object parameter)
         {
+            _isExecuting = true;
             _rolesListingItemViewModel.ErrorMessage = null;
             _rolesListingItemViewModel.IsDeleting = true;
 
@@ -51,7 +53,20 @@ namespace KFA.MyBlogWPF.Commands.Role
             finally
             {
                 _rolesListingItemViewModel.IsDeleting = false;
+                _isExecuting = false;
             }
         }
+        public override bool CanExecute(object? parameter)
+        {
+            // 🔥 Защита: нельзя удалять Admin
+            if (_rolesListingItemViewModel.IsSystemRole)
+            {
+                Debug.WriteLine($"⛔ Удаление роли '{_rolesListingItemViewModel.RoleName}' запрещено (системная роль)");
+                return false;
+            }
+
+            return !_isExecuting && !_rolesListingItemViewModel.IsDeleting;
+        }
+
     }
 }

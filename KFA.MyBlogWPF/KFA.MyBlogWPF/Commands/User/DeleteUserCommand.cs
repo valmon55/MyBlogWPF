@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using KFA.MyBlogWPF.Models;
 using KFA.MyBlogWPF.ViewModels;
+using KFA.MyBlogWPF.ViewModels.Roles;
+using System.Diagnostics;
 
 namespace KFA.MyBlogWPF.Commands.User
 {
@@ -15,6 +17,7 @@ namespace KFA.MyBlogWPF.Commands.User
     {
         private readonly UsersStore _usersStore;
         private readonly UsersListingItemViewModel _usersListingItemViewModel;
+        private bool _isExecuting;
 
         public DeleteUserCommand(UsersListingItemViewModel usersListingItemViewModel, UsersStore usersStore)
         {
@@ -40,6 +43,17 @@ namespace KFA.MyBlogWPF.Commands.User
             {
                 _usersListingItemViewModel.IsDeleting = false;
             }
+        }
+        public override bool CanExecute(object? parameter)
+        {
+            // 🔥 Защита: нельзя удалять Admin
+            if (_usersListingItemViewModel.IsSystemUser)
+            {
+                Debug.WriteLine($"⛔ Удаление пользователя '{_usersListingItemViewModel.First_Name}' запрещено (системный ползьватель)");
+                return false;
+            }
+
+            return !_isExecuting && !_usersListingItemViewModel.IsDeleting;
         }
     }
 }

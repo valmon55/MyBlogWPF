@@ -17,7 +17,12 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Text="{Binding Last_Name}" />
-            <TextBlock Grid.Column="1" Text="{Binding First_Name}" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBlock Text="{Binding First_Name}" />
+                <TextBlock Text=" 🔒" 
+                               ToolTip="{Binding LockReason}"
+                               Visibility="{Binding IsSystemUser, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </StackPanel>
             <TextBlock Grid.Column="2" Text="{Binding Middle_Name}" />
 
             <custom:DropdownMenu 

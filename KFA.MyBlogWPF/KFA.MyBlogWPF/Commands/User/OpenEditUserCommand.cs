@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KFA.MyBlogWPF.ViewModels.Roles;
+using System.Diagnostics;
 
 namespace KFA.MyBlogWPF.Commands.User
 {
@@ -29,7 +31,6 @@ namespace KFA.MyBlogWPF.Commands.User
             _allRoles = allRoles;
         }
         public event EventHandler CanExecuteChanged;
-        public bool CanExecute(object parameter) => true;
         public override void Execute(object? parameter)
         {
             Model.User user = _usersListingItemViewModel.User;
@@ -38,6 +39,16 @@ namespace KFA.MyBlogWPF.Commands.User
                 new EditUserViewModel(user, _usersStore, _modalNavigationStore, _allRoles);
             _modalNavigationStore.CurrentViewModel = editUserViewModel;
         }
+        public override bool CanExecute(object? parameter)
+        {
+            // 🔥 Защита: нельзя редактировать Admin
+            if (_usersListingItemViewModel.IsSystemUser)
+            {
+                Debug.WriteLine($"⛔ Редактирование пользователя '{_usersListingItemViewModel.First_Name}' запрещено (системный пользователь)");
+                return false;
+            }
 
+            return !_usersListingItemViewModel.IsDeleting;
+        }
     }
 }

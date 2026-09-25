@@ -41,6 +41,14 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             get => isDeleting;
             set => SetField(ref isDeleting, value);
         }
+        public bool IsSystemRole =>
+            string.Equals(_role.Name, "Admin", StringComparison.OrdinalIgnoreCase);
+        public bool CanEdit => !IsSystemRole && !IsDeleting;
+        public bool CanDelete => !IsSystemRole && !IsDeleting;
+        public string? LockReason => IsSystemRole
+            ? "Системная роль не может быть изменена или удалена"
+            : null;
+
         private string errorMessage;
         public string ErrorMessage
         {
@@ -72,6 +80,10 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
             OnPropertyChanged(nameof(RoleName));
             OnPropertyChanged(nameof(Description));
             OnPropertyChanged(nameof(IsNew));
+            OnPropertyChanged(nameof(IsSystemRole));
+            OnPropertyChanged(nameof(CanEdit));
+            OnPropertyChanged(nameof(CanDelete));
+            OnPropertyChanged(nameof(LockReason));
         }
         protected override void Dispose()
         {

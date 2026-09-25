@@ -6,6 +6,7 @@ using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,6 +61,13 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             get => errorMessage;
             set => SetField(ref errorMessage, value);
         }
+        public bool IsSystemUser =>
+            string.Equals(_user.First_Name, "Admin", StringComparison.OrdinalIgnoreCase);
+        public bool CanEdit => !IsSystemUser && !IsDeleting;
+        public bool CanDelete => !IsSystemUser && !IsDeleting;
+        public string? LockReason => IsSystemUser
+            ? "Системный пользователь не может быть изменен или удален"
+            : null;
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
         public UsersListingItemViewModel(
@@ -95,6 +103,10 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             OnPropertyChanged(nameof(Email));
             OnPropertyChanged(nameof(Login));
             OnPropertyChanged(nameof(Roles));
+            OnPropertyChanged(nameof(IsSystemUser));
+            OnPropertyChanged(nameof(CanEdit));
+            OnPropertyChanged(nameof(CanDelete));
+            OnPropertyChanged(nameof(LockReason));
         }
 
     }
