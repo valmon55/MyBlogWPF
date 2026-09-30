@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Text;	
 using System.Threading.Tasks;
 
 namespace KFA.MyBlogWPF.Stores
@@ -17,12 +17,14 @@ namespace KFA.MyBlogWPF.Stores
             _usersStore.UserUpdated += UsersStore_UserUpdated;
         }
 
-        private void UsersStore_UserUpdated(User user)
+        private async Task UsersStore_UserUpdated(User user)
         {
 			if (user.Id == SelectedUser?.Id)
 			{
 				SelectedUser = user;
 			}
+
+			await Task.CompletedTask;
         }
 
         private User _selectedUser;

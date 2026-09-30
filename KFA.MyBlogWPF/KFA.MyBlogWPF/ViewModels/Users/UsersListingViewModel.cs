@@ -67,8 +67,8 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             //_usersStore.UserUpdated += UsersStore_UserUpdated;
             //_usersStore.UserDeleted += UsersStore_UserDeleted;
             _usersStore.UserUpdated += OnUserUpdatedAsync;
-            _usersStore.UserUpdated += OnUserDeleted;
-            _usersStore.UserUpdated += OnUsersRequested;
+            _usersStore.UserDeleted += OnUserDeletedAsync;
+            //_usersStore.UserUpdated += OnUsersRequested;
 
             _usersListingItemViewModels = new ObservableCollection<UsersListingItemViewModel>();
             var allRoles = new List<Role>()
@@ -175,8 +175,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             //_usersStore.UserUpdated -= UsersStore_UserUpdated;
             //_usersStore.UserDeleted -= UsersStore_UserDeleted;
             _usersStore.UserUpdated -= OnUserUpdatedAsync;
-            _usersStore.UserUpdated -= OnUserDeleted;
-            _usersStore.UserUpdated -= OnUsersRequested;
+            _usersStore.UserDeleted -= OnUserDeletedAsync;
 
             base.Dispose();
         }
@@ -207,19 +206,33 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             }
         }
 
-        private async void OnUsersRequested(User user)
+        //private async void OnUsersRequested(User user)
+        //{
+        //    await ReloadAllUsersAsync();
+        //}
+
+        private async Task OnUserDeletedAsync(User user)
         {
+            UsersListingItemViewModel? userViewModel = 
+                _usersListingItemViewModels.FirstOrDefault(x => x.User.Id == user.Id);
+            if (userViewModel != null)
+            {
+                _usersListingItemViewModels.Remove(userViewModel);
+            }
+        }
+
+        private async Task OnUserUpdatedAsync(User user)
+        {
+            foreach(var itemViewModel in UsersListingItemViewModels)
+            {
+                if(itemViewModel.User.Id == user.Id)
+                {
+                    itemViewModel.User = user;
+                    itemViewModel.User.Roles = user.Roles;
+                    break;
+                }
+            }
             await ReloadAllUsersAsync();
-        }
-
-        private void OnUserDeleted(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void OnUserUpdatedAsync(User user)
-        {
-            throw new NotImplementedException();
         }
 
         private void UsersStore_UserUpdated(User user)

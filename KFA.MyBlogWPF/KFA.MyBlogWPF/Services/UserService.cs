@@ -33,7 +33,7 @@ namespace KFA.MyBlogWPF.Services
                 if (response.IsSuccessStatusCode)
                 {
                     Debug.WriteLine($"✅ Пользователь {user.First_Name} c id = {user.Id} удален");
-                    await _usersStore.Delete(user.Id);
+                    await _usersStore.Delete(user);
                     return true;
                 }
                 Debug.WriteLine($"Ошибка при удалении пользователя {user.First_Name}");
