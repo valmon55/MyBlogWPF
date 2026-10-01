@@ -55,7 +55,7 @@ namespace KFA.MyBlogWPF.Commands.User
                     Last_Name = formViewModel.LastName,
                     Middle_Name = formViewModel.MiddleName,
                     Email = formViewModel.Email,
-                    BirthDate = formViewModel.BirthDate,
+                    BirthDate = formViewModel.Birthday ?? DateTime.Now,
                     Login = formViewModel.Login,
                     Roles = formViewModel.GetSelectedRoles(),
                 };

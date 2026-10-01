@@ -45,8 +45,11 @@ namespace KFA.MyBlogWPF.Services
         {
             try
             {
+                Debug.WriteLine($"🌐 GET {endpoint} в {DateTime.Now:HH:mm:ss.fff}");
                 var client = CreateClient();
+
                 var response = await client.GetAsync(endpoint);
+                Debug.WriteLine($"📥 Ответ {endpoint} в {DateTime.Now:HH:mm:ss.fff}");
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();

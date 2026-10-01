@@ -29,7 +29,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
 
             ICommand submitCommand = new EditUserCommand(this, modalNavigationStore, usersStore, apiClient, userService);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
-            UserDetailsFormViewModel = new UserDetailsFormViewModel(submitCommand, cancelCommand)
+            UserDetailsFormViewModel = new UserDetailsFormViewModel(submitCommand, cancelCommand, initialBirthday: user.BirthDate)
             {
                 FirstName = user.First_Name,
                 LastName = user.Last_Name,

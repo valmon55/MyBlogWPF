@@ -52,6 +52,9 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                 OnPropertyChanged(nameof(Email));
             }
         }
+        public DatePickerViewModel BirthdayPicker { get; }
+        public DateTime? Birthday => BirthdayPicker.SelectedDate;
+
         private DateTime birthDate;
         public DateTime BirthDate
         {
@@ -96,11 +99,21 @@ namespace KFA.MyBlogWPF.ViewModels.Users
         public bool CanSubmit => !string.IsNullOrEmpty(FirstName) && !string.IsNullOrEmpty(LastName);
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
-        public UserDetailsFormViewModel(ICommand submitCommand, ICommand cancelCommand)
+        public UserDetailsFormViewModel(ICommand submitCommand, ICommand cancelCommand, DateTime? initialBirthday = null)
         {
             SubmitCommand = submitCommand;
             CancelCommand = cancelCommand;
-        }    
+
+            BirthdayPicker = new DatePickerViewModel(initialBirthday);
+            BirthdayPicker.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(DatePickerViewModel.SelectedDate))
+                {
+                    OnPropertyChanged(nameof(Birthday));
+                }
+            };
+
+        }
 
         public void InitRoles(List<Role> allRoles, List<Role> userRoles)
         {

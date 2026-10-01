@@ -47,7 +47,9 @@ namespace KFA.MyBlogWPF.Services
 
         public async Task<List<User>> GetAllUsersAsync()
         {
+            Debug.WriteLine($"⏱️ Запрос всех пользователей");
             var usersRequest = await _apiClient.GetAsync<List<UsersRequest>>("User/AllUsers");
+            Debug.WriteLine($"⏱️ Получено {usersRequest?.Count ?? 0} пользователей");
             var users = usersRequest.Select(x => new User()
             {
                 Id = x.Id,
@@ -84,8 +86,10 @@ namespace KFA.MyBlogWPF.Services
                     Login = user.Login,
                     Roles = user.Roles
                 };
-
+                
+                Debug.WriteLine($"⏱️ Начало обновления пользователя ID={user.Id}");
                 var response = await _apiClient.PostAsync<EditUserRequest, UserResponse>(endpoint, request);
+                Debug.WriteLine($"⏱️ Завершение обновления. Success={response.IsSuccess}");
                 if (response.IsSuccess)
                 {
                     Debug.WriteLine($"✅ Пользователь c Id: {request.Id} и Name: {request.First_Name} успешно обновлен");
