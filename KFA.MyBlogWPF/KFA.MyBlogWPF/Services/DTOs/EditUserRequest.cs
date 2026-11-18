@@ -14,13 +14,13 @@ namespace KFA.MyBlogWPF.Services.DTOs
         public string Id { get; set; }
         [JsonPropertyName("first_Name")]
         public string First_Name { get; set; }
-        [JsonPropertyName("last_name")]
+        [JsonPropertyName("last_Name")]
         public string Last_Name { get; set; }
         [JsonPropertyName("middle_Name")]
         public string Middle_Name { get; set; }
         [JsonPropertyName("email")]
         public string Email { get; set; }
-        [JsonPropertyName("birthDay")]
+        [JsonPropertyName("birthDate")]
         public string BirthDate { get; set; } // "2026-09-25"
         [JsonPropertyName("login")]
         public string Login { get; set; }

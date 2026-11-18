@@ -34,7 +34,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                 FirstName = user.First_Name,
                 LastName = user.Last_Name,
                 MiddleName = user.Middle_Name,
-                BirthDate = user.BirthDate,
+                //BirthDate = user.BirthDate,
                 Email = user.Email,
                 Login = user.Login,
             };

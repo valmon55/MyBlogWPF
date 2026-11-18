@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;	
 using System.Threading.Tasks;
@@ -19,7 +20,8 @@ namespace KFA.MyBlogWPF.Stores
 
         private async Task UsersStore_UserUpdated(User user)
         {
-			if (user.Id == SelectedUser?.Id)
+            Debug.WriteLine($"SelectedUserStore: UserUpdated id={user.Id}, SelectedUser?.Id={SelectedUser?.Id}, match={user.Id == SelectedUser?.Id}");
+            if (user.Id == SelectedUser?.Id)
 			{
 				SelectedUser = user;
 			}
@@ -35,8 +37,9 @@ namespace KFA.MyBlogWPF.Stores
 				return _selectedUser; 
 			}
 			set 
-			{ 
-				_selectedUser = value;
+			{
+                Debug.WriteLine($"SelectedUser set: old={_selectedUser?.Id}, new={value?.Id}");
+                _selectedUser = value;
 				SelectedUserChanged?.Invoke();
 			}
 		}

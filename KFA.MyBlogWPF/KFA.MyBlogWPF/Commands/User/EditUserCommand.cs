@@ -55,7 +55,7 @@ namespace KFA.MyBlogWPF.Commands.User
                     Last_Name = formViewModel.LastName,
                     Middle_Name = formViewModel.MiddleName,
                     Email = formViewModel.Email,
-                    BirthDate = formViewModel.Birthday ?? DateTime.Now,
+                    BirthDate = formViewModel.BirthDate ?? DateTime.Now,
                     Login = formViewModel.Login,
                     Roles = formViewModel.GetSelectedRoles(),
                 };
@@ -76,8 +76,6 @@ namespace KFA.MyBlogWPF.Commands.User
                 }
 
                 await _usersStore.Update(user);
-
-                _modalNavigationStore.Close();
             }
             catch (ValidationException ex)
             {

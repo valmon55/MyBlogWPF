@@ -79,10 +79,10 @@ namespace KFA.MyBlogWPF.Services
                     Last_Name = user.Last_Name,
                     Middle_Name = user.Middle_Name,
                     Email = user.Email,
-                    // формат "2026-09-25"
+                    // формат "2026-09-25" с нулями!
                     BirthDate = user.BirthDate.Year.ToString() + "-" +
-                                user.BirthDate.Month.ToString() + "-" +
-                                user.BirthDate.Day.ToString(),
+                                user.BirthDate.Month.ToString().PadLeft(2, '0') + "-" +
+                                user.BirthDate.Day.ToString().PadLeft(2, '0'),
                     Login = user.Login,
                     Roles = user.Roles
                 };
@@ -93,7 +93,6 @@ namespace KFA.MyBlogWPF.Services
                 if (response.IsSuccess)
                 {
                     Debug.WriteLine($"✅ Пользователь c Id: {request.Id} и Name: {request.First_Name} успешно обновлен");
-                    await _usersStore.Update(user);
                     return true;
                 }
                 Debug.WriteLine($"Ошибка при добавлении пользователя {user.First_Name}");

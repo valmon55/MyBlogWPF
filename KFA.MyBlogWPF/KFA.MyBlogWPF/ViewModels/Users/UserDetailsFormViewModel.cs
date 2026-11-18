@@ -53,9 +53,9 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             }
         }
         public DatePickerViewModel BirthdayPicker { get; }
-        public DateTime? Birthday => BirthdayPicker.SelectedDate;
+        public DateTime? BirthDate => BirthdayPicker.SelectedDate;
 
-        private DateTime birthDate;
+/*        private DateTime birthDate;
         public DateTime BirthDate
         {
             get { return birthDate; }
@@ -64,7 +64,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                 birthDate = value;
                 OnPropertyChanged(nameof(BirthDate));
             }
-        }
+        }*/
         private string login;
         public string Login
         {
@@ -109,7 +109,7 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             {
                 if (e.PropertyName == nameof(DatePickerViewModel.SelectedDate))
                 {
-                    OnPropertyChanged(nameof(Birthday));
+                    OnPropertyChanged(nameof(BirthDate));
                 }
             };
 

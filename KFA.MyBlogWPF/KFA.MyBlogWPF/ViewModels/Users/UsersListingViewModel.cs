@@ -71,12 +71,12 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             //_usersStore.UserUpdated += OnUsersRequested;
 
             _usersListingItemViewModels = new ObservableCollection<UsersListingItemViewModel>();
-            var allRoles = new List<Role>()
-            {
-                new Role() { Id = "1", Name = "Admin", Description = "Administrator" },
-                new Role() { Id = "2", Name = "User", Description = "Ordinal User" },
-                new Role() { Id = "3", Name = "Moderator", Description = "Moderator" }
-            };
+            //var allRoles = new List<Role>()
+            //{
+            //    new Role() { Id = "1", Name = "Admin", Description = "Administrator" },
+            //    new Role() { Id = "2", Name = "User", Description = "Ordinal User" },
+            //    new Role() { Id = "3", Name = "Moderator", Description = "Moderator" }
+            //};
 
             //_allRoles = allRoles;
 
