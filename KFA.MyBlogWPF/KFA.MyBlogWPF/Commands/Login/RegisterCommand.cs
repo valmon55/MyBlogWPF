@@ -1,6 +1,10 @@
-﻿using KFA.MyBlogWPF.ViewModels;
+﻿using KFA.MyBlogWPF.Services;
+using KFA.MyBlogWPF.Services.DTOs;
+using KFA.MyBlogWPF.Stores;
+using KFA.MyBlogWPF.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,27 +13,76 @@ namespace KFA.MyBlogWPF.Commands.Login
 {
     public class RegisterCommand : AsyncCommandBase
     {
-        private RegisterViewModel _registerViewModel;
+        private readonly RegisterViewModel _registerViewModel;
+        private readonly IAuthService _authService;
+        private readonly ModalNavigationStore _modalNavigationStore;
 
-        public RegisterCommand(RegisterViewModel registerViewModel)
+        public RegisterCommand(RegisterViewModel registerViewModel, 
+                IAuthService authService, 
+                ModalNavigationStore modalNavigationStore)
         {
             _registerViewModel = registerViewModel;
+            _authService = authService;
+            _modalNavigationStore = modalNavigationStore;
         }
 
-        public override Task ExecuteAsync(object parameter)
+        public override async Task ExecuteAsync(object parameter)
         {
-            ///Выполняется регистрация
-            ///если все Ок - выводим SignedIn
-            _registerViewModel.ErrorString = string.Empty;
-            if ((string)parameter != "Admin")
+            try
             {
-                _registerViewModel.ErrorString = "Login is incorrect";
+                ///Выполняется регистрация
+                ///если все Ок - выводим SignedIn
+                _registerViewModel.ErrorString = string.Empty;
+                _registerViewModel.IsLoading = true;
+                var request = new RegisterRequest()
+                {
+                    FirstName = _registerViewModel.FirstName,
+                    LastName = _registerViewModel.LastName,
+                    MiddleName = _registerViewModel.MiddleName,
+                    Email = _registerViewModel.Email,
+                    Year = _registerViewModel.BirthDate.Value.Year,
+                    Month = _registerViewModel.BirthDate.Value.Month,
+                    Day = _registerViewModel.BirthDate.Value.Day,
+                    Password = _registerViewModel.Password,
+                    ConfirmPassword = _registerViewModel.PasswordConf,
+                    Login = _registerViewModel.Login
+                };
+
+                var response = await _authService.RegisterAsync(request);
+
+                // TODO: поправить _registerViewModel
+                if (response.IsSuccess)
+                {
+                    SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
+                    //SessionStateMessenger.SendAuthStateChanged(AuthState.Unknown);
+                    Debug.WriteLine($"✅ Registered as {request.Login}");
+                    _modalNavigationStore.Close();
+                    //подгружаем роли для пользователей имеющих соответствующие права
+                    //вызываем событие
+                }
+                else
+                {
+                    // TODO: поправить _registerViewModel
+                    _registerViewModel.ErrorMessage = response.Error?.Message ?? "Ошибка регистрации пользователя";
+                }
+                //if ((string)parameter != "Admin")
+                //{
+                //    _registerViewModel.ErrorString = "Login is incorrect";
+                //}
+                //else
+                //{
+                //    SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
+                //}
             }
-            else
+            catch (Exception ex)
             {
-                SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
+                _registerViewModel.ErrorMessage = $"Непредвиденная ошибка: {ex.Message}";
             }
-            return Task.CompletedTask;
+            finally 
+            {
+                _registerViewModel.IsLoading = false;
+            }
+            //return Task.CompletedTask;
         }
     }
 }

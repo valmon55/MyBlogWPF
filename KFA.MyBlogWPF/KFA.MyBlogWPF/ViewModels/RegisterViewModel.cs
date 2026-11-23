@@ -1,4 +1,6 @@
 ﻿using KFA.MyBlogWPF.Commands.Login;
+using KFA.MyBlogWPF.Services;
+using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,15 +13,23 @@ namespace KFA.MyBlogWPF.ViewModels
 {
     public class RegisterViewModel : ViewModelBase
     {
-        private readonly HttpClient _myBlog;
+        //private readonly HttpClient _myBlog;
         public ICommand RegisterCommand { get; }
         public ICommand GoToLoginCommand { get; }
-        public RegisterViewModel(HttpClient myBlog)
+        public RegisterViewModel(IAuthService authService, ModalNavigationStore modalNavigationStore)
         {
-            _myBlog = myBlog;
-            RegisterCommand = new RegisterCommand(this);
+            //_myBlog = myBlog;
+            RegisterCommand = new RegisterCommand(this, authService, modalNavigationStore);
             GoToLoginCommand = new GoToLoginCommand();
 
+            BirthdayPicker = new DatePickerViewModel(DateTime.Now.AddYears(-20));
+            BirthdayPicker.PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(DatePickerViewModel.SelectedDate))
+                {
+                    OnPropertyChanged(nameof(BirthDate));
+                }
+            };
         }
         private string firstName;
         public string FirstName 
@@ -56,17 +66,19 @@ namespace KFA.MyBlogWPF.ViewModels
                 OnPropertyChanged(nameof(MiddleName));
             }
         }
-        private DateTime birthDate;
-        public DateTime BirthDate
-        {
-            get => birthDate;
-            set
-            {
-                birthDate = value;
-                ErrorString = string.Empty;
-                OnPropertyChanged(nameof(BirthDate));
-            }
-        }
+        public DatePickerViewModel BirthdayPicker { get; }
+        public DateTime? BirthDate => BirthdayPicker.SelectedDate;
+        //private DateTime birthDate;
+        //public DateTime BirthDate
+        //{
+        //    get => birthDate;
+        //    set
+        //    {
+        //        birthDate = value;
+        //        ErrorString = string.Empty;
+        //        OnPropertyChanged(nameof(BirthDate));
+        //    }
+        //}
         private string email;
         public string Email
         {

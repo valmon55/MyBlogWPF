@@ -10,7 +10,7 @@ namespace KFA.MyBlogWPF.Services
     public interface IAuthService
     {
         Task<ApiResponse<bool>> LoginAsync(LoginRequest loginRequest);
-        Task<bool> RegisterAsync(RegisterRequest registerRequest);
+        Task<ApiResponse<bool>> RegisterAsync(RegisterRequest registerRequest);
         Task<bool> LogoutAsync();
     }
 }

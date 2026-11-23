@@ -83,9 +83,44 @@ namespace KFA.MyBlogWPF.Services
             }
         }
 
-        public Task<bool> RegisterAsync(RegisterRequest registerRequest)
+        public async Task<ApiResponse<bool>> RegisterAsync(RegisterRequest registerRequest)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(registerRequest.Login))
+                throw new ArgumentException("Login не может быть пустым", nameof(registerRequest.Login));
+            if (string.IsNullOrWhiteSpace(registerRequest.Password))
+                throw new ArgumentException("Пароль не может быть пустым", nameof(registerRequest.Password));
+            if (registerRequest.Password != registerRequest.ConfirmPassword)
+                throw new ArgumentException("Пароль и его подтверждение должны совпадать", nameof(registerRequest.ConfirmPassword));
+
+            try
+            {
+                var response = await _apiClient.PostAsync<RegisterRequest, bool>(
+                "User/Register",
+                    registerRequest);
+
+                if (response == null)
+                    return ApiResponse<bool>.Failure(
+                        new ApiError { Message = "Сервер вернул пустой ответ при входе" }
+                        );
+                if (!response.IsSuccess)
+                    return response;
+
+                return ApiResponse<bool>.Success(true);
+            }
+            catch (HttpRequestException ex)
+            {
+                return ApiResponse<bool>.Failure(new ApiError
+                {
+                    Message = "Сетевая ошибка. Проверьте подключение к интернету."
+                });
+            }
+            catch (Exception ex)
+            {
+                return ApiResponse<bool>.Failure(new ApiError
+                {
+                    Message = $"Ошибка при регистрации: {ex.Message}"
+                });
+            }
         }
     }
 }
