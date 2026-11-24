@@ -1,6 +1,7 @@
 ﻿using KFA.MyBlogWPF.Commands.Article;
 using KFA.MyBlogWPF.Commands.User;
 using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -26,32 +27,18 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         private bool isDeleting;
         public bool IsDeleting
         {
-            get
-            {
-                return isDeleting;
-            }
-            set
-            {
-                isDeleting = value;
-                OnPropertyChanged(nameof(IsDeleting));
-            }
+            get => isDeleting;
+            set => SetField(ref isDeleting, value);
         }
         private string errorMessage;
         public string ErrorMessage
         {
-            get
-            {
-                return ErrorMessage;
-            }
-            set
-            {
-                errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
-            }
+            get => errorMessage;
+            set => SetField(ref errorMessage, value);
         }
         public ICommand EditCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ArticlesListingItemViewModel(Article article, List<Tag> allTags, ModalNavigationStore modalNavigationStore, ArticlesStore articlesStore)
+        public ArticlesListingItemViewModel(Article article, List<Tag> allTags, ModalNavigationStore modalNavigationStore, ArticlesStore articlesStore, Services.IApiClient _apiClient, IArticleService _articleService)
         {
             Article = article;
             _allTags = allTags;

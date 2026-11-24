@@ -79,7 +79,6 @@ namespace KFA.MyBlogWPF.ViewModels.Tags
             //_tagsStore.TagAdded += TagsStore_TagAdded;
             _tagsStore.TagAdded += OnTagAdded;
             _tagsStore.TagUpdated += OnTagUpdated;
-            _tagsStore.TagUpdated += OnTagUpdated;
             //_tagsStore.TagDeleted += TagsStore_TagDeleted;
             _tagsStore.TagDeleted += OnTagDeleted;
 

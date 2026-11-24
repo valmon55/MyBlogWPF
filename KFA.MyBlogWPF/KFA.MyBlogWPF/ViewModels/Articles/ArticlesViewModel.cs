@@ -1,33 +1,32 @@
-﻿using KFA.MyBlogWPF.Components;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using KFA.MyBlogWPF.ViewModels.Articles;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.Commands.Article;
 using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Configuration;
+using KFA.MyBlogWPF.Services;
 
 namespace KFA.MyBlogWPF.ViewModels.Articles
 {
     public class ArticlesViewModel : ViewModelBase
     {
-        private readonly HttpClient _myBlog;
-
         public ArticlesListingViewModel ArticlesListingViewModel { get; }
         public ArticlesDetailsViewModel ArticlesDetailsViewModel { get; }
         public ICommand AddArticlesCommand { get; }
-        public ArticlesViewModel(HttpClient myBlog, 
+        public ArticlesViewModel(IApiClient apiClient, 
+                                ApiSettings apiSettings,   
+                                AppSettings appSettings,
+                                FeatureFlags featureFlags,
                                 ModalNavigationStore modalNavigationStore,
                                 SelectedArticleStore selectedArticleStore,
                                 ArticlesStore articleStore,
-                                CommentsStore commentsStore)
+                                CommentsStore commentsStore,
+                                IArticleService articleService,
+                                ITagService tagService)
         {
-            _myBlog = myBlog;
-            ArticlesListingViewModel = new ArticlesListingViewModel(_myBlog, modalNavigationStore, selectedArticleStore,articleStore);
+            ArticlesListingViewModel = new ArticlesListingViewModel(
+                                            apiClient,apiSettings, appSettings, featureFlags, 
+                                            modalNavigationStore, selectedArticleStore,articleStore,
+                                            articleService, tagService);
             ArticlesDetailsViewModel = new ArticlesDetailsViewModel(selectedArticleStore, modalNavigationStore, commentsStore);
             
             List<Tag> allTags = new List<Tag>()

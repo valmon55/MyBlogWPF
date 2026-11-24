@@ -13,12 +13,10 @@ namespace KFA.MyBlogWPF.ViewModels
 {
     public class RegisterViewModel : ViewModelBase
     {
-        //private readonly HttpClient _myBlog;
         public ICommand RegisterCommand { get; }
         public ICommand GoToLoginCommand { get; }
         public RegisterViewModel(IAuthService authService, ModalNavigationStore modalNavigationStore)
         {
-            //_myBlog = myBlog;
             RegisterCommand = new RegisterCommand(this, authService, modalNavigationStore);
             GoToLoginCommand = new GoToLoginCommand();
 
@@ -68,17 +66,6 @@ namespace KFA.MyBlogWPF.ViewModels
         }
         public DatePickerViewModel BirthdayPicker { get; }
         public DateTime? BirthDate => BirthdayPicker.SelectedDate;
-        //private DateTime birthDate;
-        //public DateTime BirthDate
-        //{
-        //    get => birthDate;
-        //    set
-        //    {
-        //        birthDate = value;
-        //        ErrorString = string.Empty;
-        //        OnPropertyChanged(nameof(BirthDate));
-        //    }
-        //}
         private string email;
         public string Email
         {
@@ -139,6 +126,5 @@ namespace KFA.MyBlogWPF.ViewModels
             }
         }
         public bool HasErrors => !string.IsNullOrEmpty(ErrorString);
-
     }
 }

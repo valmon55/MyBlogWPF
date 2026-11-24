@@ -31,7 +31,7 @@ namespace KFA.MyBlogWPF.Commands.Login
             try
             {
                 ///Выполняется регистрация
-                ///если все Ок - выводим SignedIn
+                ///если все Ок - выводим SignedIn 
                 _registerViewModel.ErrorString = string.Empty;
                 _registerViewModel.IsLoading = true;
                 var request = new RegisterRequest()
@@ -50,29 +50,16 @@ namespace KFA.MyBlogWPF.Commands.Login
 
                 var response = await _authService.RegisterAsync(request);
 
-                // TODO: поправить _registerViewModel
                 if (response.IsSuccess)
                 {
                     SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
-                    //SessionStateMessenger.SendAuthStateChanged(AuthState.Unknown);
                     Debug.WriteLine($"✅ Registered as {request.Login}");
                     _modalNavigationStore.Close();
-                    //подгружаем роли для пользователей имеющих соответствующие права
-                    //вызываем событие
                 }
                 else
                 {
-                    // TODO: поправить _registerViewModel
                     _registerViewModel.ErrorMessage = response.Error?.Message ?? "Ошибка регистрации пользователя";
                 }
-                //if ((string)parameter != "Admin")
-                //{
-                //    _registerViewModel.ErrorString = "Login is incorrect";
-                //}
-                //else
-                //{
-                //    SessionStateMessenger.SendSessionStateChanged(SessionState.Signedin);
-                //}
             }
             catch (Exception ex)
             {
@@ -82,7 +69,6 @@ namespace KFA.MyBlogWPF.Commands.Login
             {
                 _registerViewModel.IsLoading = false;
             }
-            //return Task.CompletedTask;
         }
     }
 }

@@ -1,10 +1,13 @@
-﻿using KFA.MyBlogWPF.Models;
+﻿using KFA.MyBlogWPF.Configuration;
+using KFA.MyBlogWPF.Models;
+using KFA.MyBlogWPF.Services;
 using KFA.MyBlogWPF.Stores;
 using KFA.MyBlogWPF.ViewModels.Tags;
 using KFA.MyBlogWPF.ViewModels.Users;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -14,11 +17,16 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
 {
     public class ArticlesListingViewModel : ViewModelBase
     {
-        private readonly HttpClient _myBlog;
+        private readonly IApiClient _apiClient;
+        private readonly ApiSettings _apiSettings;
+        private readonly AppSettings _appSettings;
+        private readonly FeatureFlags _featureFlags;
         private readonly ModalNavigationStore _modalNavigationStore;
         private readonly SelectedArticleStore _selectedArticleStore;
         private readonly ArticlesStore _articleStore;
-        private List<Tag> _allTags;
+        private readonly IArticleService _articleService;
+        private readonly ITagService _tagService;
+        
         private List<Comment> _allComments;
 
         private ObservableCollection<ArticlesListingItemViewModel> _articlesListingItemViewModels;
@@ -40,126 +48,62 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                 _selectedArticleStore.SelectedArticle = _selectedArticleListingItemViewModel?.Article;
             }
         }
-        public ArticlesListingViewModel(HttpClient myBlog, ModalNavigationStore modalNavigationStore, SelectedArticleStore selectedArticleStore, ArticlesStore articleStore)
+        public ArticlesListingViewModel(
+            IApiClient apiClient,
+            ApiSettings apiSettings,
+            AppSettings appSettings,
+            FeatureFlags featureFlags,
+            ModalNavigationStore modalNavigationStore, 
+            SelectedArticleStore selectedArticleStore, 
+            ArticlesStore articleStore,
+            IArticleService articleService,
+            ITagService tagService)
         {
-            _myBlog = myBlog;
+            _apiClient = apiClient;
+            _apiSettings = apiSettings;
+            _appSettings = appSettings;
+            _featureFlags = featureFlags;
             _modalNavigationStore = modalNavigationStore;
             _selectedArticleStore = selectedArticleStore;
             _articleStore = articleStore;
+            _articleService = articleService;
+            _tagService = tagService;
+
+            _articlesListingItemViewModels = new ObservableCollection<ArticlesListingItemViewModel>();
 
             _articleStore.ArticleAdded += ArticleStore_ArticleAdded;
             _articleStore.ArticleUpdated += ArticleStore_ArticleUpdated;
             _articleStore.ArticleDeleted += ArticleStore_ArticleDeleted;
 
-            var allTags = new List<Tag>()
-            {
-                new Tag() { Id = 1, Name = "C#"},
-                new Tag() { Id = 2, Name = "ASP" },
-                new Tag() { Id = 3, Name = "Xamarin" }
-            };
-            _allTags = allTags;
-            _articlesListingItemViewModels = new ObservableCollection<ArticlesListingItemViewModel>();
-            //_articlesListingItemViewModels.Add(
-            //    new ArticlesListingItemViewModel(
-            //        new Article()
-            //        {
-            //            Id = 1,
-            //            Title = "C# Language",
-            //            ArticleDate = DateTime.Now,
-            //            Content = "C# is Modern and high performance Language",
-            //            UserId = "1",
-            //            User = new User()
-            //            {
-            //                Id = 1,
-            //                First_Name = "A",
-            //                Middle_Name = "a",
-            //                Last_Name = "Admin",
-            //                Login = "Admin"
-            //            },
-            //            Tags = new List<Tag>()
-            //            {
-            //                new Tag() { Id = 1, Name = "C#" },
-            //                new Tag() { Id = 2, Name = "ASP" }
-            //            },
-            //            Comments = new List<Comment>()
-            //            {
-            //                new Comment() {Id = 1, ArticleId = 1, CommentDate = DateTime.Now, Comment_Text = "1st comment", UserId = "2"},
-            //                new Comment() {Id = 2, ArticleId = 1, CommentDate = DateTime.Now, Comment_Text = "2nd comment", UserId = "1"}
-            //            }
-            //        },
-            //        allTags,
-            //        modalNavigationStore,
-            //        articleStore
-            //        )
-            //    );
-            //_articlesListingItemViewModels.Add(
-            //    new ArticlesListingItemViewModel(
-            //        new Article()
-            //        {
-            //            Id = 2,
-            //            Title = "JavaScript",
-            //            ArticleDate = DateTime.Now,
-            //            Content = "JS is Modern Language for Web",
-            //            UserId = "2",
-            //            User = new User()
-            //            {
-            //                Id = 2,
-            //                First_Name = "Fedor",
-            //                Middle_Name = "f",
-            //                Last_Name = "K",
-            //                Login = "a"
-            //            },
-            //            Tags = new List<Tag>()
-            //            {
-            //                new Tag() { Id = 1, Name = "JS" },
-            //                new Tag() { Id = 2, Name = "ASP" }
-            //            },
-            //            Comments = new List<Comment>()
-            //            {
-            //                new Comment() {Id = 3, ArticleId = 2, CommentDate = DateTime.Now, Comment_Text = "1st comment for JS", UserId = "2"},
-            //                new Comment() {Id = 4, ArticleId = 2, CommentDate = DateTime.Now, Comment_Text = "2nd comment for JS", UserId = "1"}
-            //            }
-            //        },
-            //        allTags,
-            //        modalNavigationStore,
-            //        articleStore
-            //        )
-            //    );
-            //_articlesListingItemViewModels.Add(
-            //    new ArticlesListingItemViewModel(
-            //        new Article()
-            //        {
-            //            Id = 3,
-            //            Title = "C# Xamarin",
-            //            ArticleDate = DateTime.Now,
-            //            Content = "Xamarin platform is Obsolet",
-            //            UserId = "1",
-            //            User = new User()
-            //            {
-            //                Id = 1,
-            //                First_Name = "Patrick",
-            //                Middle_Name = "a",
-            //                Last_Name = "Jane",
-            //                Login = "Admin"
-            //            },
-            //            Tags = new List<Tag>()
-            //            {
-            //                new Tag() { Id = 1, Name = "C#" },
-            //                new Tag() { Id = 2, Name = "Xamarin" }
-            //            },
-            //            Comments = new List<Comment>()
-            //            {
-            //                new Comment() {Id = 10, ArticleId = 3, CommentDate = DateTime.Now, Comment_Text = "1st comment XAM", UserId = "2"},
-            //                new Comment() {Id = 11, ArticleId = 3, CommentDate = DateTime.Now, Comment_Text = "2nd comment XAMARIN", UserId = "1"}
-            //            }
-            //        },
-            //        allTags,
-            //        modalNavigationStore,
-            //        articleStore
-            //        )
-            //    );
-
+            ReloadAllArticlesAsync();
         }
+
+        private async Task ReloadAllArticlesAsync()
+        {
+            try
+            {
+                List<Tag> _allTags = await _tagService.GetAllTagAsync();
+                var articles = await _articleService.GetAllArticlesAsync();
+                _articlesListingItemViewModels.Clear();
+                if (articles != null)
+                {
+                    foreach (var article in articles)
+                    {
+                        _articlesListingItemViewModels.Add(
+                            new ArticlesListingItemViewModel(article, _allTags, _modalNavigationStore, 
+                                                            _articleStore, _apiClient, _articleService));
+                    }
+                    Debug.WriteLine($"🔄 Загружено {articles?.Count ?? 0} статей");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"❌ Ошибка перезагрузки статуй: {ex.Message}");
+                // Можно показать ошибку пользователю
+                ErrorMessage = "Не удалось обновить список статей";
+            }
+        }
+
         protected override void Dispose()
         {
             _articleStore.ArticleAdded -= ArticleStore_ArticleAdded;
@@ -191,9 +135,9 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
 
         private void ArticleStore_ArticleAdded(Article article)
         {
-            ArticlesListingItemViewModel articleViewModel =
-                 new ArticlesListingItemViewModel(article, _allTags, _modalNavigationStore, _articleStore);
-            _articlesListingItemViewModels.Add(articleViewModel);
+            //ArticlesListingItemViewModel articleViewModel =
+            //     new ArticlesListingItemViewModel(article, _allTags, _modalNavigationStore, _articleStore);
+            //_articlesListingItemViewModels.Add(articleViewModel);
         }
     }
 }

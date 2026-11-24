@@ -118,6 +118,7 @@ namespace KFA.MyBlogWPF
                     services.AddTransient<LogoutViewModel>();
 
                     services.AddScoped<IAuthService, AuthService>();
+                    services.AddScoped<IArticleService, ArticleService>();
                     services.AddScoped<ITagService, TagService>();
                     services.AddScoped<IRoleService, RoleService>();
                     services.AddScoped<IUserService, UserService>();
