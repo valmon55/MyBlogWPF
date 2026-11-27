@@ -64,86 +64,10 @@ namespace KFA.MyBlogWPF.ViewModels.Users
             _userService = userService;
             _roleService = roleService;
 
-            //_usersStore.UserUpdated += UsersStore_UserUpdated;
-            //_usersStore.UserDeleted += UsersStore_UserDeleted;
             _usersStore.UserUpdated += OnUserUpdatedAsync;
             _usersStore.UserDeleted += OnUserDeletedAsync;
-            //_usersStore.UserUpdated += OnUsersRequested;
 
             _usersListingItemViewModels = new ObservableCollection<UsersListingItemViewModel>();
-            //var allRoles = new List<Role>()
-            //{
-            //    new Role() { Id = "1", Name = "Admin", Description = "Administrator" },
-            //    new Role() { Id = "2", Name = "User", Description = "Ordinal User" },
-            //    new Role() { Id = "3", Name = "Moderator", Description = "Moderator" }
-            //};
-
-            //_allRoles = allRoles;
-
-            //_usersListingItemViewModels = new ObservableCollection<UsersListingItemViewModel>();
-            //_usersListingItemViewModels.Add(
-            //    new UsersListingItemViewModel(
-            //        new User()
-            //        {
-            //            Id = 1,
-            //            First_Name = "Admin",
-            //            Last_Name = "a",
-            //            Middle_Name = "a",
-            //            Email = "Admin@a.ru",
-            //            BirthDate = DateTime.Now,
-            //            Login = "Admin",
-            //            Roles = new List<Role>()
-            //            {
-            //                new Role() { Id = "1", Name = "Admin", Description = "Administrator" },
-            //                new Role() { Id = "2", Name = "User", Description = "Ordinal User" },
-            //            }
-            //        },
-            //        _allRoles,
-            //        modalNavigationStore,
-            //        usersStore
-            //        )
-            //    );
-            //_usersListingItemViewModels.Add(
-            //    new UsersListingItemViewModel(
-            //        new User()
-            //        {
-            //            Id = 2,
-            //            First_Name = "Fedor",
-            //            Last_Name = "k",
-            //            Middle_Name = "a",
-            //            Email = "f@f.ru",
-            //            BirthDate = DateTime.Now,
-            //            Login = "fedor",
-            //            Roles = new List<Role>()
-            //            {
-            //                new Role() { Id = "3", Name = "Moderator", Description = "Moderator" },
-            //                new Role() { Id = "2", Name = "User", Description = "Ordinal User" },
-            //            }
-            //        },
-            //        _allRoles,
-            //        modalNavigationStore,
-            //        usersStore)
-            //    );
-            //_usersListingItemViewModels.Add(
-            //    new UsersListingItemViewModel(
-            //        new User()
-            //        {
-            //            Id = 3,
-            //            First_Name = "user",
-            //            Last_Name = "u",
-            //            Middle_Name = "u",
-            //            Email = "user@u.ru",
-            //            BirthDate = DateTime.Now,
-            //            Login = "usr",
-            //            Roles = new List<Role>()
-            //            {
-            //                new Role() { Id = "2", Name = "User", Description = "Ordinal User" },
-            //            }
-            //        },
-            //        _allRoles,
-            //        modalNavigationStore,
-            //        usersStore)
-            //    );
         }
         /// <summary>
         /// 🔥 Публичный метод для загрузки пользователей
@@ -172,8 +96,6 @@ namespace KFA.MyBlogWPF.ViewModels.Users
 
         protected override void Dispose()
         {
-            //_usersStore.UserUpdated -= UsersStore_UserUpdated;
-            //_usersStore.UserDeleted -= UsersStore_UserDeleted;
             _usersStore.UserUpdated -= OnUserUpdatedAsync;
             _usersStore.UserDeleted -= OnUserDeletedAsync;
 
@@ -205,12 +127,6 @@ namespace KFA.MyBlogWPF.ViewModels.Users
                 ErrorMessage = "Не удалось обновить список пользователей";
             }
         }
-
-        //private async void OnUsersRequested(User user)
-        //{
-        //    await ReloadAllUsersAsync();
-        //}
-
         private async Task OnUserDeletedAsync(User user)
         {
             UsersListingItemViewModel? userViewModel = 

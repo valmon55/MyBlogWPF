@@ -9,9 +9,9 @@ namespace KFA.MyBlogWPF.Stores
 {
     public class ArticlesStore
     {
-        public event Action<Article> ArticleAdded;
-        public event Action<Article> ArticleUpdated;
-        public event Action<int> ArticleDeleted;
+        public event Func<Article, Task> ArticleAdded;
+        public event Func<Article, Task> ArticleUpdated;
+        public event Func<int, Task> ArticleDeleted;
         public async Task Add(Article article)
         {
             ArticleAdded?.Invoke(article);

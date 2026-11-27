@@ -29,15 +29,8 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
                                             articleService, tagService);
             ArticlesDetailsViewModel = new ArticlesDetailsViewModel(selectedArticleStore, modalNavigationStore, commentsStore);
             
-            List<Tag> allTags = new List<Tag>()
-            {
-                new Tag() { Id = 1, Name = "C#"},
-                new Tag() { Id = 2, Name = "ASP"},
-                new Tag() { Id = 3, Name = "JavaScript"},
-                new Tag() { Id = 4, Name = "WPF"}
-            };
-
-            AddArticlesCommand = new OpenAddArticleCommand(modalNavigationStore, articleStore, allTags);
+            AddArticlesCommand = 
+                new OpenAddArticleCommand(modalNavigationStore, articleStore, apiClient, articleService, tagService);
         }
     }
 }

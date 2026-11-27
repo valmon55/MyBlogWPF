@@ -10,7 +10,8 @@ namespace KFA.MyBlogWPF.Services
     public interface IArticleService
     {
         Task<List<Article>> GetAllArticlesAsync();
-        Task<bool> UpdateArticleAsync(User user);
-        Task<bool> DeleteArticleAsync(User user);
+        Task<bool> AddArticleAsync(Article article);
+        Task<bool> UpdateArticleAsync(Article article);
+        Task<bool> DeleteArticleAsync(Article article);
     }
 }

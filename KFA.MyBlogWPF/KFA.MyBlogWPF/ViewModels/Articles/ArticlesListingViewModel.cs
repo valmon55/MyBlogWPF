@@ -71,9 +71,9 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
 
             _articlesListingItemViewModels = new ObservableCollection<ArticlesListingItemViewModel>();
 
-            _articleStore.ArticleAdded += ArticleStore_ArticleAdded;
-            _articleStore.ArticleUpdated += ArticleStore_ArticleUpdated;
-            _articleStore.ArticleDeleted += ArticleStore_ArticleDeleted;
+            _articleStore.ArticleAdded += OnArticleAddedAsync;
+            _articleStore.ArticleUpdated += OnArticleUpdatedAsync;
+            _articleStore.ArticleDeleted += OnArticleDeletedAsync;
 
             ReloadAllArticlesAsync();
         }
@@ -106,14 +106,14 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
 
         protected override void Dispose()
         {
-            _articleStore.ArticleAdded -= ArticleStore_ArticleAdded;
-            _articleStore.ArticleUpdated -= ArticleStore_ArticleUpdated;
-            _articleStore.ArticleDeleted -= ArticleStore_ArticleDeleted;
+            _articleStore.ArticleAdded -= OnArticleAddedAsync;
+            _articleStore.ArticleUpdated -= OnArticleUpdatedAsync;
+            _articleStore.ArticleDeleted -= OnArticleDeletedAsync;
 
             base.Dispose();
         }
 
-        private void ArticleStore_ArticleDeleted(int Id)
+        private async Task OnArticleDeletedAsync(int Id)
         {
             ArticlesListingItemViewModel articleViewModel =
                 _articlesListingItemViewModels.FirstOrDefault(x => x.Article.Id == Id);
@@ -123,7 +123,7 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
             }
         }
 
-        private void ArticleStore_ArticleUpdated(Article article)
+        private async Task OnArticleUpdatedAsync(Article article)
         {
             ArticlesListingItemViewModel articleViewModel =
                 _articlesListingItemViewModels.FirstOrDefault(x => x.Article.Id == article.Id);
@@ -133,11 +133,11 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
             }
         }
 
-        private void ArticleStore_ArticleAdded(Article article)
+        private async Task OnArticleAddedAsync(Article article)
         {
-            //ArticlesListingItemViewModel articleViewModel =
-            //     new ArticlesListingItemViewModel(article, _allTags, _modalNavigationStore, _articleStore);
-            //_articlesListingItemViewModels.Add(articleViewModel);
+            /*ArticlesListingItemViewModel articleViewModel =
+                 new ArticlesListingItemViewModel(article, _allTags, _modalNavigationStore, _articleStore);*/
+            ReloadAllArticlesAsync();
         }
     }
 }

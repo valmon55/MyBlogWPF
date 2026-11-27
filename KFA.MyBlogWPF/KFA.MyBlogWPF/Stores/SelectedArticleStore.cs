@@ -14,10 +14,10 @@ namespace KFA.MyBlogWPF.Stores
         public SelectedArticleStore(ArticlesStore articleStore)
         {
             _articleStore = articleStore;
-            _articleStore.ArticleUpdated += _articleStore_ArticleUpdated;
+            _articleStore.ArticleUpdated += _articleStore_ArticleUpdatedAsync;
         }
 
-        private void _articleStore_ArticleUpdated(Article article)
+        private async Task _articleStore_ArticleUpdatedAsync(Article article)
         {
             if(article.Id == SelectedArticle?.Id)
             {

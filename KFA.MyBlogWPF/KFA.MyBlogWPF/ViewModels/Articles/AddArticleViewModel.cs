@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using KFA.MyBlogWPF.Services;
 
 namespace KFA.MyBlogWPF.ViewModels.Articles
 {
@@ -16,9 +17,13 @@ namespace KFA.MyBlogWPF.ViewModels.Articles
         public Article article = new Article(); 
         public ArticleDetailsFormViewModel ArticleDetailsFormViewModel { get; }
 
-        public AddArticleViewModel(ModalNavigationStore modalNavigationStore, ArticlesStore articleStore, List<Tag> tags)
+        public AddArticleViewModel(ModalNavigationStore modalNavigationStore, 
+            ArticlesStore articleStore, 
+            List<Tag> tags,
+            IApiClient apiClient,
+            IArticleService articleService)
         {
-            ICommand submitCommand = new AddArticleCommand(this, modalNavigationStore, articleStore);
+            ICommand submitCommand = new AddArticleCommand(this, modalNavigationStore, articleStore, apiClient, articleService);
             ICommand cancelCommand = new CloseModalCommand(modalNavigationStore);
             ArticleDetailsFormViewModel = new ArticleDetailsFormViewModel(submitCommand, cancelCommand)
             { 

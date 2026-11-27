@@ -208,11 +208,8 @@ namespace KFA.MyBlogWPF.ViewModels.Roles
 
         protected override void Dispose()
         {
-            //_rolesStore.RoleAdded -= RolesStore_RoleAdded;
             _rolesStore.RoleAdded -= OnRoleAddedAsync;
-            //_rolesStore.RoleUpdated -= RolesStore_RoleUpdated;
             _rolesStore.RoleUpdated -= OnRoleUpdatedAsync;
-            //_rolesStore.RoleDeleted -= RolesStore_RoleDeleted;
             _rolesStore.RoleDeleted -= OnRoleDeleted;
             _rolesStore.RolesRequested -= OnRolesRequested;
 
